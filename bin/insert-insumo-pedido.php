@@ -18,7 +18,9 @@ if(isset($_POST['insumoId'])){
     $ejecutarNewPedido = $conn->query($sqlNewPedido);
     $resultNewPedido = $ejecutarNewPedido->fetch_assoc();
 
-    $funcionAjax = "$.ajax({
+    $funcionAjax = "var r =  confirm('Esta seguro que desea eliminar el insumo?');
+    if(r==true){
+    $.ajax({
         type:'POST',
         url:'./bin/delete-insumo-pedido.php',
         data:'idInsumo=".$result['id']."',
@@ -40,7 +42,7 @@ if(isset($_POST['insumoId'])){
             };
             toastr.info('Se ha eliminado el insumo del pedido', 'Eliminación exitosa', opts);
         }
-    });";
+    });}";
     
     $btneliminar = '<button type="button" class="btn btn-danger btn-xs" onclick="'.$funcionAjax.'"><i class="entypo-trash"></i></button>';
     $return_arr = array();  

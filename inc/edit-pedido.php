@@ -185,6 +185,8 @@ if($pedido['ep_id']==5){
                     <td><?php echo $listaInsumosPedido["ip_cantidad"];?></td>
                    <td width="80px">
                         <button type="button" class="btn btn-danger btn-xs" onclick="
+                        var r =  confirm('Esta seguro que desea eliminar el insumo?');
+                        if(r==true){
                         $.ajax({
                             type:'POST',
                             url:'./bin/delete-insumo-pedido.php',
@@ -207,7 +209,7 @@ if($pedido['ep_id']==5){
                                 };
                                 toastr.info('Se ha eliminado el insumo del pedido', 'Eliminación exitosa', opts);
                             }
-                        });
+                        })};
                         ">
                             <i class="entypo-trash"></i>
                         </button>

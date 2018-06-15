@@ -20,7 +20,7 @@ $sqlSugeridos = "SELECT
         FROM insumo, paciente_insumo, tipo_insumo
         WHERE insumo.insumo_id=paciente_insumo.insumo_id
         AND insumo.tipoinsumo_id = tipo_insumo.tipoinsumo_id
-        AND (paciente_insumo.pi_consumo)*0.5 > paciente_insumo.pi_stock
+        AND paciente_insumo.pi_consumo > paciente_insumo.pi_stock
         AND paciente_id='".$_GET['id']."'
         ) sugerido 
     LEFT JOIN (
