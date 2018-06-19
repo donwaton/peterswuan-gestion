@@ -37,7 +37,6 @@
             <th>Nombre</th>
             <th>Email</th>
             <th>Perfil</th>
-            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -47,11 +46,6 @@
             <td><?php echo $listaUsuarios["user_names"];?></td>
             <td><?php echo $listaUsuarios["user_email"];?></td>
             <td><?php echo $listaUsuarios["tipousuario_nombre"];?></td>
-            <td width="100px">
-                <a href="index.php?sec=paciente&id=<?php echo $listaUsuarios["user_id"];?>" class="btn btn-info btn-sm btn-icon icon-left">
-                    <i class="entypo-vcard"></i>Ver ficha
-                </a>
-            </td>
         </tr>
     <?php } ?>
     </tbody>			
