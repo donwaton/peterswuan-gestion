@@ -6,7 +6,7 @@
 
         <!-- logo -->
         <div class="logo">
-            <a href="index.php">
+            <a href="#">
                 <img src="assets/images/logo-peterswuan-white.png" width="120" alt="" />
             </a>
         </div>
@@ -35,7 +35,7 @@
         <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
     <?php if($_SESSION['perfil']==5){ ?>    
         <li>
-            <a href="index.php?sec=paciente&id=1">
+            <a href="index.php?sec=paciente-tens&id=1">
                 <i class="entypo-cc-by"></i>
                 <span class="title">Paciente</span>
             </a>
