@@ -17,16 +17,20 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
         });
 
         $('#updateInsumo').click(function(){
-            if(document.forms["formUpdateInsumo"]["newStock"].value ==""){
+            var stock = document.forms["formUpdateInsumo"]["newStock"].value;
+            var idInsumo = document.forms["formUpdateInsumo"]["insumoId"].value;
+
+            if(stock ==""){
                 alert("Debe ingresar el nuevo stock para actualizar");
             } 
             else {
-                /*$.ajax({
+                                
+                $.ajax({
                     url:"bin/update-insumo-paciente.php",
                     method:"POST",
                     data:$('#formUpdateInsumo').serialize(),
-                    success:function(data){ 
-                        var obj = JSON.parse(data);
+                    success:function(response){
+                        console.log(response);
                         var opts = {
                             "closeButton": true,
                             "debug": false,
@@ -40,12 +44,12 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                             "hideEasing": "linear",
                             "showMethod": "fadeIn",
                             "hideMethod": "fadeOut"
-                        };
-                        
-                        toastr.success("Se ha agregado "+obj[0].nombre+" al consumo del paciente", "Ingreso exitoso", opts);
-                                
+                        };                        
+                        toastr.success("Se ha actualizado el stock del insumo", "Actualización exitosa", opts);
+                        $('#modalUpdateInsumo').modal('hide');
+                        document.getElementById('listInsumo'+idInsumo).innerHTML = stock;
                         }
-                });*/
+                });
             } 
         });
 
@@ -102,16 +106,17 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
             </thead>
             <tbody id="tabla-consumo">
             <?php while($listaInsumos = $resultInsumos->fetch_assoc()) { ?>
-                <tr id="listInsumo<?php echo $listaInsumos['pi_id'];?>">
+                <tr>
                     <td><?php echo $listaInsumos["insumo_nombre"];?></td>
                     <td class="hidden-xs"><?php echo $listaInsumos["tipoinsumo_nombre"];?></td>
                     <td class="hidden-xs"><?php echo $listaInsumos["pi_consumo"];?></td>
-                    <td><?php echo $listaInsumos["pi_stock"];?></td>     
-                    <td><button type="button" class="btn btn-info btn-xs" onclick="
-                        document.getElementById('insumoId').value = '<?php echo $listaInsumos['pi_id'];?>';
-                        document.getElementById('newStock').value = '';
-                        $('#modalUpdateInsumo').modal('show');
-                    ">
+                    <td id="listInsumo<?php echo $listaInsumos['pi_id'];?>"><?php echo $listaInsumos["pi_stock"];?></td>     
+                    <td>
+                        <button type="button" class="btn btn-info btn-xs" onclick="
+                            document.getElementById('insumoId').value = '<?php echo $listaInsumos['pi_id'];?>';
+                            document.getElementById('newStock').value = '';
+                            $('#modalUpdateInsumo').modal('show');
+                        ">
 								<i class="entypo-pencil"></i>
 						</button>
                     </td>               

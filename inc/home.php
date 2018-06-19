@@ -1,4 +1,10 @@
-<?php include './bin/select-home.php'; ?>
+<?php include './bin/select-home.php'; 
+
+if($_SESSION['perfil']==5){
+    echo "<script>window.location = 'index.php?sec=paciente-tens&id=1';</script>";
+}
+
+?>
 
 <!-- Inicio HTML -->
       
