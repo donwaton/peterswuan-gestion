@@ -36,7 +36,9 @@
         <tr>
             <th>Nombre</th>
             <th>Tipo</th>
+            <?php if($_SESSION['perfil']==1 || $_SESSION['perfil']==2) { ?>
             <th>Precio</th>
+            <?php } ?>
             <!-- Proxima versión
             <th>Stock</th>
             <th>Demanda</th>
@@ -49,7 +51,9 @@
         <tr class="odd gradeX">
             <td><?php echo $listaInsumos["insumo_nombre"];?></td>
             <td><?php echo $listaInsumos["tipoinsumo_nombre"];?></td>
+            <?php if($_SESSION['perfil']==1 || $_SESSION['perfil']==2) { ?>
             <td><?php echo $listaInsumos["insumo_precio"];?></td>
+            <?php } ?>
             <!-- Proxima version no noob
             <td><?php /* echo $listaInsumos["insumo_stock"];?></td>
             <td><?php echo $listaInsumos["demanda"];?></td>

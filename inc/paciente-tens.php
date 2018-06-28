@@ -5,11 +5,16 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
 <script type="text/javascript">
     jQuery( document ).ready( function() {
         var $table1 = jQuery( '#table-1' );
+        var $table2 = jQuery( '#table-2' );
 
         // Initialize DataTable1
         $table1.DataTable( {
             paging: false
         });
+
+        $table2.DataTable( {
+            paging: false
+        })
 
         // Initalize Select Dropdown after DataTables is created
         $table1.closest( '.dataTables_wrapper' ).find( 'select' ).select2( {
@@ -53,6 +58,17 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
             } 
         });
 
+        $('#addPedido').click(function(){
+            $.ajax({
+                url:"bin/insert-pedido.php",
+                method:"POST",
+                data:$('#formAddPedido').serialize(),
+                success:function(data){
+                    window.location.replace('index.php?sec=edit-pedido&id=<?php echo $_GET['id'];?>&pid='+data);
+                }
+            });
+        });  
+
     } );
 </script>
 
@@ -72,6 +88,12 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
         <a href="#contacto" data-toggle="tab">
             <span class="visible-xs"><i class="entypo-user"></i></span>
             <span class="hidden-xs">Contacto</span>
+        </a>
+    </li>
+    <li>
+        <a href="#pedidos" data-toggle="tab">
+            <span class="visible-xs"><i class="entypo-clipboard"></i></span>
+            <span class="hidden-xs">Pedidos</span>
         </a>
     </li>
 </ul>
@@ -125,6 +147,39 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
             </tbody>			
         </table> 
     </div>
+
+    <!-- Pedidos -->
+    <div class="tab-pane" id="pedidos">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-blue btn-sm btn-icon icon-left" data-toggle="modal" data-target="#newPedidoModal">
+            <i class="entypo-plus"></i>Nuevo pedido
+        </button>
+        <table class="table table-bordered datatable" id="table-2">
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Fecha pedido</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-consumo">
+            <?php while($listaPedidos = $resultPedidos->fetch_assoc()) { ?>
+                <tr>
+                    <td><?php echo $listaPedidos["pedido_desc"];?></td>
+                    <td><?php echo $listaPedidos["pedido_fecha"];?></td>
+                    <td><?php echo $listaPedidos["ep_nombre"];?></td>
+                    <td width="100px">
+                        <a href="index.php?sec=edit-pedido&id=<?php echo $_GET['id'];?>&pid=<?php echo $listaPedidos['pedido_id'];?>" class="btn btn-info btn-sm btn-icon icon-left">
+                            <i class="entypo-doc-text"></i>Ver detalles
+                        </a>
+                    </td>
+                </tr>
+            <?php } ?>
+            </tbody>			
+        </table> 
+        </div>
+    </div>
 </div>
 
 <!-- Modal Actualiza Stock-->
@@ -151,6 +206,34 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
             <button type="button" name="updateInsumo" id="updateInsumo" class="btn btn-success">Actualizar</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Agregar Pedido-->
+<div class="modal fade" id="newPedidoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            <h3 class="modal-title" id="exampleModalLabel">Ingresar Nuevo Pedido</h3>
+            </div>
+            <div class="modal-body">
+            <form id="formAddPedido" name="formAddPedido">
+
+            <input type="hidden" name="pacienteId" value="<?php echo $_GET['id'];?>">
+            <input type="hidden" name="userId" value="<?php echo $_SESSION['userid'];?>">
+
+            <label for="pedidoDesc">Descripción</label>
+            <input type="text" name="pedidoDesc" id="pedidoDesc" class="form-control form-control-sm">
+        </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+            <button type="button" name="addPedido" id="addPedido" class="btn btn-success">Agregar</button>
         </div>
         </div>
     </div>

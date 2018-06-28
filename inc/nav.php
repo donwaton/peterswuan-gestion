@@ -57,7 +57,7 @@
             </a>						
         </li>
     <?php } ?>
-    <?php if($_SESSION['perfil']==1){ ?>
+    <?php if($_SESSION['perfil']==1 || $_SESSION['perfil']==3){ ?>
         <li>
             <a href="index.php?sec=turnos">
                 <i class="entypo-calendar"></i>

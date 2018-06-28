@@ -285,7 +285,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
     </div>
 </div>
 
-<!-- Modal Agregar Insumo-->
+<!-- Modal Agregar Pedido-->
 <div class="modal fade" id="newPedidoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

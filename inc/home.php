@@ -13,7 +13,7 @@ if($_SESSION['perfil']==5){
 
 <div class="row">
 <?php while($QuiebreStock = $resultQuiebreStock->fetch_assoc()) { 
-    if($QuiebreStock['quiebrestock']==""){ } else { ?>
+    if($QuiebreStock['quiebrestock']==""){ } if(1==2) { ?>
 
 <div class="col-sm-3">
     <a href="index.php?sec=lista-insumos">
@@ -29,7 +29,7 @@ if($_SESSION['perfil']==5){
 <?php } } ?>
 
 <?php while($StockAjustado = $resultStockAjustado->fetch_assoc()) { 
-    if($StockAjustado['stockajustado']==""){ } else { ?>
+    if($StockAjustado['stockajustado']==""){ } if(1==2) { ?>
 
 <div class="col-sm-3">
     <a href="index.php?sec=lista-insumos">
@@ -45,7 +45,7 @@ if($_SESSION['perfil']==5){
 <?php } } ?>
 
 <?php while($PendAprob = $resultPendAprob->fetch_assoc()) { 
-    if($PendAprob['pendiente_aprobacion']==""){ } else { ?>
+    if($PendAprob['pendiente_aprobacion']==""){ } if($_SESSION['perfil']==1 || $_SESSION['perfil']==3) { ?>
 
 <div class="col-sm-3">
     <a href="index.php?sec=lista-pedidos-pendientes">
@@ -61,7 +61,7 @@ if($_SESSION['perfil']==5){
 <?php } } ?>
 
 <?php while($Despacho = $resultDespacho->fetch_assoc()) { 
-    if($Despacho['pendiente_despacho']==""){ } else { ?>
+    if($Despacho['pendiente_despacho']==""){ } if($_SESSION['perfil']==1 || $_SESSION['perfil']==2) { ?>
 
 <div class="col-sm-3">
     <a href="index.php?sec=lista-pedidos-despacho">
