@@ -14,6 +14,12 @@ $result = $conn->query($sql);
 $sqlTipoInsumo = "SELECT * FROM tipo_insumo";
 $resultTipoInsumo = $conn->query($sqlTipoInsumo);
 
+$sqlPrincipioActivo = "SELECT * FROM prinicipio_activo";
+$resultPrincipioActivo = $conn->query($sqlPrincipioActivo);
+
+$sqlFormaFarmaceutica = "SELECT * FROM forma_farmaceutica";
+$resultFormaFarmaceutica = $conn->query($sqlFormaFarmaceutica);
+
 $sqlPedidos = "SELECT * FROM pedido, estado_pedido 
     WHERE estado_pedido.ep_id=pedido.ep_id
     AND paciente_id='".$_GET['id']."'";

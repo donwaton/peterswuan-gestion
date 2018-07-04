@@ -39,7 +39,7 @@ include './bin/select-magistral.php';
         $nuevafecha = strtotime ( '+'.$dias_duracion.' day' , strtotime ( $magistral['prep_fecha'] ) ) ;
         $nuevafecha = date ( 'j-m-Y' , $nuevafecha );
         
-        echo $dias_duracion."dias, <br>Fecha estimada de término: ". $nuevafecha;
+        echo $dias_duracion." dias, <br>Fecha estimada de término: ". $nuevafecha;
     ?> 
 
     </div>

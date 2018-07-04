@@ -80,6 +80,51 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
             });
         });
 
+        $('#addPreparado').click(function(){       
+            $.ajax({
+                url:"bin/insert-preparado.php",
+                method:"POST",
+                data:$('#formAddPreparado').serialize(),
+                success:function(data){ 
+                    var obj = JSON.parse(data);
+                    $('#table-3').DataTable().row.add({
+                        "DT_RowId": "listInsumo"+obj[0].prep_id,
+                        "0": obj[0].principio_nombre,
+                        "1": obj[0].prep_dosis+' '+obj[0].prep_unidad,
+                        "2": obj[0].prep_cantidad+' '+obj[0].forma_nombre,
+                        "3": obj[0].prep_pos_dosis+' cada '+obj[0].prep_pos_horas+' horas',
+                        "4": obj[0].prep_fecha_venc,
+                        "5": obj[0].detalles}).draw();
+                    document.getElementById('formaId').value = '';
+                    document.getElementById('nombreMedico').value = '';
+                    document.getElementById('rutMedico').value = '';
+                    document.getElementById('fechaReceta').value = '';
+                    document.getElementById('dosis').value = '';
+                    document.getElementById('unidadMedida').value = '';
+                    document.getElementById('cantidad').value = '';
+                    document.getElementById('posDosis').value = '';
+                    document.getElementById('posHoras').value = '';
+                    var opts = {
+                        "closeButton": true,
+                        "debug": false,
+                        "positionClass": "toast-top-full-width",
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "1000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+                    
+                    toastr.success("Se ha agregado el preparado magistral a la ficha del paciente", "Ingreso exitoso", opts);
+                            
+                    }
+            });
+        });
+
         $('#addPedido').click(function(){
             $.ajax({
                 url:"bin/insert-pedido.php",
@@ -220,6 +265,10 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
 
 <!-- Datos de contacto -->
     <div class="tab-pane" id="magistrales"> 
+     <!-- Button trigger modal -->
+     <button type="button" class="btn btn-blue btn-sm btn-icon icon-left" data-toggle="modal" data-target="#newPreparadoModal">
+        <i class="entypo-plus"></i>Nuevo preparado magistral
+    </button>
     <table class="table table-bordered datatable" id="table-3">
         <thead>
             <tr>
@@ -238,15 +287,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                 <td><?php echo $listaMagistrales["prep_dosis"]." ".$listaMagistrales["prep_unidad"];?></td>
                 <td><?php echo $listaMagistrales["prep_cantidad"]." ".$listaMagistrales["forma_nombre"];?></td>
                 <td><?php echo $listaMagistrales["prep_pos_dosis"]." ".$listaMagistrales["prep_unidad"]." cada ".$listaMagistrales["prep_pos_horas"]." horas";?></td>
-                <td>
-                <?php 
-                $dias_duracion = round(($listaMagistrales["prep_dosis"]*$listaMagistrales["prep_cantidad"])/($listaMagistrales["prep_pos_dosis"]*(24/$listaMagistrales["prep_pos_horas"])));
-
-                $nuevafecha = strtotime ( '+'.$dias_duracion.' day' , strtotime ( $listaMagistrales['prep_fecha'] ) ) ;
-                $nuevafecha = date ( 'd-m-Y' , $nuevafecha );
-                
-                echo $nuevafecha;?>
-                </td>
+                <td><?php echo $listaMagistrales["prep_fecha_venc"];?></td>
                 <td width="100px">
                     <a href="index.php?sec=magistral&id=<?php echo $listaMagistrales['prep_id'];?>" class="btn btn-info btn-sm btn-icon icon-left">
                         <i class="entypo-doc-text"></i>Ver detalles
@@ -359,6 +400,95 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
             <button type="button" name="addPedido" id="addPedido" class="btn btn-success">Agregar</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Agregar Preparado Magistral-->
+<div class="modal fade" id="newPreparadoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            <h3 class="modal-title" id="exampleModalLabel">Ingresar Nuevo Preparado Magistral</h3>
+            </div>
+            <div class="modal-body">
+            <form id="formAddPreparado" name="formAddPreparado">
+                <input type="hidden" name="pacienteId" value="<?php echo $_GET['id'];?>">
+                <input type="hidden" name="userId" value="<?php echo $_SESSION['userid'];?>">
+
+            <label for="fechaReceta">Fecha de Receta</label>
+            <input type="date" name="fechaReceta" id="fechaReceta" class="form-control form-control-sm">
+            
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="rutMedico">RUT Médico</label>
+                    <input type="text" name="rutMedico" id="rutMedico" class="form-control form-control-sm">   
+                </div>
+                <div class="col-sm-6">
+                    <label for="nombreMedico">Nombre Médico</label>
+                    <input type="text" name="nombreMedico" id="nombreMedico" class="form-control form-control-sm">
+                </div>
+            </div>           
+
+            <label for="principioId">Principio Activo</label>
+            <select class="form-control form-control-sm" name="principioId" id="principioId" required>
+            <option value="0"></option>
+            <?php 
+            while($listaPrincipioActivo = $resultPrincipioActivo->fetch_assoc()) { ?>
+            <option value="<?php echo $listaPrincipioActivo["principio_id"];?>"><?php echo $listaPrincipioActivo["principio_nombre"];?></option>
+            <?php } ?>
+            </select>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="dosis">Dosis</label>
+                    <input type="number" name="dosis" id="dosis" class="form-control form-control-sm">
+                </div>
+                <div class="col-sm-6">
+                    <label for="unidadMedida">Unidad de medida</label>
+                    <input type="text" name="unidadMedida" id="unidadMedida" class="form-control form-control-sm">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="formaId">Forma Farmaceutica</label>
+                    <select class="form-control form-control-sm" name="formaId" id="formaId" required>
+                    <option value="0"></option>
+                    <?php 
+                    while($listaFormaFarmaceutica = $resultFormaFarmaceutica->fetch_assoc()) { ?>
+                    <option value="<?php echo $listaFormaFarmaceutica["forma_id"];?>"><?php echo $listaFormaFarmaceutica["forma_nombre"];?></option>
+                    <?php } ?>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <label for="cantidad">Cantidad</label>
+                    <input type="number" name="cantidad" id="cantidad" class="form-control form-control-sm">
+                </div>
+            </div>
+            
+            <br>
+            <p><b>Posología</b></p>            
+            
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="posDosis">Dosis (misma unidad de medida)</label>
+                    <input type="text" name="posDosis" id="posDosis" class="form-control form-control-sm">
+                </div>
+                <div class="col-sm-6">
+                    <label for="posHoras">Frecuencia (horas)</label>
+                    <input type="text" name="posHoras" id="posHoras" class="form-control form-control-sm">
+                </div>
+            </div>
+        </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+            <button type="button" name="addPreparado" id="addPreparado" class="btn btn-success" data-dismiss="modal">Agregar</button>
         </div>
         </div>
     </div>
