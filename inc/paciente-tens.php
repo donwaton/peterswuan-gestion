@@ -6,6 +6,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
     jQuery( document ).ready( function() {
         var $table1 = jQuery( '#table-1' );
         var $table2 = jQuery( '#table-2' );
+        var $table3 = jQuery( '#table-3' );
 
         // Initialize DataTable1
         $table1.DataTable( {
@@ -85,15 +86,21 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
         </a>
     </li>
     <li>
-        <a href="#contacto" data-toggle="tab">
-            <span class="visible-xs"><i class="entypo-user"></i></span>
-            <span class="hidden-xs">Contacto</span>
+        <a href="#magistrales" data-toggle="tab">
+            <span class="visible-xs"><i class="entypo-newspaper"></i></span>
+            <span class="hidden-xs">Preparados magistrales</span>
         </a>
     </li>
     <li>
         <a href="#pedidos" data-toggle="tab">
             <span class="visible-xs"><i class="entypo-clipboard"></i></span>
             <span class="hidden-xs">Pedidos</span>
+        </a>
+    </li>
+    <li>
+        <a href="#contacto" data-toggle="tab">
+            <span class="visible-xs"><i class="entypo-user"></i></span>
+            <span class="hidden-xs">Contacto</span>
         </a>
     </li>
 </ul>
@@ -146,6 +153,39 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
             <?php } ?>
             </tbody>			
         </table> 
+    </div>
+
+    <!-- Preparados Magistrales -->
+    <div class="tab-pane" id="magistrales"> 
+     <!-- Button trigger modal -->
+    <table class="table table-bordered datatable" id="table-3">
+        <thead>
+            <tr>
+                <th>Principio Actico</th>
+                <th>Dosis</th>
+                <th>Cantidad</th>
+                <th>Posología</th>
+                <th>Duración estimada</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-consumo">
+        <?php while($listaMagistrales = $resultMagistrales->fetch_assoc()) { ?>
+            <tr>
+                <td><?php echo $listaMagistrales["principio_nombre"];?></td>
+                <td><?php echo $listaMagistrales["prep_dosis"]." ".$listaMagistrales["prep_unidad"];?></td>
+                <td><?php echo $listaMagistrales["prep_cantidad"]." ".$listaMagistrales["forma_nombre"];?></td>
+                <td><?php echo $listaMagistrales["prep_pos_dosis"]." ".$listaMagistrales["prep_unidad"]." cada ".$listaMagistrales["prep_pos_horas"]." horas";?></td>
+                <td><?php echo $listaMagistrales["prep_fecha_venc"];?></td>
+                <td width="100px">
+                    <a href="index.php?sec=magistral&id=<?php echo $listaMagistrales['prep_id'];?>" class="btn btn-info btn-sm btn-icon icon-left">
+                        <i class="entypo-doc-text"></i>Ver detalles
+                    </a>
+                </td>
+            </tr>
+        <?php } ?>
+        </tbody>			
+    </table> 
     </div>
 
     <!-- Pedidos -->

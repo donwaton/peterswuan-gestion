@@ -9,12 +9,18 @@ include './bin/select-magistral.php';
   <li>
     <a href="index.php"><i class="fa-home"></i>Inicio</a>
   </li>
+  <?php if($_SESSION['perfil']<>5) {?>
   <li>
     <a href="index.php?sec=lista-pacientes"><i class="fa-home"></i>Lista de pacientes</a>
   </li>
   <li>
     <a href="index.php?sec=paciente&id=<?php echo $magistral['paciente_id'];?>"><i class="fa-home"></i>Ficha <?php echo $magistral['paciente_nombre']?></a>
   </li>
+  <?php } if($_SESSION['perfil']==5) {?>
+  <li>
+    <a href="index.php?sec=paciente-tens&id=<?php echo $magistral['paciente_id'];?>"><i class="fa-home"></i>Ficha <?php echo $magistral['paciente_nombre']?></a>
+  </li>
+  <?php }?>
   <li class="active">
     <strong>Detalles Preparado Magistral</strong>
   </li>
@@ -31,7 +37,7 @@ include './bin/select-magistral.php';
     Principio Activo: <?php echo $magistral["principio_nombre"];?><br>
     Dosis: <?php echo $magistral["prep_dosis"]." ".$magistral["prep_unidad"];?><br>
     Forma Farmaceutica: <?php echo $magistral["prep_cantidad"]." ".$magistral["forma_nombre"];?><br>
-    Posificación: <?php echo $magistral["prep_pos_dosis"]." ".$magistral["prep_unidad"]." cada ".$magistral["prep_pos_horas"]." horas";?><br>
+    Posoficación: <?php echo $magistral["prep_pos_dosis"]." ".$magistral["prep_unidad"]." cada ".$magistral["prep_pos_horas"]." horas";?><br>
     Duración estimada:
     <?php
         $dias_duracion = round(($magistral["prep_dosis"]*$magistral["prep_cantidad"])/($magistral["prep_pos_dosis"]*(24/$magistral["prep_pos_horas"])));

@@ -17,10 +17,6 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
             paging: false
         });
 
-        $table3.DataTable( {
-            paging: false
-        });
-
         // Initalize Select Dropdown after DataTables is created
         $table1.closest( '.dataTables_wrapper' ).find( 'select' ).select2( {
             minimumResultsForSearch: -1
@@ -92,7 +88,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                         "0": obj[0].principio_nombre,
                         "1": obj[0].prep_dosis+' '+obj[0].prep_unidad,
                         "2": obj[0].prep_cantidad+' '+obj[0].forma_nombre,
-                        "3": obj[0].prep_pos_dosis+' cada '+obj[0].prep_pos_horas+' horas',
+                        "3": obj[0].prep_pos_dosis+' '+obj[0].prep_unidad+' cada '+obj[0].prep_pos_horas+' horas',
                         "4": obj[0].prep_fecha_venc,
                         "5": obj[0].detalles}).draw();
                     document.getElementById('formaId').value = '';
@@ -263,7 +259,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
         </table> 
     </div>
 
-<!-- Datos de contacto -->
+<!-- Preparados Magistrales -->
     <div class="tab-pane" id="magistrales"> 
      <!-- Button trigger modal -->
      <button type="button" class="btn btn-blue btn-sm btn-icon icon-left" data-toggle="modal" data-target="#newPreparadoModal">
