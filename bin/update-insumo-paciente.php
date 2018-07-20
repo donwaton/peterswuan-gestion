@@ -7,7 +7,19 @@ if(isset($_POST['insumoId'])){
     WHERE paciente_insumo.pi_id = ".$_POST['insumoId'].";";
     $conn->query($sqlUpdate);
 
-    echo $_POST['insumoId'].",".$_POST['newStock'];
+    $sql = "SELECT pi_consumo
+    FROM paciente_insumo
+    WHERE pi_id = ".$_POST['insumoId'].";";
+    $result = $conn->query($sql);
+    $consumo = $result->fetch_assoc();
+
+    if($consumo['pi_consumo']*0.3>$_POST['newStock']){
+        echo "true";
+    }
+    else {
+        echo "false";
+    }
+
     }
 else {
     echo "Error en la actualización";

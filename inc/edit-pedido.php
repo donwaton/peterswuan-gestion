@@ -119,12 +119,18 @@ if($pedido['ep_id']==5){
   <li>
     <a href="index.php"><i class="fa-home"></i>Inicio</a>
   </li>
+  <?php if($_SESSION['perfil']<>5) {?>
   <li>
     <a href="index.php?sec=lista-pacientes"><i class="fa-home"></i>Lista de pacientes</a>
   </li>
   <li>
     <a href="index.php?sec=paciente&id=<?php echo $pedido['paciente_id'];?>"><i class="fa-home"></i>Ficha <?php echo $pedido['paciente_nombre']?></a>
   </li>
+  <?php } if($_SESSION['perfil']==5) {?>
+  <li>
+    <a href="index.php?sec=paciente-tens&id=<?php echo $pedido['paciente_id'];?>"><i class="fa-home"></i>Ficha <?php echo $pedido['paciente_nombre']?></a>
+  </li>
+  <?php }?>
   <li class="active">
     <strong>Detalles pedido</strong>
   </li>
@@ -149,7 +155,7 @@ if($pedido['ep_id']==5){
         url:'./bin/solicitar-aprobacion.php',
         data:{idPedido:<?php echo $_GET['pid'];?>,userId:<?php echo $_SESSION['userid'];?>},
         success:function(response){
-            window.location.replace('index.php?sec=paciente&id=<?php echo $_GET['id'];?>');
+            window.location.replace('index.php?sec=paciente-tens&id=<?php echo $_GET['id'];?>');
         }
     });
     ">
@@ -163,9 +169,11 @@ if($pedido['ep_id']==5){
 <br />
 
     <div>
+    <?php if($_SESSION['perfil']<>5 || ($_SESSION['perfil']==5 && $pedido['ep_id']==1 )) { ?>
     <button type="button" class="btn btn-blue btn-sm btn-icon icon-left" data-toggle="modal" data-target="#exampleModal">
         <i class="entypo-plus"></i>Agregar
     </button>
+    <?php }?>
     <table class="table table-bordered datatable" id="table-pedido">
             <thead>
                 <tr>
@@ -173,7 +181,9 @@ if($pedido['ep_id']==5){
                     <th>Tipo</th>
                     <th>Motivo</th>
                     <th style="width:80px;">Pedido</th>
+                    <?php if($_SESSION['perfil']<>5 || ($_SESSION['perfil']==5 && $pedido['ep_id']==1 )) { ?>
                     <th style="width:80px;">Acciones</th>
+                    <?php }?>
                 </tr>
             </thead>
             <tbody id="tabla-consumo">
@@ -183,6 +193,7 @@ if($pedido['ep_id']==5){
                     <td><?php echo $listaInsumosPedido["tipoinsumo_nombre"];?></td>
                     <td><?php echo $listaInsumosPedido["mp_nombre"];?></td>
                     <td><?php echo $listaInsumosPedido["ip_cantidad"];?></td>
+                    <?php if($_SESSION['perfil']<>5 || ($_SESSION['perfil']==5 && $pedido['ep_id']==1 )) { ?>
                    <td width="80px">
                         <button type="button" class="btn btn-danger btn-xs" onclick="
                         var r =  confirm('Esta seguro que desea eliminar el insumo?');
@@ -219,6 +230,7 @@ if($pedido['ep_id']==5){
                         </button>
                         -->
                     </td>
+                    <?php } ?>
                 </tr>
             <?php } ?>
             </tbody>			

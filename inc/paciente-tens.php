@@ -1,12 +1,31 @@
 <?php 
 include './bin/select-paciente.php';
-while($datosPaciente = $result->fetch_assoc()) { ?>
+while($datosPaciente = $result->fetch_assoc()) { 
+$alertaInsumos = $alertaCritico['alerta_critico']; ?>
 
 <script type="text/javascript">
     jQuery( document ).ready( function() {
         var $table1 = jQuery( '#table-1' );
         var $table2 = jQuery( '#table-2' );
         var $table3 = jQuery( '#table-3' );
+
+        function alertaQuiebreStock(){
+            $.ajax({
+                url:"bin/select-insumo-critico.php",
+                method:"POST",
+                data:'pacienteId=<?php echo $_GET['id'];?>',
+                success:function(response){
+                    if(response>0){
+                        document.getElementById('alertaInsumo').innerHTML = response;
+                    }
+                    else {
+                        document.getElementById('alertaInsumo').innerHTML = '';
+                    }
+                }
+            });
+        }
+
+        alertaQuiebreStock();
 
         // Initialize DataTable1
         $table1.DataTable( {
@@ -53,7 +72,13 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                         };                        
                         toastr.success("Se ha actualizado el stock del insumo", "Actualización exitosa", opts);
                         $('#modalUpdateInsumo').modal('hide');
-                        document.getElementById('listInsumo'+idInsumo).innerHTML = stock;
+                        if(response == "false"){
+                            document.getElementById('listInsumo'+idInsumo).innerHTML = stock;
+                        }
+                        if(response == "true"){
+                            document.getElementById('listInsumo'+idInsumo).innerHTML = stock+" <i class='entypo-attention' style='color:#ff3300;'></i>";
+                        }
+                        alertaQuiebreStock();
                         }
                 });
             } 
@@ -82,7 +107,9 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
     <li class="active">
         <a href="#consumo" data-toggle="tab">
             <span class="visible-xs"><i class="entypo-box"></i></span>
-            <span class="hidden-xs">Consumo</span>
+            <span class="hidden-xs">Consumo 
+            </span>
+            <span class="badge badge-danger" id="alertaInsumo"></span>
         </a>
     </li>
     <li>
@@ -134,12 +161,17 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                 </tr>
             </thead>
             <tbody id="tabla-consumo">
-            <?php while($listaInsumos = $resultInsumos->fetch_assoc()) { ?>
+            <?php while($listaInsumos = $resultInsumos->fetch_assoc()) { 
+                    $classDanger = '';
+                if($listaInsumos["pi_consumo"]*0.3>$listaInsumos["pi_stock"]){
+                    $classDanger = "<i class='entypo-attention' style='color:#ff3300;'></i>";
+                }
+                ?>
                 <tr>
                     <td><?php echo $listaInsumos["insumo_nombre"];?></td>
                     <td class="hidden-xs"><?php echo $listaInsumos["tipoinsumo_nombre"];?></td>
                     <td class="hidden-xs"><?php echo $listaInsumos["pi_consumo"];?></td>
-                    <td id="listInsumo<?php echo $listaInsumos['pi_id'];?>"><?php echo $listaInsumos["pi_stock"];?></td>     
+                    <td id="listInsumo<?php echo $listaInsumos['pi_id'];?>"><?php echo $listaInsumos["pi_stock"]." ".$classDanger;?></td>     
                     <td>
                         <button type="button" class="btn btn-info btn-xs" onclick="
                             document.getElementById('insumoId').value = '<?php echo $listaInsumos['pi_id'];?>';
@@ -240,7 +272,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
 
             <label for="newStock">Stock</label>
             <input type="number" name="newStock" id="newStock" class="form-control form-control-sm"
-            data-validate="required" data-message-required="Debe ingresar el nuevo stock.">
+            data-validate="required" data-message-required="Debe ingresar el nuevo stock." required>
         </form>
         </div>
         <div class="modal-footer">
@@ -268,7 +300,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
             <input type="hidden" name="userId" value="<?php echo $_SESSION['userid'];?>">
 
             <label for="pedidoDesc">Descripción</label>
-            <input type="text" name="pedidoDesc" id="pedidoDesc" class="form-control form-control-sm">
+            <input type="text" name="pedidoDesc" id="pedidoDesc" class="form-control form-control-sm" required>
         </form>
         </div>
         <div class="modal-footer">
