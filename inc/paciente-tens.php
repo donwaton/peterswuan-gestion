@@ -1,7 +1,6 @@
 <?php 
 include './bin/select-paciente.php';
-while($datosPaciente = $result->fetch_assoc()) { 
-$alertaInsumos = $alertaCritico['alerta_critico']; ?>
+while($datosPaciente = $result->fetch_assoc()) { ?>
 
 <script type="text/javascript">
     jQuery( document ).ready( function() {
