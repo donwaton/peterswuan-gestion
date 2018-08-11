@@ -26,6 +26,30 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
 
         alertaQuiebreStock();
 
+        $('.noEnterSubmit').keypress(function(e){
+            if ( e.which == 13 ) return false;
+            //or...
+            if ( e.which == 13 ) e.preventDefault();
+        });
+
+        function alertaPreparadoVencimiento(){
+            $.ajax({
+                url:"bin/select-preparado-vencimiento.php",
+                method:"POST",
+                data:'pacienteId=<?php echo $_GET['id'];?>',
+                success:function(response){
+                    if(response>0){
+                        document.getElementById('alertaPreparado').innerHTML = response;
+                    }
+                    else {
+                        document.getElementById('alertaPreparado').innerHTML = '';
+                    }
+                }
+            });
+        }
+
+        alertaPreparadoVencimiento();
+
         // Initialize DataTable1
         $table1.DataTable( {
             paging: false
@@ -53,6 +77,44 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                     }
                 });
             }
+        });
+
+        $('#updateInsumo').click(function(){
+            var consumo = document.forms["formUpdateInsumo"]["newConsumo"].value;
+            var idInsumo = document.forms["formUpdateInsumo"]["insumoId"].value;
+
+            if(consumo ==""){
+                alert("Debe ingresar el nuevo consumo para actualizar");
+            } 
+            else {
+                                
+                $.ajax({
+                    url:"bin/update-consumo-paciente.php",
+                    method:"POST",
+                    data:$('#formUpdateInsumo').serialize(),
+                    success:function(response){
+                        var opts = {
+                            "closeButton": true,
+                            "debug": false,
+                            "positionClass": "toast-top-full-width",
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "1000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        };                        
+                        toastr.success("Se ha actualizado el consumo del insumo", "Actualización exitosa", opts);
+                        $('#modalUpdateInsumo').modal('hide');
+                        document.getElementById('listConsumo'+idInsumo).innerHTML = consumo;
+                        document.forms["formUpdateInsumo"]["newConsumo"].value = "";
+                        alertaQuiebreStock();
+                        }
+                });
+            } 
         });
 
         $('#addInsumo').click(function(){       
@@ -188,6 +250,8 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
         <a href="#magistrales" data-toggle="tab">
             <span class="visible-xs"><i class="entypo-newspaper"></i></span>
             <span class="hidden-xs">Preparados magistrales</span>
+
+            <span class="badge badge-danger" id="alertaPreparado"></span>
         </a>
     </li>
     <li>
@@ -217,7 +281,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
     <div class="tab-pane active" id="consumo">
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-blue btn-sm btn-icon icon-left" data-toggle="modal" data-target="#exampleModal">
-            <i class="entypo-plus"></i>Agregar
+            <i class="entypo-plus"></i>Agregar insumo
         </button>
         <table class="table table-bordered datatable" id="table-1">
             <thead>
@@ -239,9 +303,16 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                 <tr id="listInsumo<?php echo $listaInsumos['pi_id'];?>">
                     <td><?php echo $listaInsumos["insumo_nombre"];?></td>
                     <td><?php echo $listaInsumos["tipoinsumo_nombre"];?></td>
-                    <td><?php echo $listaInsumos["pi_consumo"];?></td>
+                    <td id="listConsumo<?php echo $listaInsumos['pi_id'];?>"><?php echo $listaInsumos["pi_consumo"];?></td>
                     <td><?php echo $listaInsumos["pi_stock"]." ".$classDanger;?></td>
                     <td width="80px">
+                        <button type="button" class="btn btn-info btn-xs" onclick="
+                            document.getElementById('insumoId').value = '<?php echo $listaInsumos['pi_id'];?>';
+                            document.forms['formUpdateInsumo']['newConsumo'].value = '';
+                            $('#modalUpdateInsumo').modal('show');
+                        ">
+							<i class="entypo-pencil"></i>
+						</button>
                         <button type="button" class="btn btn-danger btn-xs" onclick="                        
                         $.ajax({
                             type:'POST',
@@ -301,13 +372,19 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
             </tr>
         </thead>
         <tbody id="tabla-consumo">
-        <?php while($listaMagistrales = $resultMagistrales->fetch_assoc()) { ?>
+        <?php while($listaMagistrales = $resultMagistrales->fetch_assoc()) { 
+            $week=strtotime("-6 day");
+            $classDangerPrep = '';
+            if($listaMagistrales["prep_fecha_venc"]<date("Y-m-d", $week)){
+                $classDangerPrep = "<i class='entypo-attention' style='color:#ff3300;'></i>";
+            }
+        ?>
             <tr>
                 <td><?php echo $listaMagistrales["principio_nombre"];?></td>
                 <td><?php echo $listaMagistrales["prep_dosis"]." ".$listaMagistrales["prep_unidad"];?></td>
                 <td><?php echo $listaMagistrales["prep_cantidad"]." ".$listaMagistrales["forma_nombre"];?></td>
                 <td><?php echo $listaMagistrales["prep_pos_dosis"]." ".$listaMagistrales["prep_unidad"]." cada ".$listaMagistrales["prep_pos_horas"]." horas";?></td>
-                <td><?php echo $listaMagistrales["prep_fecha_venc"];?></td>
+                <td><?php echo $listaMagistrales["prep_fecha_venc"]." ".$classDangerPrep;?></td>
                 <td width="100px">
                     <a href="index.php?sec=magistral&id=<?php echo $listaMagistrales['prep_id'];?>" class="btn btn-info btn-sm btn-icon icon-left">
                         <i class="entypo-doc-text"></i>Ver detalles
@@ -528,6 +605,34 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
   </div>
 </div>
 
+<!-- Modal Actualiza Consumo-->
+<div class="modal fade" id="modalUpdateInsumo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            <h3 class="modal-title" id="exampleModalLabel">Actualizar Consumo</h3>
+            </div>
+            <div class="modal-body">
+            <form id="formUpdateInsumo" name="formUpdateInsumo" onsubmit="false">
+
+            <input type="hidden" name="pacienteId" value="<?php echo $_GET['id'];?>">
+            <input type="hidden" name="insumoId" id="insumoId" value="0">
+
+            <label for="newConsumo">Consumo</label>
+            <input type="number" name="newConsumo" id="newConsumo" class="form-control form-control-sm noEnterSubmit"
+            data-validate="required" data-message-required="Debe ingresar el nuevo consumo." required>
+        </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+            <button type="button" name="updateInsumo" id="updateInsumo" class="btn btn-success">Actualizar</button>
+        </div>
+        </div>
+    </div>
+</div>
 
 <!-- Imported styles on this page -->
 <link rel="stylesheet" href="assets/js/datatables/datatables.css">

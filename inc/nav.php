@@ -6,7 +6,7 @@
 
         <!-- logo -->
         <div class="logo">
-            <a href="#">
+            <a href="index.php">
                 <img src="assets/images/logo-peterswuan-white.png" width="120" alt="" />
             </a>
         </div>

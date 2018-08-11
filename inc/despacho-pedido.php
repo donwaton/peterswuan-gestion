@@ -132,6 +132,11 @@ if($pedido['ep_id']==5){
     ">
     <i class="entypo-check"></i>Despachar pedido
 </button>
+
+<a href="index.php?sec=pedido&id=<?php echo $_GET['pid'];?>"  class="btn btn-success btn-icon icon-left" target="_blank">
+    <i class="entypo-doc"></i>Guía de despacho
+</a>
+
 <?php } ?>
 <br />
 
@@ -140,9 +145,6 @@ if($pedido['ep_id']==5){
 <br />
 
     <div>
-    <button type="button" class="btn btn-blue btn-sm btn-icon icon-left" data-toggle="modal" data-target="#exampleModal">
-        <i class="entypo-plus"></i>Agregar
-    </button>
     <table class="table table-bordered datatable" id="table-pedido">
             <thead>
                 <tr>
@@ -185,58 +187,6 @@ if($pedido['ep_id']==5){
         </table> 
     </div>    
 </div>
-
-<!-- Modal Agregar Insumo-->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-            <h3 class="modal-title" id="exampleModalLabel">Ingresar Insumo Nuevo</h3>
-            </div>
-            <div class="modal-body">
-            <form id="formAddInsumo" name="formAddInsumo">
-
-            <input type="hidden" name="pedidoId" value="<?php echo $_GET['pid'];?>">
-
-            <label for="motivo">Motivo</label>
-            <select class="form-control form-control-sm" name="motivo" id="motivo" required>
-            <option value="0"></option>
-            <?php 
-            while($listaMotivos = $resultMotivo->fetch_assoc()) { ?>
-            <option value="<?php echo $listaMotivos["mp_id"];?>"><?php echo $listaMotivos["mp_nombre"];?></option>
-            <?php } ?>
-            </select>
-
-            <label for="tipoinsumo">Tipo</label>
-            <select class="form-control form-control-sm" name="tipoinsumoId" id="newTipoInsumo" required>
-            <option value="0"></option>
-            <?php 
-            while($listaTipoInsumo = $resultTipoInsumo->fetch_assoc()) { ?>
-            <option value="<?php echo $listaTipoInsumo["tipoinsumo_id"];?>"><?php echo $listaTipoInsumo["tipoinsumo_nombre"];?></option>
-            <?php } ?>
-            </select>
-
-            <label for="newInsumo">Nombre</label>
-            <select class="form-control form-control-sm" name="insumoId" id="newInsumo" required>
-            <option value=""></option>
-            </select>
-
-            <label for="newCantidad">Cantidad</label>
-            <input type="number" name="newCantidad" id="newCantidad" class="form-control form-control-sm">
-        </form>
-            <div class="label label-success" id="ingresoExitoso">Se ha ingresado exitósamente</div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" id="refreshInsumos" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-            <button type="button" name="addInsumo" id="addInsumo" class="btn btn-success">Agregar al pedido</button>
-        </div>
-        </div>
-    </div>
-</div>
-
 
 <!-- Imported styles on this page -->
 <link rel="stylesheet" href="assets/js/datatables/datatables.css">

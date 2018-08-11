@@ -169,9 +169,9 @@ if($pedido['ep_id']==5){
 <br />
 
     <div>
-    <?php if($_SESSION['perfil']<>5 || ($_SESSION['perfil']==5 && $pedido['ep_id']==1 )) { ?>
+    <?php if($_SESSION['perfil']==1 || ($_SESSION['perfil']==5 && $pedido['ep_id']==1 ) || ($_SESSION['perfil']==4 && $pedido['ep_id']<3 )) { ?>
     <button type="button" class="btn btn-blue btn-sm btn-icon icon-left" data-toggle="modal" data-target="#exampleModal">
-        <i class="entypo-plus"></i>Agregar
+        <i class="entypo-plus"></i>Agregar insumo
     </button>
     <?php }?>
     <table class="table table-bordered datatable" id="table-pedido">
@@ -181,7 +181,7 @@ if($pedido['ep_id']==5){
                     <th>Tipo</th>
                     <th>Motivo</th>
                     <th style="width:80px;">Pedido</th>
-                    <?php if($_SESSION['perfil']<>5 || ($_SESSION['perfil']==5 && $pedido['ep_id']==1 )) { ?>
+                    <?php if($_SESSION['perfil']==1 || ($_SESSION['perfil']==5 && $pedido['ep_id']==1 ) || ($_SESSION['perfil']==4 && $pedido['ep_id']<3 )) { ?>
                     <th style="width:80px;">Acciones</th>
                     <?php }?>
                 </tr>
@@ -193,7 +193,7 @@ if($pedido['ep_id']==5){
                     <td><?php echo $listaInsumosPedido["tipoinsumo_nombre"];?></td>
                     <td><?php echo $listaInsumosPedido["mp_nombre"];?></td>
                     <td><?php echo $listaInsumosPedido["ip_cantidad"];?></td>
-                    <?php if($_SESSION['perfil']<>5 || ($_SESSION['perfil']==5 && $pedido['ep_id']==1 )) { ?>
+                    <?php if($_SESSION['perfil']==1 || ($_SESSION['perfil']==5 && $pedido['ep_id']==1 ) || ($_SESSION['perfil']==4 && $pedido['ep_id']<3 )) { ?>
                    <td width="80px">
                         <button type="button" class="btn btn-danger btn-xs" onclick="
                         var r =  confirm('Esta seguro que desea eliminar el insumo?');

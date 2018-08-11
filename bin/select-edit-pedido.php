@@ -31,6 +31,12 @@ $resultSugeridos = $conn->query($sqlSugeridos);
 $sqlTipoInsumo = "SELECT * FROM tipo_insumo";
 $resultTipoInsumo = $conn->query($sqlTipoInsumo);
 
+$sqlMagistrales = "SELECT * FROM preparado_magistral, prinicipio_activo, forma_farmaceutica
+    WHERE preparado_magistral.principio_id=prinicipio_activo.principio_id
+    AND preparado_magistral.forma_id=forma_farmaceutica.forma_id
+    AND paciente_id='".$_GET['id']."'";
+$resultMagistrales = $conn->query($sqlMagistrales);
+
 $sqlMotivo = "SELECT * FROM motivo_pedido";
 $resultMotivo = $conn->query($sqlMotivo);
 

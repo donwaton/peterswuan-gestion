@@ -45,7 +45,7 @@ if($_SESSION['perfil']==5){
 <?php } } ?>
 
 <?php while($PendAprob = $resultPendAprob->fetch_assoc()) { 
-    if($PendAprob['pendiente_aprobacion']==""){ } if($_SESSION['perfil']==1 || $_SESSION['perfil']==3) { ?>
+    if($PendAprob['pendiente_aprobacion']==""){ } if($_SESSION['perfil']==1 || $_SESSION['perfil']==3 || $_SESSION['perfil']==4) { ?>
 
 <div class="col-sm-3">
     <a href="index.php?sec=lista-pedidos-pendientes">

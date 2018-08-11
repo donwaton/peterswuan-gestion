@@ -26,6 +26,24 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
 
         alertaQuiebreStock();
 
+        function alertaPreparadoVencimiento(){
+            $.ajax({
+                url:"bin/select-preparado-vencimiento.php",
+                method:"POST",
+                data:'pacienteId=<?php echo $_GET['id'];?>',
+                success:function(response){
+                    if(response>0){
+                        document.getElementById('alertaPreparado').innerHTML = response;
+                    }
+                    else {
+                        document.getElementById('alertaPreparado').innerHTML = '';
+                    }
+                }
+            });
+        }
+
+        alertaPreparadoVencimiento();
+
         // Initialize DataTable1
         $table1.DataTable( {
             paging: false
@@ -54,7 +72,6 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                     method:"POST",
                     data:$('#formUpdateInsumo').serialize(),
                     success:function(response){
-                        console.log(response);
                         var opts = {
                             "closeButton": true,
                             "debug": false,
@@ -106,8 +123,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
     <li class="active">
         <a href="#consumo" data-toggle="tab">
             <span class="visible-xs"><i class="entypo-box"></i></span>
-            <span class="hidden-xs">Consumo 
-            </span>
+            <span class="hidden-xs">Consumo</span>
             <span class="badge badge-danger" id="alertaInsumo"></span>
         </a>
     </li>
@@ -115,6 +131,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
         <a href="#magistrales" data-toggle="tab">
             <span class="visible-xs"><i class="entypo-newspaper"></i></span>
             <span class="hidden-xs">Preparados magistrales</span>
+            <span class="badge badge-danger" id="alertaPreparado"></span>
         </a>
     </li>
     <li>
@@ -201,13 +218,19 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
             </tr>
         </thead>
         <tbody id="tabla-consumo">
-        <?php while($listaMagistrales = $resultMagistrales->fetch_assoc()) { ?>
+        <?php while($listaMagistrales = $resultMagistrales->fetch_assoc()) { 
+            $week=strtotime("-6 day");
+            $classDangerPrep = '';
+            if($listaMagistrales["prep_fecha_venc"]<date("Y-m-d", $week)){
+                $classDangerPrep = "<i class='entypo-attention' style='color:#ff3300;'></i>";
+            }
+            ?>
             <tr>
                 <td><?php echo $listaMagistrales["principio_nombre"];?></td>
                 <td><?php echo $listaMagistrales["prep_dosis"]." ".$listaMagistrales["prep_unidad"];?></td>
                 <td><?php echo $listaMagistrales["prep_cantidad"]." ".$listaMagistrales["forma_nombre"];?></td>
                 <td><?php echo $listaMagistrales["prep_pos_dosis"]." ".$listaMagistrales["prep_unidad"]." cada ".$listaMagistrales["prep_pos_horas"]." horas";?></td>
-                <td><?php echo $listaMagistrales["prep_fecha_venc"];?></td>
+                <td><?php echo $listaMagistrales["prep_fecha_venc"]." ".$classDangerPrep;?></td>
                 <td width="100px">
                     <a href="index.php?sec=magistral&id=<?php echo $listaMagistrales['prep_id'];?>" class="btn btn-info btn-sm btn-icon icon-left">
                         <i class="entypo-doc-text"></i>Ver detalles

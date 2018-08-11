@@ -18,6 +18,10 @@ if(isset($_POST['insumoId'])){
     $ejecutarNewPedido = $conn->query($sqlNewPedido);
     $resultNewPedido = $ejecutarNewPedido->fetch_assoc();
 
+    $funcionEditar = "document.getElementById('insumoId').value = '".$resultNewPedido['pi_id']."';
+    document.forms['formUpdateInsumo']['newConsumo'].value = '';
+    $('#modalUpdateInsumo').modal('show');";
+
     $funcionAjax = "$.ajax({
         type:'POST',
         url:'./bin/delete-consumo.php',
@@ -42,7 +46,8 @@ if(isset($_POST['insumoId'])){
             toastr.info('Se ha eliminado el insumo del consumo del paciente', 'Eliminación exitosa', opts);
         }
     });";
-    $btneliminar = '<button type="button" class="btn btn-danger btn-xs" onclick="'.$funcionAjax.'"><i class="entypo-trash"></i></button>';
+    $btneliminar = '<button type="button" class="btn btn-info btn-xs" onclick="'.$funcionEditar.'"><i class="entypo-pencil"></i></button>
+    <button type="button" class="btn btn-danger btn-xs" onclick="'.$funcionAjax.'"><i class="entypo-trash"></i></button>';
     $return_arr = array();  
 
     $row_array['id'] = $resultNewPedido['pi_id'];

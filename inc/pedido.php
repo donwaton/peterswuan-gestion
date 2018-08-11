@@ -3,22 +3,6 @@ include './bin/select-pedido.php';
 ?>
 
 <!-- Inicio HTML -->
-
-<ol class="breadcrumb bc-3 hidden-print" >
-  <li>
-    <a href="index.php"><i class="fa-home"></i>Inicio</a>
-  </li>
-  <li>
-    <a href="index.php?sec=lista-pacientes"><i class="fa-home"></i>Lista de pacientes</a>
-  </li>
-  <li>
-    <a href="index.php?sec=paciente&id=<?php echo $pedido['paciente_id']; ?>"><i class="fa-home"></i>Ficha <?php echo $pedido['paciente_nombre'] ?></a>
-  </li>
-  <li class="active">
-    <strong>Detalles pedido</strong>
-  </li>
-</ol>
-
 <div class="invoice">
 
     <div class="row">
@@ -34,7 +18,7 @@ include './bin/select-pedido.php';
         <div class="col-sm-6 invoice-right">
 
                 <h3>Nº de Pedido: <?php echo $pedido['pedido_id']; ?></h3>
-                <?php $fechaPedido = date ( 'd-m-Y' , strtotime ($pedido['pedido_fecha']) );?>
+                <?php $fechaPedido = date ( 'd-m-Y');?>
                 <span>Fecha: <?php echo $fechaPedido ?></span>
         </div>
 
@@ -53,13 +37,19 @@ include './bin/select-pedido.php';
 
         </div>
 
-        <div class="col-sm-3 invoice-left">
+        <div class="col-sm-2 invoice-left">
+
+            <h4>Contacto</h4>
+            <?php echo $pedido['contacto_nombre1'] ?>
+        </div>
+
+        <div class="col-sm-2 invoice-left">
 
             <h4>Telefono</h4>
             <?php echo $pedido['contacto_tel1'] ?>
         </div>
 
-        <div class="col-md-6 invoice-right">
+        <div class="col-md-5 invoice-right">
 
             <h4>Dirección</h4>
             <?php echo $pedido['paciente_domicilio'] ?>
@@ -76,6 +66,7 @@ include './bin/select-pedido.php';
                 <th>Producto</th>
                 <th>Tipo</th>
                 <th>Cantidad</th>
+                <th>Check</th>
             </tr>
         </thead>
 
@@ -86,6 +77,7 @@ include './bin/select-pedido.php';
                 <td><?php echo $listaInsumosPedido["insumo_nombre"]; ?></td>
                 <td><?php echo $listaInsumosPedido["tipoinsumo_nombre"]; ?></td>
                 <td><?php echo $listaInsumosPedido["ip_cantidad"]; ?></td>
+                <td></td>
             </tr>
         <?php }?>
 
@@ -107,6 +99,40 @@ include './bin/select-pedido.php';
             <tr><td>&nbsp;</td></tr>
         </tbody>
     </table>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="checkbox checkbox-replace" style="margin-left:20px;">
+                <input type="checkbox" id="chk-1" >
+                <label>Conforme</label>
+            </div>
+            <div class="checkbox checkbox-replace" style="margin-left:20px;">
+                <input type="checkbox" id="chk-1" >
+                <label>Disconforme</label>
+            </div>
+            <div class="checkbox checkbox-replace" style="margin-left:40px;">
+                <input type="checkbox" id="chk-1" >
+                <label>Producto en mal estado</label>
+            </div>
+            <div class="checkbox checkbox-replace" style="margin-left:40px;">
+                <input type="checkbox" id="chk-1" >
+                <label>Falta de insumo y/o medicamentos</label>
+            </div>
+        </div>
+    </div>
+    <br><br>
+    <div class="row">
+        <div class="col-md-6 invoice-left">
+            <p align="center">_____________________________________________________________________________</p>
+            <p align="center">Nombre</p>
+        </div>
+
+        <div class="col-md-6 invoice-right">
+            <p align="center">_____________________________________</p>
+            <p align="center">Firma</p>
+        </div>
+    </div>
+
 
     <div class="margin"></div>
 
