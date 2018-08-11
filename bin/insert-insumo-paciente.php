@@ -22,7 +22,9 @@ if(isset($_POST['insumoId'])){
     document.forms['formUpdateInsumo']['newConsumo'].value = '';
     $('#modalUpdateInsumo').modal('show');";
 
-    $funcionAjax = "$.ajax({
+    $funcionAjax = "var confirmDelete = confirm('¿Está seguro que desea eliminar el insumo?');
+    if(confirmDelete == true){
+    $.ajax({
         type:'POST',
         url:'./bin/delete-consumo.php',
         data:'idInsumo=".$result['id']."',
@@ -42,10 +44,10 @@ if(isset($_POST['insumoId'])){
                 'showMethod': 'fadeIn',
                 'hideMethod': 'fadeOut'
             };
-
             toastr.info('Se ha eliminado el insumo del consumo del paciente', 'Eliminación exitosa', opts);
+            confirmDelete = false;
         }
-    });";
+    });}";
     $btneliminar = '<button type="button" class="btn btn-info btn-xs" onclick="'.$funcionEditar.'"><i class="entypo-pencil"></i></button>
     <button type="button" class="btn btn-danger btn-xs" onclick="'.$funcionAjax.'"><i class="entypo-trash"></i></button>';
     $return_arr = array();  

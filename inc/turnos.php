@@ -26,6 +26,11 @@ $('#calendar').fullCalendar({
 
 });
 </script>
+<style>
+.calendar-env .fc .fc-view-container .fc-view table tbody .fc-day.fc-state-highlight {
+    background:#285182;
+}
+</style>
 
 <!-- Inicio HTML -->
 
@@ -49,54 +54,6 @@ $('#calendar').fullCalendar({
     <div id="calendar"></div>
 
 </div>
-
-<!-- Sidebar -->
-<div class="calendar-sidebar">
-
-    <!-- new task form -->
-    <div class="calendar-sidebar-row">
-
-        <form role="form" id="add_event_form">
-
-            <div class="input-group minimal">
-                <input type="text" class="form-control" placeholder="Add event..."   disabled/>
-
-                <div class="input-group-addon">
-                    <i class="entypo-pencil"></i>
-                </div>
-            </div>
-
-        </form>
-
-    </div>
-
-
-    <!-- Events List -->
-    <ul class="events-list" id="draggable_events">
-       <!-- Soon
-        <li>
-            <p>Drag Events to Calendar Dates</p>
-        </li>
-        <li>
-            <a href="#">Sport Match</a>
-        </li>
-        <li>
-            <a href="#" class="color-blue" data-event-class="color-blue">Meeting</a>
-        </li>
-        <li>
-            <a href="#" class="color-orange" data-event-class="color-orange">Relax</a>
-        </li>
-        <li>
-            <a href="#" class="color-primary" data-event-class="color-primary">Study</a>
-        </li>
-        <li>
-            <a href="#" class="color-green" data-event-class="color-green">Family Time</a>
-        </li>
-        -->
-    </ul>
-
-</div>
-
 
 <!-- Imported styles on this page -->
 <link rel="stylesheet" href="assets/js/fullcalendar-2/fullcalendar.min.css">

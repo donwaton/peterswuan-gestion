@@ -65,7 +65,7 @@ var baseurl = '';
 		<div class="login-content">
 			
 			<a href="index.html" class="logo">
-				<img src="assets/images/logo-peterswuan-white.png" width="180" alt="" />
+				<img src="assets/images/PS_white.png" width="180" alt="" />
 			</a>
 			
             <p class="description">Estimado usuario, esta ingresando a un sitio protegido.<br>

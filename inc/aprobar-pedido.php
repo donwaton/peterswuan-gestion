@@ -122,7 +122,7 @@ if($pedido['ep_id']==5){
     <a href="index.php"><i class="fa-home"></i>Inicio</a>
   </li>
   <li>
-    <a href="index.php?sec=lista-pedidos"><i class="fa-home"></i>Lista de pacientes</a>
+    <a href="index.php?sec=lista-pedidos-pendientes"><i class="fa-home"></i>Lista de pacientes</a>
   </li>
   <li class="active">
     <strong>Detalles pedido</strong>

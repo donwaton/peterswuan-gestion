@@ -7,7 +7,7 @@
         <!-- logo -->
         <div class="logo">
             <a href="index.php">
-                <img src="assets/images/logo-peterswuan-white.png" width="120" alt="" />
+                <img src="assets/images/PS_white.png" width="120" alt="" />
             </a>
         </div>
 
@@ -38,6 +38,14 @@
             <a href="index.php?sec=paciente-tens&id=1">
                 <i class="entypo-cc-by"></i>
                 <span class="title">Paciente</span>
+            </a>
+        </li>
+    <?php } ?>
+    <?php if($_SESSION['perfil']<>5){ ?>    
+        <li>
+            <a href="index.php">
+                <i class="entypo-home"></i>
+                <span class="title">Inicio</span>
             </a>
         </li>
     <?php } ?>

@@ -4,29 +4,39 @@ include './bin/select-edit-pedido.php';
 $class1 = $class2 = $class3 = $class4 = $class5 = "hidden-xs";
 
 if($pedido['ep_id']==1){
-    $class1="text-info";
+    $class1="alert-info";
+    $class2="hidden-xs";
+    $class3="hidden-xs";
+    $class4="hidden-xs";
+    $class5="hidden-xs";
 }
 if($pedido['ep_id']==2){
     $class1="text-success hidden-xs";
-    $class2="text-info";
+    $class2="alert-info";
+    $class3="hidden-xs";
+    $class4="hidden-xs";
+    $class5="hidden-xs";
 }
 if($pedido['ep_id']==3){
     $class1="text-success hidden-xs";
     $class2="text-success hidden-xs";
-    $class3="text-info";
+    $class3="alert-info";
+    $class4="hidden-xs";
+    $class5="hidden-xs";
 }
 if($pedido['ep_id']==4){
     $class1="text-success hidden-xs";
     $class2="text-success hidden-xs";
     $class3="text-success hidden-xs";
-    $class4="text-info";
+    $class4="alert-info";
+    $class5="hidden-xs";
 }
 if($pedido['ep_id']==5){
     $class1="text-success hidden-xs";
     $class2="text-success hidden-xs";
     $class3="text-success hidden-xs";
     $class4="text-success hidden-xs";
-    $class5="text-info";
+    $class5="alert-info";
 }
 ?>
 
@@ -116,11 +126,11 @@ if($pedido['ep_id']==5){
 <!-- Inicio HTML -->
 
 <ol class="breadcrumb bc-3" >
-  <li>
+  <li class="hidden-xs">
     <a href="index.php"><i class="fa-home"></i>Inicio</a>
   </li>
   <?php if($_SESSION['perfil']<>5) {?>
-  <li>
+  <li class="hidden-xs">
     <a href="index.php?sec=lista-pacientes"><i class="fa-home"></i>Lista de pacientes</a>
   </li>
   <li>
@@ -136,17 +146,18 @@ if($pedido['ep_id']==5){
   </li>
 </ol>
 
-<h2>Estado del pedido</h2> <br>
+<h2 class="hidden-xs">Estado del pedido</h2> <br>
 
 <div class="row" align="center">
-    <div class="col-md-2 <?php echo $class1;?>"><i class="entypo-clipboard"></i><br class="hidden-xs">Borrador</div>
-    <div class="col-md-2 <?php echo $class2;?>"><i class="entypo-check"></i><br class="hidden-xs">Pendiente de aprobación</div>
-    <div class="col-md-2 <?php echo $class3;?>"><i class="entypo-box"></i><br class="hidden-xs">Pendiente de despacho</div>
-    <div class="col-md-2 <?php echo $class4;?>"><i class="entypo-map"></i><br class="hidden-xs">Camino al domicilio</div>
-    <div class="col-md-2 <?php echo $class5;?>"><i class="entypo-home"></i><br class="hidden-xs">Despachado</div>
+    <div class="col-sm-1 col-xs-4"><p class="visible-xs"><b>Estado Pedido</b></p></div>
+    <div class="col-sm-2 col-xs-8 <?php echo $class1;?>" style="border-radius: 25px;"><i class="entypo-clipboard"></i><br class="hidden-xs">Borrador</div>
+    <div class="col-sm-2 col-xs-8 <?php echo $class2;?>" style="border-radius: 25px;"><i class="entypo-check"></i><br class="hidden-xs">Pendiente de<br class="hidden-xs">aprobación</div>
+    <div class="col-sm-2 col-xs-8 <?php echo $class3;?>" style="border-radius: 25px;"><i class="entypo-box"></i><br class="hidden-xs">Pendiente de<br class="hidden-xs">despacho</div>
+    <div class="col-sm-2 col-xs-8 <?php echo $class4;?>" style="border-radius: 25px;"><i class="entypo-map"></i><br class="hidden-xs">Camino al<br class="hidden-xs">domicilio</div>
+    <div class="col-sm-2 col-xs-8 <?php echo $class5;?>" style="border-radius: 25px;"><i class="entypo-home"></i><br class="hidden-xs">Despachado</div>
+    <div class="col-sm-1"></div>
 </div>
-
-<br />
+<hr>
       
 <?php if($pedido['ep_id']==1){?>
 <button type="button" class="btn btn-success btn-icon icon-left"onclick="
@@ -161,8 +172,8 @@ if($pedido['ep_id']==5){
     ">
     <i class="entypo-check"></i>Solicitar aprobación
 </button>
-<?php } ?>
 <br />
+<?php } ?>
 
 <h2>Lista de Insumos Pedido</h2>
 
@@ -178,8 +189,8 @@ if($pedido['ep_id']==5){
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Tipo</th>
-                    <th>Motivo</th>
+                    <th class="hidden-xs">Tipo</th>
+                    <th class="hidden-xs">Motivo</th>
                     <th style="width:80px;">Pedido</th>
                     <?php if($_SESSION['perfil']==1 || ($_SESSION['perfil']==5 && $pedido['ep_id']==1 ) || ($_SESSION['perfil']==4 && $pedido['ep_id']<3 )) { ?>
                     <th style="width:80px;">Acciones</th>
@@ -190,8 +201,8 @@ if($pedido['ep_id']==5){
             <?php while($listaInsumosPedido = $resultInsumosPedido->fetch_assoc()) { ?>
                 <tr id="listInsumo<?php echo $listaInsumosPedido['ip_id'];?>">
                     <td><?php echo $listaInsumosPedido["insumo_nombre"];?></td>
-                    <td><?php echo $listaInsumosPedido["tipoinsumo_nombre"];?></td>
-                    <td><?php echo $listaInsumosPedido["mp_nombre"];?></td>
+                    <td class="hidden-xs"><?php echo $listaInsumosPedido["tipoinsumo_nombre"];?></td>
+                    <td class="hidden-xs"><?php echo $listaInsumosPedido["mp_nombre"];?></td>
                     <td><?php echo $listaInsumosPedido["ip_cantidad"];?></td>
                     <?php if($_SESSION['perfil']==1 || ($_SESSION['perfil']==5 && $pedido['ep_id']==1 ) || ($_SESSION['perfil']==4 && $pedido['ep_id']<3 )) { ?>
                    <td width="80px">

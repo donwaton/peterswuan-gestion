@@ -4,10 +4,15 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
 
 <script type="text/javascript">
     jQuery( document ).ready( function() {
+        // Propiedades de la tablas
         var $table1 = jQuery( '#table-1' );
         var $table2 = jQuery( '#table-2' );
         var $table3 = jQuery( '#table-3' );
+        $table1.DataTable( { paging: false });        
+        $table2.DataTable( { paging: false });        
+        $table3.DataTable( { paging: false });
 
+        // Alerta de quiebre de stock de insumos
         function alertaQuiebreStock(){
             $.ajax({
                 url:"bin/select-insumo-critico.php",
@@ -23,15 +28,9 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                 }
             });
         }
-
         alertaQuiebreStock();
 
-        $('.noEnterSubmit').keypress(function(e){
-            if ( e.which == 13 ) return false;
-            //or...
-            if ( e.which == 13 ) e.preventDefault();
-        });
-
+        // Alerta de próximos vencimientos de preparados magistrales
         function alertaPreparadoVencimiento(){
             $.ajax({
                 url:"bin/select-preparado-vencimiento.php",
@@ -47,22 +46,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                 }
             });
         }
-
         alertaPreparadoVencimiento();
-
-        // Initialize DataTable1
-        $table1.DataTable( {
-            paging: false
-        });
-        
-        $table2.DataTable( {
-            paging: false
-        });
-
-        // Initalize Select Dropdown after DataTables is created
-        $table1.closest( '.dataTables_wrapper' ).find( 'select' ).select2( {
-            minimumResultsForSearch: -1
-        });
 
         $('#newTipoInsumo').on('change',function(){
             var tipoInsumoID = $(this).val();
@@ -77,6 +61,12 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                     }
                 });
             }
+        });
+
+        $('.noEnterSubmit').keypress(function(e){
+            if ( e.which == 13 ) return false;
+            //or...
+            if ( e.which == 13 ) e.preventDefault();
         });
 
         $('#updateInsumo').click(function(){
@@ -313,32 +303,35 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                         ">
 							<i class="entypo-pencil"></i>
 						</button>
-                        <button type="button" class="btn btn-danger btn-xs" onclick="                        
-                        $.ajax({
-                            type:'POST',
-                            url:'./bin/delete-consumo.php',
-                            data:'idInsumo=<?php echo $listaInsumos['pi_id'];?>',
-                            success:function(response){
-                                $('#table-1').DataTable().row($('#listInsumo<?php echo $listaInsumos['pi_id'];?>')).remove().draw();
-                                var opts = {
-                                    'closeButton': true,
-                                    'debug': false,
-                                    'positionClass': 'toast-top-full-width',
-                                    'onclick': null,
-                                    'showDuration': '300',
-                                    'hideDuration': '1000',
-                                    'timeOut': '3000',
-                                    'extendedTimeOut': '1000',
-                                    'showEasing': 'swing',
-                                    'hideEasing': 'linear',
-                                    'showMethod': 'fadeIn',
-                                    'hideMethod': 'fadeOut'
-                                };
-                    
-                                toastr.info('Se ha eliminado el insumo del consumo del paciente', 'Eliminación exitosa', opts);
-                            }
-                        });
-                        ">
+                        <button type="button" class="btn btn-danger btn-xs" onclick="
+                        var confirmDelete = confirm('¿Está seguro que desea eliminar el insumo?');
+                        if(confirmDelete == true){
+                            $.ajax({
+                                type:'POST',
+                                url:'./bin/delete-consumo.php',
+                                data:'idInsumo=<?php echo $listaInsumos['pi_id'];?>',
+                                success:function(response){
+                                    $('#table-1').DataTable().row($('#listInsumo<?php echo $listaInsumos['pi_id'];?>')).remove().draw();
+                                    var opts = {
+                                        'closeButton': true,
+                                        'debug': false,
+                                        'positionClass': 'toast-top-full-width',
+                                        'onclick': null,
+                                        'showDuration': '300',
+                                        'hideDuration': '1000',
+                                        'timeOut': '3000',
+                                        'extendedTimeOut': '1000',
+                                        'showEasing': 'swing',
+                                        'hideEasing': 'linear',
+                                        'showMethod': 'fadeIn',
+                                        'hideMethod': 'fadeOut'
+                                    };
+                        
+                                    toastr.info('Se ha eliminado el insumo del consumo del paciente', 'Eliminación exitosa', opts);
+                                    confirmDelete = false;
+                                }
+                            });
+                        } ">
                             <i class="entypo-trash"></i>
                         </button>
                         <!--
@@ -439,32 +432,30 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
             <span aria-hidden="true">&times;</span>
             </button>
             <h3 class="modal-title" id="exampleModalLabel">Ingresar Insumo Nuevo</h3>
-            </div>
-            <div class="modal-body">
+        </div>
+        <div class="modal-body">
             <form id="formAddInsumo" name="formAddInsumo">
+                <input type="hidden" name="pacienteId" value="<?php echo $_GET['id'];?>">
 
-            <input type="hidden" name="pacienteId" value="<?php echo $_GET['id'];?>">
+                <label for="tipoinsumo">Tipo</label>
+                <select class="form-control form-control-sm" name="tipoinsumoId" id="newTipoInsumo" required>
+                    <option value="0"></option>
+                <?php while($listaTipoInsumo = $resultTipoInsumo->fetch_assoc()) { ?>
+                    <option value="<?php echo $listaTipoInsumo["tipoinsumo_id"];?>"><?php echo $listaTipoInsumo["tipoinsumo_nombre"];?></option>
+                <?php } ?>
+                </select>
 
-            <label for="tipoinsumo">Tipo</label>
-            <select class="form-control form-control-sm" name="tipoinsumoId" id="newTipoInsumo" required>
-            <option value="0"></option>
-            <?php 
-            while($listaTipoInsumo = $resultTipoInsumo->fetch_assoc()) { ?>
-            <option value="<?php echo $listaTipoInsumo["tipoinsumo_id"];?>"><?php echo $listaTipoInsumo["tipoinsumo_nombre"];?></option>
-            <?php } ?>
-            </select>
+                <label for="newInsumo">Nombre</label>
+                <select class="form-control form-control-sm" name="insumoId" id="newInsumo" required>
+                <option value=""></option>
+                </select>
 
-            <label for="newInsumo">Nombre</label>
-            <select class="form-control form-control-sm" name="insumoId" id="newInsumo" required>
-            <option value=""></option>
-            </select>
+                <label for="newConsumo">Consumo</label>
+                <input type="number" name="newConsumo" id="newConsumo" class="form-control form-control-sm">
 
-            <label for="newConsumo">Consumo</label>
-            <input type="number" name="newConsumo" id="newConsumo" class="form-control form-control-sm">
-
-            <label for="newStock">Stock</label>
-            <input type="number" name="newStock" id="newStock" class="form-control form-control-sm">
-        </form>
+                <label for="newStock">Stock</label>
+                <input type="number" name="newStock" id="newStock" class="form-control form-control-sm">
+            </form>
         </div>
         <div class="modal-footer">
             <button type="button" id="refreshInsumos" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
@@ -483,16 +474,15 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
             <span aria-hidden="true">&times;</span>
             </button>
             <h3 class="modal-title" id="exampleModalLabel">Ingresar Nuevo Pedido</h3>
-            </div>
-            <div class="modal-body">
+        </div>
+        <div class="modal-body">
             <form id="formAddPedido" name="formAddPedido">
+                <input type="hidden" name="pacienteId" value="<?php echo $_GET['id'];?>">
+                <input type="hidden" name="userId" value="<?php echo $_SESSION['userid'];?>">
 
-            <input type="hidden" name="pacienteId" value="<?php echo $_GET['id'];?>">
-            <input type="hidden" name="userId" value="<?php echo $_SESSION['userid'];?>">
-
-            <label for="pedidoDesc">Descripción</label>
-            <input type="text" name="pedidoDesc" id="pedidoDesc" class="form-control form-control-sm">
-        </form>
+                <label for="pedidoDesc">Descripción</label>
+                <input type="text" name="pedidoDesc" id="pedidoDesc" class="form-control form-control-sm noEnterSubmit">
+            </form>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
@@ -591,45 +581,30 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
     </div>
 </div>
 
-<!-- Modal eliminación exitósa-->
-<div class="modal" tabindex="-1" role="dialog" id="okDelete">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-        <p class=" alert alert-success">Insumo eliminado correctamente</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- Modal Actualiza Consumo-->
 <div class="modal fade" id="modalUpdateInsumo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-            <h3 class="modal-title" id="exampleModalLabel">Actualizar Consumo</h3>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title" id="exampleModalLabel">Actualizar Consumo</h3>
             </div>
             <div class="modal-body">
-            <form id="formUpdateInsumo" name="formUpdateInsumo" onsubmit="false">
+                <form id="formUpdateInsumo" name="formUpdateInsumo" onsubmit="false">
+                    <input type="hidden" name="pacienteId" value="<?php echo $_GET['id'];?>">
+                    <input type="hidden" name="insumoId" id="insumoId" value="0">
 
-            <input type="hidden" name="pacienteId" value="<?php echo $_GET['id'];?>">
-            <input type="hidden" name="insumoId" id="insumoId" value="0">
-
-            <label for="newConsumo">Consumo</label>
-            <input type="number" name="newConsumo" id="newConsumo" class="form-control form-control-sm noEnterSubmit"
-            data-validate="required" data-message-required="Debe ingresar el nuevo consumo." required>
-        </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-            <button type="button" name="updateInsumo" id="updateInsumo" class="btn btn-success">Actualizar</button>
-        </div>
+                    <label for="newConsumo">Consumo</label>
+                    <input type="number" name="newConsumo" id="newConsumo" class="form-control form-control-sm noEnterSubmit"
+                    data-validate="required" data-message-required="Debe ingresar el nuevo consumo." required>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                <button type="button" name="updateInsumo" id="updateInsumo" class="btn btn-success">Actualizar</button>
+            </div>
         </div>
     </div>
 </div>

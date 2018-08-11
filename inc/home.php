@@ -49,9 +49,14 @@ if($_SESSION['perfil']==5){
 
 <div class="col-sm-3">
     <a href="index.php?sec=lista-pedidos-pendientes">
-    <div class="tile-stats tile-orange">
+    <?php if($PendAprob['pendiente_aprobacion']==0){
+        $colorTilePA="green";
+    } else {
+        $colorTilePA="orange";
+    }?>
+    <div class="tile-stats tile-<?php echo $colorTilePA;?>">
         <div class="icon"><i class="entypo-check"></i></div>
-        <div class="num" data-start="0" data-end="<?php echo $PendAprob['pendiente_aprobacion'];?>" data-postfix=" Pedidos" data-duration="1500" data-delay="0">0 Pedidos</div>
+        <div class="num" data-start="0" data-end="<?php echo $PendAprob['pendiente_aprobacion'];?>" data-postfix=" Pedidos" data-duration="700" data-delay="0">0 Pedidos</div>
         <h3>Pendiente Aprobación</h3>
         <p>Debe aprobar los pedidos</p>
     </div>
@@ -65,9 +70,14 @@ if($_SESSION['perfil']==5){
 
 <div class="col-sm-3">
     <a href="index.php?sec=lista-pedidos-despacho">
-    <div class="tile-stats tile-orange">
+    <?php if($Despacho['pendiente_despacho']==0){
+        $colorTilePD="green";
+    } else {
+        $colorTilePD="orange";
+    }?>
+    <div class="tile-stats tile-<?php echo $colorTilePD;?>">
         <div class="icon"><i class="entypo-basket"></i></div>
-        <div class="num" data-start="0" data-end="<?php echo $Despacho['pendiente_despacho'];?>" data-postfix=" Pedidos" data-duration="1500" data-delay="0">0 Pedidos</div>
+        <div class="num" data-start="0" data-end="<?php echo $Despacho['pendiente_despacho'];?>" data-postfix=" Pedidos" data-duration="700" data-delay="0">0 Pedidos</div>
         <h3>Pendiente Despacho</h3>
         <p>Debe despachar los pedidos</p>
     </div>
