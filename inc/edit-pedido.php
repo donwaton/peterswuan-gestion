@@ -5,31 +5,21 @@ $class1 = $class2 = $class3 = $class4 = $class5 = "hidden-xs";
 
 if($pedido['ep_id']==1){
     $class1="alert-info";
-    $class2="hidden-xs";
-    $class3="hidden-xs";
-    $class4="hidden-xs";
-    $class5="hidden-xs";
 }
 if($pedido['ep_id']==2){
     $class1="text-success hidden-xs";
     $class2="alert-info";
-    $class3="hidden-xs";
-    $class4="hidden-xs";
-    $class5="hidden-xs";
 }
 if($pedido['ep_id']==3){
     $class1="text-success hidden-xs";
     $class2="text-success hidden-xs";
     $class3="alert-info";
-    $class4="hidden-xs";
-    $class5="hidden-xs";
 }
 if($pedido['ep_id']==4){
     $class1="text-success hidden-xs";
     $class2="text-success hidden-xs";
     $class3="text-success hidden-xs";
     $class4="alert-info";
-    $class5="hidden-xs";
 }
 if($pedido['ep_id']==5){
     $class1="text-success hidden-xs";
@@ -153,7 +143,7 @@ if($pedido['ep_id']==5){
     <div class="col-sm-2 col-xs-8 <?php echo $class1;?>" style="border-radius: 25px;"><i class="entypo-clipboard"></i><br class="hidden-xs">Borrador</div>
     <div class="col-sm-2 col-xs-8 <?php echo $class2;?>" style="border-radius: 25px;"><i class="entypo-check"></i><br class="hidden-xs">Pendiente de<br class="hidden-xs">aprobación</div>
     <div class="col-sm-2 col-xs-8 <?php echo $class3;?>" style="border-radius: 25px;"><i class="entypo-box"></i><br class="hidden-xs">Pendiente de<br class="hidden-xs">despacho</div>
-    <div class="col-sm-2 col-xs-8 <?php echo $class4;?>" style="border-radius: 25px;"><i class="entypo-map"></i><br class="hidden-xs">Camino al<br class="hidden-xs">domicilio</div>
+    <div class="col-sm-2 col-xs-8 <?php echo $class4;?>" style="border-radius: 25px;"><i class="entypo-map"></i><br class="hidden-xs">En ruta</div>
     <div class="col-sm-2 col-xs-8 <?php echo $class5;?>" style="border-radius: 25px;"><i class="entypo-home"></i><br class="hidden-xs">Despachado</div>
     <div class="col-sm-1"></div>
 </div>

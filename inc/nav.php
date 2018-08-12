@@ -81,6 +81,14 @@
             </a>						
         </li>
     <?php } ?>
+    <?php if($_SESSION['perfil']==1){ ?> 
+        <li>
+            <a href="index.php?sec=lista-usuarios">
+                <i class="entypo-user"></i>
+                <span class="title">Usuarios</span>
+            </a>						
+        </li>
+    <?php } ?>
         <li>
             <a href="./bin/logout.php">
                 <i class="entypo-logout"></i>

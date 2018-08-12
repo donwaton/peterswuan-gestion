@@ -18,6 +18,7 @@ if($result->num_rows == 1){
     session_start();  
     $_SESSION['login'] = 1;
     $_SESSION['userid'] = $userinfo['user_id'];
+    $_SESSION['userNames'] = $userinfo['user_names'];
     $_SESSION['perfil'] = $userinfo['tipousuario_id'];
     $login_status = 'success';
 }

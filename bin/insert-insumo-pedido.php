@@ -9,12 +9,19 @@ if(isset($_POST['insumoId'])){
     $ejecutar = $conn->query($sql);
     $result = $ejecutar->fetch_assoc();
 
-    $sqlNewPedido = "SELECT insumo_pedido.ip_id,insumo.insumo_nombre, tipo_insumo.tipoinsumo_nombre, insumo_pedido.ip_cantidad,mp_nombre
-    FROM insumo, insumo_pedido, tipo_insumo, motivo_pedido
-    WHERE insumo.insumo_id=insumo_pedido.insumo_id
-    AND motivo_pedido.mp_id=insumo_pedido.mp_id
-    AND insumo.tipoinsumo_id = tipo_insumo.tipoinsumo_id
-    AND ip_id=".$result['id'].";";
+    $sqlPacienteId = "SELECT paciente_id FROM pedido, insumo_pedido WHERE pedido.pedido_id=insumo_pedido.pedido_id AND ip_id=".$result['id'].";";
+    $ejecutarPacienteId = $conn->query($sqlPacienteId);
+    $resultPacienteId = $ejecutarPacienteId->fetch_assoc();
+
+    $sqlNewPedido = "SELECT * FROM 
+        (SELECT insumo_pedido.ip_id,insumo.insumo_nombre, tipo_insumo.tipoinsumo_nombre, insumo_pedido.ip_cantidad,mp_nombre, insumo_pedido.insumo_id 
+        FROM insumo, insumo_pedido, tipo_insumo, motivo_pedido 
+        WHERE insumo.insumo_id=insumo_pedido.insumo_id 
+        AND motivo_pedido.mp_id=insumo_pedido.mp_id 
+        AND insumo.tipoinsumo_id = tipo_insumo.tipoinsumo_id 
+        AND ip_id=".$result['id'].") a 
+        LEFT JOIN 
+        (SELECT * FROM paciente_insumo WHERE paciente_insumo.paciente_id=".$resultPacienteId['paciente_id'].") b ON b.insumo_id=a.insumo_id;";
     $ejecutarNewPedido = $conn->query($sqlNewPedido);
     $resultNewPedido = $ejecutarNewPedido->fetch_assoc();
 
@@ -52,6 +59,8 @@ if(isset($_POST['insumoId'])){
     $row_array['tipo'] = $resultNewPedido['tipoinsumo_nombre'];
     $row_array['cantidad'] = $resultNewPedido['ip_cantidad'];
     $row_array['motivo'] = $resultNewPedido['mp_nombre'];
+    $row_array['stock'] = $resultNewPedido['pi_stock'];
+    $row_array['consumo'] = $resultNewPedido['pi_consumo'];
     $row_array['eliminar'] = $btneliminar;
     
     array_push($return_arr,$row_array);

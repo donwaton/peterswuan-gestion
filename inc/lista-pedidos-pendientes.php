@@ -35,7 +35,7 @@
         <tr>
             <th>Descripción</th>
             <th>Paciente</th>
-            <th>Profesional</th>
+            <th>Solicitante</th>
             <th>Fecha</th>
             <th>Acciones</th>
         </tr>
@@ -46,7 +46,7 @@
             <td><?php echo $listaPedidos["pedido_desc"];?></td>
             <td><?php echo $listaPedidos["paciente_nombre"];?></td>
             <td><?php echo $listaPedidos["user_names"];?></td>
-            <td><?php echo $listaPedidos["ultima_fecha"];?></td>
+            <td><?php echo $listaPedidos["historia_fecha"];?></td>
             <td width="100px">
                 <a href="index.php?sec=aprobar-pedido&id=<?php echo $listaPedidos["paciente_id"];?>&pid=<?php echo $listaPedidos['pedido_id'];?>" 
                     class="btn btn-info btn-sm btn-icon icon-left">

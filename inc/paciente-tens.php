@@ -4,10 +4,16 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
 
 <script type="text/javascript">
     jQuery( document ).ready( function() {
+   
+    // Propiedades de la tablas
         var $table1 = jQuery( '#table-1' );
         var $table2 = jQuery( '#table-2' );
         var $table3 = jQuery( '#table-3' );
+        $table1.DataTable( { paging: false });        
+        $table2.DataTable( { paging: false });        
+        $table3.DataTable( { paging: false });
 
+    // Alerta de quiebre de stock de insumos
         function alertaQuiebreStock(){
             $.ajax({
                 url:"bin/select-insumo-critico.php",
@@ -23,9 +29,10 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                 }
             });
         }
-
         alertaQuiebreStock();
 
+        /* Pendiente de definición de proceso de pedidos para preparados magistrales
+        // Alerta de próximos vencimientos de preparados magistrales
         function alertaPreparadoVencimiento(){
             $.ajax({
                 url:"bin/select-preparado-vencimiento.php",
@@ -41,21 +48,13 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                 }
             });
         }
-
         alertaPreparadoVencimiento();
+        */
 
-        // Initialize DataTable1
-        $table1.DataTable( {
-            paging: false
-        });
-
-        $table2.DataTable( {
-            paging: false
-        })
-
-        // Initalize Select Dropdown after DataTables is created
-        $table1.closest( '.dataTables_wrapper' ).find( 'select' ).select2( {
-            minimumResultsForSearch: -1
+        $('.noEnterSubmit').keypress(function(e){
+            if ( e.which == 13 ) return false;
+            //or...
+            if ( e.which == 13 ) e.preventDefault();
         });
 
         $('#updateInsumo').click(function(){
@@ -119,7 +118,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
 <h2>Ficha de <?php echo $datosPaciente['paciente_nombre'];?></h2>
 <br />
 
-<ul class="nav nav-tabs bordered"><!-- available classes "bordered", "right-aligned" -->
+<ul class="nav nav-tabs bordered">
     <li class="active">
         <a href="#consumo" data-toggle="tab">
             <span class="visible-xs"><i class="entypo-box"></i></span>
@@ -127,6 +126,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
             <span class="badge badge-danger" id="alertaInsumo"></span>
         </a>
     </li>
+    <!-- Pendiente de definición de proceso de pedidos para preparados magistrales
     <li>
         <a href="#magistrales" data-toggle="tab">
             <span class="visible-xs"><i class="entypo-newspaper"></i></span>
@@ -134,6 +134,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
             <span class="badge badge-danger" id="alertaPreparado"></span>
         </a>
     </li>
+    -->
     <li>
         <a href="#pedidos" data-toggle="tab">
             <span class="visible-xs"><i class="entypo-clipboard"></i></span>
@@ -172,7 +173,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                     <th class="hidden-xs">Tipo</th>
                     <th class="hidden-xs">Consumo</th>
                     <th>Stock</th>
-                    <th><i class="entypo-pencil"></i></th>
+                    <th></th>
 
                 </tr>
             </thead>
@@ -194,7 +195,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                             document.getElementById('newStock').value = '';
                             $('#modalUpdateInsumo').modal('show');
                         ">
-								<i class="entypo-pencil"></i>
+								<i class="entypo-pencil"></i><span class="hidden-xs">Actualizar Stock</span>
 						</button>
                     </td>               
                 </tr>
@@ -203,6 +204,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
         </table> 
     </div>
 
+<?php /* Pendiente de definición de proceso de pedidos para preparados magistrales
     <!-- Preparados Magistrales -->
     <div class="tab-pane" id="magistrales"> 
      <!-- Button trigger modal -->
@@ -241,6 +243,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
         </tbody>			
     </table> 
     </div>
+*/ ?>
 
     <!-- Pedidos -->
     <div class="tab-pane" id="pedidos">
@@ -293,7 +296,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
             <input type="hidden" name="insumoId" id="insumoId" value="0">
 
             <label for="newStock">Stock</label>
-            <input type="number" name="newStock" id="newStock" class="form-control form-control-sm"
+            <input type="number" name="newStock" id="newStock" class="form-control form-control-sm noEnterSubmit"
             data-validate="required" data-message-required="Debe ingresar el nuevo stock." required>
         </form>
         </div>
@@ -322,7 +325,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
             <input type="hidden" name="userId" value="<?php echo $_SESSION['userid'];?>">
 
             <label for="pedidoDesc">Descripción</label>
-            <input type="text" name="pedidoDesc" id="pedidoDesc" class="form-control form-control-sm" required>
+            <input type="text" name="pedidoDesc" id="pedidoDesc" class="form-control form-control-sm noEnterSubmit" required>
         </form>
         </div>
         <div class="modal-footer">

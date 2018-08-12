@@ -43,7 +43,7 @@ if($_SESSION['login']<>1){echo "<script>window.location.replace('login.php');</s
 
 <body class="page-body skin-blue" data-url="http://neon.dev">
 
-	<div class="page-container">
+	<div class="page-container sidebar-collapsed">
 		<!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
 
 		<?php include('inc/nav.php');?>
