@@ -98,10 +98,10 @@ if($pedido['ep_id']==5){
 
 <ol class="breadcrumb bc-3" >
   <li>
-    <a href="index.php"><i class="fa-home"></i>Inicio</a>
+    <a href="index.php">Inicio</a>
   </li>
   <li>
-    <a href="index.php?sec=lista-pedidos-despacho"><i class="fa-home"></i> Lista de pedidos pendientes de despacho</a>
+    <a href="index.php?sec=lista-pedidos-despacho">Lista de pedidos pendientes de despacho</a>
   </li>
   <li class="active">
     <strong>Detalles pedido</strong>
@@ -115,8 +115,8 @@ if($pedido['ep_id']==5){
     <div class="col-sm-2 col-xs-8 <?php echo $class1;?>" style="border-radius: 25px;"><i class="entypo-clipboard"></i><br class="hidden-xs">Borrador</div>
     <div class="col-sm-2 col-xs-8 <?php echo $class2;?>" style="border-radius: 25px;"><i class="entypo-check"></i><br class="hidden-xs">Pendiente de<br class="hidden-xs">aprobación</div>
     <div class="col-sm-2 col-xs-8 <?php echo $class3;?>" style="border-radius: 25px;"><i class="entypo-box"></i><br class="hidden-xs">Pendiente de<br class="hidden-xs">despacho</div>
-    <div class="col-sm-2 col-xs-8 <?php echo $class4;?>" style="border-radius: 25px;"><i class="entypo-map"></i><br class="hidden-xs">En ruta</div>
-    <div class="col-sm-2 col-xs-8 <?php echo $class5;?>" style="border-radius: 25px;"><i class="entypo-home"></i><br class="hidden-xs">Despachado</div>
+    <div class="col-sm-2 col-xs-8 <?php echo $class4;?>" style="border-radius: 25px;"><i class="fa fa-truck"></i><br class="hidden-xs">En ruta</div>
+    <div class="col-sm-2 col-xs-8 <?php echo $class5;?>" style="border-radius: 25px;"><i class="entypo-home"></i><br class="hidden-xs">Entregado</div>
     <div class="col-sm-1"></div>
 </div>
 <hr>
@@ -197,6 +197,7 @@ if($pedido['ep_id']==5){
 <link rel="stylesheet" href="assets/js/datatables/datatables.css">
 <link rel="stylesheet" href="assets/js/select2/select2-bootstrap.css">
 <link rel="stylesheet" href="assets/js/select2/select2.css">
+<link rel="stylesheet" href="assets/css/font-icons/font-awesome/css/font-awesome.min.css">
 
 <style>
 .dataTables_info {
