@@ -33,9 +33,10 @@
     <ul id="main-menu" class="main-menu">
         <!-- add class "multiple-expanded" to allow multiple submenus to open -->
         <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
-    <?php if($_SESSION['perfil']==5){ ?>    
+    <?php if($_SESSION['perfil']==5){ 
+        include './bin/select-paciente-tens.php';?>    
         <li>
-            <a href="index.php?sec=paciente-tens&id=1">
+            <a href="index.php?sec=paciente-tens&id=<?php echo $pacienteAsignado['paciente_id'];?>">
                 <i class="entypo-cc-by"></i>
                 <span class="title">Paciente</span>
             </a>

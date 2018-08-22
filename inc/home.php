@@ -1,7 +1,8 @@
 <?php include './bin/select-home.php'; 
 
 if($_SESSION['perfil']==5){
-    echo "<script>window.location = 'index.php?sec=paciente-tens&id=1';</script>";
+    include './bin/select-paciente-tens.php';
+    echo "<script>window.location = 'index.php?sec=paciente-tens&id=".$pacienteAsignado['paciente_id']."';</script>";
 }
 
 ?>

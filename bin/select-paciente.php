@@ -8,8 +8,9 @@ AND paciente_id='" . $_GET['id'] . "'
 ORDER BY insumo.insumo_nombre;";
 $resultInsumos = $conn->query($sqlInsumos);
 
-$sql = "SELECT * FROM paciente WHERE paciente_id='".$_GET['id']."'";
-$result = $conn->query($sql);
+$sqlPaciente = "SELECT * FROM paciente WHERE paciente_id='".$_GET['id']."';";
+$resultPaciente = $conn->query($sqlPaciente);
+$datosPaciente = $resultPaciente->fetch_assoc();
 
 $sqlTipoInsumo = "SELECT * FROM tipo_insumo";
 $resultTipoInsumo = $conn->query($sqlTipoInsumo);

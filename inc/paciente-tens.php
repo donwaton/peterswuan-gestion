@@ -1,6 +1,10 @@
 <?php 
+if($_GET['id']==""){
+    echo "<h2>No tiene paciente asignado</h2>";
+}
+else {
 include './bin/select-paciente.php';
-while($datosPaciente = $result->fetch_assoc()) { ?>
+?>
 
 <script type="text/javascript">
     jQuery( document ).ready( function() {
