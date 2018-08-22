@@ -83,9 +83,9 @@
     <?php } ?>
     <?php if($_SESSION['perfil']==1){ ?> 
         <li>
-            <a href="index.php?sec=lista-usuarios">
-                <i class="entypo-user"></i>
-                <span class="title">Usuarios</span>
+            <a href="index.php?sec=asignar-tens">
+                <i class="entypo-users"></i>
+                <span class="title">Asignar TENS</span>
             </a>						
         </li>
     <?php } ?>
