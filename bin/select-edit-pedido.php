@@ -68,5 +68,7 @@ LEFT JOIN (SELECT * FROM paciente_insumo WHERE paciente_insumo.paciente_id=".$_G
 ) pedido_insumo ON pedido_insumo.insumo_id=pedido_paciente.insumo_id;";
 $resultInsumosPedido = $conn->query($sqlInsumosPedido);
 
+$resultConfirmacion = $conn->query($sqlInsumosPedido);
+
 $conn->close();
 ?>

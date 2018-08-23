@@ -383,6 +383,7 @@ include './bin/select-paciente.php';
                     <a href="index.php?sec=magistral&id=<?php echo $listaMagistrales['prep_id'];?>" class="btn btn-info btn-xs">
                         <i class="entypo-doc-text"></i>
                     </a>
+                    <?php if($_SESSION['perfil']==1 || $_SESSION['perfil']==2){?>
                     <button type="button" class="btn btn-danger btn-xs" onclick="
                         var confirmDelete = confirm('¿Está seguro que desea eliminar el preparado magistral?');
                         if(confirmDelete == true){
@@ -414,6 +415,7 @@ include './bin/select-paciente.php';
                         } ">
                             <i class="entypo-trash"></i>
                         </button>
+                    <?php }?>
                 </td>
             </tr>
         <?php } ?>
