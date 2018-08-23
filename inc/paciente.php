@@ -1,6 +1,6 @@
 <?php 
 include './bin/select-paciente.php';
-while($datosPaciente = $result->fetch_assoc()) { ?>
+?>
 
 <script type="text/javascript">
     jQuery( document ).ready( function() {
@@ -156,13 +156,12 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                 success:function(data){ 
                     var obj = JSON.parse(data);
                     $('#table-3').DataTable().row.add({
-                        "DT_RowId": "listInsumo"+obj[0].prep_id,
+                        "DT_RowId": "listPreparado"+obj[0].prep_id,
                         "0": obj[0].principio_nombre,
                         "1": obj[0].prep_dosis+' '+obj[0].prep_unidad,
                         "2": obj[0].prep_cantidad+' '+obj[0].forma_nombre,
                         "3": obj[0].prep_pos_dosis+' '+obj[0].prep_unidad+' cada '+obj[0].prep_pos_horas+' horas',
-                        "4": obj[0].prep_fecha_venc,
-                        "5": obj[0].detalles}).draw();
+                        "4": obj[0].detalles}).draw();
                     document.getElementById('formaId').value = '';
                     document.getElementById('nombreMedico').value = '';
                     document.getElementById('rutMedico').value = '';
@@ -238,7 +237,6 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
             <span class="badge badge-danger" id="alertaInsumo"></span>
         </a>
     </li>
-    <!-- Pendiente de definición de proceso de pedidos para preparados magistrales
     <li>
         <a href="#magistrales" data-toggle="tab">
             <span class="visible-xs"><i class="entypo-newspaper"></i></span>
@@ -247,7 +245,6 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
             <span class="badge badge-danger" id="alertaPreparado"></span>
         </a>
     </li>
-    -->
     <li>
         <a href="#pedidos" data-toggle="tab">
             <span class="visible-xs"><i class="entypo-clipboard"></i></span>
@@ -351,7 +348,6 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
         </table> 
     </div>
 
-<?php /* Pendiente de definición de proceso de pedidos para preparados magistrales
 <!-- Preparados Magistrales -->
     <div class="tab-pane" id="magistrales"> 
      <!-- Button trigger modal -->
@@ -365,7 +361,7 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                 <th>Dosis</th>
                 <th>Cantidad</th>
                 <th>Posología</th>
-                <th>Duración estimada</th>
+                <!--<th>Duración estimada</th>-->
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -377,23 +373,53 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
                 $classDangerPrep = "<i class='entypo-attention' style='color:#ff3300;'></i>";
             }
         ?>
-            <tr>
+            <tr id="listPreparado<?php echo $listaInsumos['pi_id'];?>">
                 <td><?php echo $listaMagistrales["principio_nombre"];?></td>
                 <td><?php echo $listaMagistrales["prep_dosis"]." ".$listaMagistrales["prep_unidad"];?></td>
                 <td><?php echo $listaMagistrales["prep_cantidad"]." ".$listaMagistrales["forma_nombre"];?></td>
                 <td><?php echo $listaMagistrales["prep_pos_dosis"]." ".$listaMagistrales["prep_unidad"]." cada ".$listaMagistrales["prep_pos_horas"]." horas";?></td>
-                <td><?php echo $listaMagistrales["prep_fecha_venc"]." ".$classDangerPrep;?></td>
-                <td width="100px">
-                    <a href="index.php?sec=magistral&id=<?php echo $listaMagistrales['prep_id'];?>" class="btn btn-info btn-sm btn-icon icon-left">
-                        <i class="entypo-doc-text"></i>Ver detalles
+               <?php /* <td><?php echo $listaMagistrales["prep_fecha_venc"]." ".$classDangerPrep;?></td> */?>
+                <td width="80px">
+                    <a href="index.php?sec=magistral&id=<?php echo $listaMagistrales['prep_id'];?>" class="btn btn-info btn-xs">
+                        <i class="entypo-doc-text"></i>
                     </a>
+                    <button type="button" class="btn btn-danger btn-xs" onclick="
+                        var confirmDelete = confirm('¿Está seguro que desea eliminar el preparado magistral?');
+                        if(confirmDelete == true){
+                            $.ajax({
+                                type:'POST',
+                                url:'./bin/delete-preparado.php',
+                                data:'idPreparado=<?php echo $listaMagistrales['prep_id'];?>',
+                                success:function(response){
+                                    $('#table-3').DataTable().row($('#listPreparado<?php echo $listaInsumos['pi_id'];?>')).remove().draw();
+                                    var opts = {
+                                        'closeButton': true,
+                                        'debug': false,
+                                        'positionClass': 'toast-top-full-width',
+                                        'onclick': null,
+                                        'showDuration': '300',
+                                        'hideDuration': '1000',
+                                        'timeOut': '3000',
+                                        'extendedTimeOut': '1000',
+                                        'showEasing': 'swing',
+                                        'hideEasing': 'linear',
+                                        'showMethod': 'fadeIn',
+                                        'hideMethod': 'fadeOut'
+                                    };
+                        
+                                    toastr.info('Se ha eliminado el Preparado Magistral del paciente', 'Eliminación exitosa', opts);
+                                    confirmDelete = false;
+                                }
+                            });
+                        } ">
+                            <i class="entypo-trash"></i>
+                        </button>
                 </td>
             </tr>
         <?php } ?>
         </tbody>			
     </table> 
     </div>
-*/ ?>
 
 <!-- Pedidos -->
     <div class="tab-pane" id="pedidos">
@@ -629,5 +655,3 @@ while($datosPaciente = $result->fetch_assoc()) { ?>
 <script src="assets/js/datatables/datatables.js"></script>
 <script src="assets/js/select2/select2.min.js"></script>
 <script src="assets/js/toastr.js"></script>
-
-<?php } ?>

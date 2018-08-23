@@ -46,9 +46,40 @@ if(isset($_POST['pacienteId'])){
     $ejecutarNewPedido = $conn->query($sqlNewPedido);
     $resultNewPedido = $ejecutarNewPedido->fetch_assoc();
 
-    $detalles = '<a href="index.php?sec=magistral&id='.$resultNewPedido['prep_id'].'" class="btn btn-info btn-sm btn-icon icon-left">
-    <i class="entypo-doc-text"></i>Ver detalles
-    </a>';
+    $funcionAjax = "var confirmDelete = confirm('¿Está seguro que desea eliminar el preparado magistral?');
+    if(confirmDelete == true){
+        $.ajax({
+        type:'POST',
+            url:'./bin/delete-preparado.php',
+            data:'idPreparado=".$resultNewPedido['prep_id']."',
+        success:function(response){
+            $('#table-3').DataTable().row($('#listPreparado".$resultNewPedido['prep_id']."')).remove().draw();
+            var opts = {
+                'closeButton': true,
+                'debug': false,
+                'positionClass': 'toast-top-full-width',
+                'onclick': null,
+                'showDuration': '300',
+                'hideDuration': '1000',
+                'timeOut': '3000',
+                'extendedTimeOut': '1000',
+                'showEasing': 'swing',
+                'hideEasing': 'linear',
+                'showMethod': 'fadeIn',
+                'hideMethod': 'fadeOut'
+            };
+            toastr.info('Se ha eliminado el Preparado Magistral del paciente', 'Eliminación exitosa', opts);
+            confirmDelete = false;
+        }
+    });
+    } ";
+
+    $detalles = '<a href="index.php?sec=magistral&id='.$resultNewPedido['prep_id'].'" class="btn btn-info btn-xs">
+    <i class="entypo-doc-text"></i>
+    </a>
+    <button type="button" class="btn btn-danger btn-xs" onclick="'.$funcionAjax.'">
+    <i class="entypo-trash"></i>
+</button>';
 
     $return_arr = array();  
 

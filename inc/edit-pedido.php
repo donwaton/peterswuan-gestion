@@ -148,19 +148,46 @@ if($pedido['ep_id']==5){
     <div class="col-sm-1"></div>
 </div>
 <hr>
-      
-<?php if($pedido['ep_id']==1){?>
+<!-- Solicitar borrador -->      
+<?php if($pedido['ep_id']==1 && $_SESSION['perfil']==5){?>
 <button type="button" class="btn btn-success btn-icon icon-left"onclick="
     $.ajax({
         type:'POST',
         url:'./bin/solicitar-aprobacion.php',
         data:{idPedido:<?php echo $_GET['pid'];?>,userId:<?php echo $_SESSION['userid'];?>},
         success:function(response){
+            <?php if($_SESSION['perfil']==5) {?>
             window.location.replace('index.php?sec=paciente-tens&id=<?php echo $_GET['id'];?>');
+            <?php }?>
         }
     });
     ">
     <i class="entypo-check"></i>Solicitar aprobación
+</button>
+<br />
+<?php } ?>
+
+<!-- Aprobar pedido -->   
+<?php if($pedido['ep_id']==1 && $_SESSION['perfil']<>5){?>
+<button type="button" class="btn btn-success btn-icon icon-left"onclick="
+    $.ajax({
+        type:'POST',
+        url:'./bin/aprobar-pedido.php',
+        data:{idPedido:<?php echo $_GET['pid'];?>,userId:<?php echo $_SESSION['userid'];?>},
+        success:function(response){
+            window.location.replace('index.php?sec=paciente&id=<?php echo $_GET['id'];?>');
+        }
+    });
+    ">
+    <i class="entypo-check"></i>Aprobar pedido
+</button>
+<br />
+<?php } ?>
+
+<!-- Cerrar pedido -->   
+<?php if($pedido['ep_id']==4){?>
+<button type="button" class="btn btn-success btn-icon icon-left"onclick="alert('Carlangaz la chupa');">
+    <i class="entypo-check"></i>Confirmar Recepción
 </button>
 <br />
 <?php } ?>

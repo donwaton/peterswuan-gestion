@@ -18,7 +18,7 @@ include './bin/select-pedido.php';
         <div class="col-sm-6 invoice-right">
 
                 <h3>Nº de Pedido: <?php echo $pedido['pedido_id']; ?></h3>
-                <?php $fechaPedido = date ( 'd-m-Y');?>
+                <?php $fechaPedido = date('d-m-Y');?>
                 <span>Fecha: <?php echo $fechaPedido ?></span>
         </div>
 
@@ -122,15 +122,16 @@ include './bin/select-pedido.php';
     </div>
     <br><br>
     <div class="row">
-        <div class="col-md-6 invoice-left">
-            <p align="center">_____________________________________________________________________________</p>
-            <p align="center">Nombre</p>
-        </div>
-
-        <div class="col-md-6 invoice-right">
-            <p align="center">_____________________________________</p>
-            <p align="center">Firma</p>
-        </div>
+        <table style="margin: 0 auto 0 auto;">
+            <tr>
+                <td style="padding-right: 30px;">_________________________________________</td>
+                <td>_________________________________________</td>
+            </tr>
+            <tr>
+                <td align="center">Nombre</td>
+                <td align="center">Firma</td>
+            </tr>
+        </table>
     </div>
 
 

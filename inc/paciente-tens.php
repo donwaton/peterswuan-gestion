@@ -35,7 +35,6 @@ include './bin/select-paciente.php';
         }
         alertaQuiebreStock();
 
-        /* Pendiente de definición de proceso de pedidos para preparados magistrales
         // Alerta de próximos vencimientos de preparados magistrales
         function alertaPreparadoVencimiento(){
             $.ajax({
@@ -53,7 +52,6 @@ include './bin/select-paciente.php';
             });
         }
         alertaPreparadoVencimiento();
-        */
 
         $('.noEnterSubmit').keypress(function(e){
             if ( e.which == 13 ) return false;
@@ -130,7 +128,6 @@ include './bin/select-paciente.php';
             <span class="badge badge-danger" id="alertaInsumo"></span>
         </a>
     </li>
-    <!-- Pendiente de definición de proceso de pedidos para preparados magistrales
     <li>
         <a href="#magistrales" data-toggle="tab">
             <span class="visible-xs"><i class="entypo-newspaper"></i></span>
@@ -138,7 +135,6 @@ include './bin/select-paciente.php';
             <span class="badge badge-danger" id="alertaPreparado"></span>
         </a>
     </li>
-    -->
     <li>
         <a href="#pedidos" data-toggle="tab">
             <span class="visible-xs"><i class="entypo-clipboard"></i></span>
@@ -207,8 +203,6 @@ include './bin/select-paciente.php';
             </tbody>			
         </table> 
     </div>
-
-<?php /* Pendiente de definición de proceso de pedidos para preparados magistrales
     <!-- Preparados Magistrales -->
     <div class="tab-pane" id="magistrales"> 
      <!-- Button trigger modal -->
@@ -247,7 +241,6 @@ include './bin/select-paciente.php';
         </tbody>			
     </table> 
     </div>
-*/ ?>
 
     <!-- Pedidos -->
     <div class="tab-pane" id="pedidos">
