@@ -28,7 +28,7 @@ include './bin/select-confirmar-pedido.php';
   </li>
 </ol>
 
-<h2 class="hidden-xs">Confirmar pedido</h2> <br>
+<h2 class="hidden-xs">Verificar pedido</h2> <br>
 
 <button type="button" class="btn btn-success btn-icon icon-left" onclick="
     $.ajax({
@@ -45,7 +45,7 @@ include './bin/select-confirmar-pedido.php';
         }
     });
     ">
-    <i class="entypo-check"></i>Solicitar aprobación
+    <i class="entypo-check"></i>Confirmar pedido
 </button>
 <br /><br />
 

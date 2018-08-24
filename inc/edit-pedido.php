@@ -26,7 +26,7 @@ if ($pedido['ep_id'] == 5) {
     $class2 = "text-success hidden-xs";
     $class3 = "text-success hidden-xs";
     $class4 = "text-success hidden-xs";
-    $class5 = "alert-info";
+    $class5 = "alert-success";
 }
 if ($pedido['ep_id'] == 6) {
     $class1 = "text-success hidden-xs";
@@ -217,6 +217,9 @@ if ($pedido['ep_id'] == 6) {
                     <th class="hidden-xs">Tipo</th>
                     <th class="hidden-xs">Motivo</th>
                     <th style="width:80px;">Pedido</th>
+                    <?php if($pedido['ep_id'] > 4){?>
+                    <th style="width:80px;">Entregado</th>
+                    <?php } ?>
                     <?php if ($_SESSION['perfil'] == 1 || ($_SESSION['perfil'] == 5 && $pedido['ep_id'] == 1) || ($_SESSION['perfil'] == 4 && $pedido['ep_id'] < 3)) {?>
                     <th style="width:80px;">Acciones</th>
                     <?php }?>
@@ -229,6 +232,17 @@ if ($pedido['ep_id'] == 6) {
                     <td class="hidden-xs"><?php echo $listaInsumosPedido["tipoinsumo_nombre"]; ?></td>
                     <td class="hidden-xs"><?php echo $listaInsumosPedido["mp_nombre"]; ?></td>
                     <td><?php echo $listaInsumosPedido["ip_cantidad"]; ?></td>
+                    <?php if($pedido['ep_id'] > 4){
+                        if($listaInsumosPedido["ip_estado"]==1){
+                            $estadoPedido = $listaInsumosPedido["ip_cantidad"];
+                            $classEstado = "alert-success";
+                        } else {
+                            $estadoPedido = $listaInsumosPedido["ip_entregado"];
+                            $classEstado = "alert-danger";
+                        }
+                    ?>
+                    <td class="<?php echo $classEstado;?>"><?php echo $estadoPedido; ?></td>
+                    <?php }?>
                     <?php if ($_SESSION['perfil'] == 1 || ($_SESSION['perfil'] == 5 && $pedido['ep_id'] == 1) || ($_SESSION['perfil'] == 4 && $pedido['ep_id'] < 3)) {?>
                    <td width="80px">
                         <button type="button" class="btn btn-danger btn-xs" onclick="
