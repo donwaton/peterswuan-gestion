@@ -145,7 +145,7 @@ if($pedido['ep_id']==5){
 <hr>
       
 <?php if($pedido['ep_id']==2){?>
-<button type="button" class="btn btn-success btn-icon icon-left"onclick="
+<button type="button" class="btn btn-success btn-icon icon-left" onclick="
     $.ajax({
         type:'POST',
         url:'./bin/aprobar-pedido.php',

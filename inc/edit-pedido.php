@@ -28,6 +28,13 @@ if ($pedido['ep_id'] == 5) {
     $class4 = "text-success hidden-xs";
     $class5 = "alert-info";
 }
+if ($pedido['ep_id'] == 6) {
+    $class1 = "text-success hidden-xs";
+    $class2 = "text-success hidden-xs";
+    $class3 = "text-success hidden-xs";
+    $class4 = "text-success hidden-xs";
+    $class5 = "alert-danger";
+}
 ?>
 
 <script type="text/javascript">
@@ -117,7 +124,7 @@ if ($pedido['ep_id'] == 5) {
 
 <ol class="breadcrumb bc-3" >
   <li class="hidden-xs">
-    <a href="index.php"><Inicio</a>
+    <a href="index.php">Inicio</a>
   </li>
   <?php if ($_SESSION['perfil'] != 5) {?>
   <li class="hidden-xs">
@@ -187,55 +194,10 @@ if ($pedido['ep_id'] == 5) {
 
 <!-- Cerrar pedido -->
 <?php if ($pedido['ep_id'] == 4) {?>
-<button type="button" class="btn btn-success btn-icon icon-left" data-toggle="modal" data-target="#modalConfirmacion">
-    <i class="entypo-check"></i>Confirmar Recepción
-</button>
+<a href="index.php?sec=confirmar-pedido&id=<?php echo $_GET['id'];?>&pid=<?php echo $_GET['pid'];?>" class="btn btn-success btn-icon icon-left">
+    <i class="entypo-search"></i>Verificar Recepción
+</a>
 <br />
-
-<div class="modal fade" id="modalConfirmacion" tabindex="-1" role="dialog" aria-labelledby="modalConfirmacion" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h3 class="modal-title" id="exampleModalLabel">Confirmar Recepción</h3>
-            </div>
-            <div class="modal-body">
-                <table class="table table-bordered datatable" id="table-confirmacion">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th style="width:80px;">Pedido</th>
-                            <th width="60px">No Ok</th>
-                            <th width="80px">Cantidad</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabla-consumo">
-                    <?php while ($listaConfirmacion = $resultConfirmacion->fetch_assoc()) {?>
-                        <tr id="listInsumo<?php echo $listaConfirmacion['ip_id']; ?>">
-                            <td><?php echo $listaConfirmacion["insumo_nombre"]; ?></td>
-                            <td><?php echo $listaConfirmacion["ip_cantidad"]; ?></td>
-                            <td>
-                                <div class="checkbox checkbox-replace" style="margin-top:7px;" align="center">
-                                    <input type="checkbox" id="chk-<?php echo $listaConfirmacion['ip_id'];?>"
-                                    onclick="document.getElementById('cantidad-<?php echo $listaConfirmacion['ip_id'];?>').disabled">
-                                </div>                                
-                            </td>
-                            <td>
-                                <input type="text" name="cantidad" id="cantidad-<?php echo $listaConfirmacion['ip_id'];?>" 
-                                class="form-control form-control-sm noEnterSubmit" 
-                                disabled="true">
-                            </td>
-                        <tr>
-                    <?php }?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
 <?php }?>
 
 <h2>Lista de Insumos Pedido</h2>
