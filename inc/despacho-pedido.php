@@ -72,15 +72,13 @@ if($pedido['ep_id']==5){
         });
 
         $('#updateInsumo').click(function(){
-            document.getElementById('updateInsumo').disabled = true;
             var pedido = document.forms["formUpdateInsumo"]["newPedido"].value;
             var idInsumo = document.forms["formUpdateInsumo"]["insumoId"].value;
 
             if(pedido ==""){
                 alert("Debe ingresar una cantidad para actualizar");
             } 
-            else {
-                                
+            else {                
                 $.ajax({
                     url:"bin/update-insumo-pedido.php",
                     method:"POST",
@@ -103,6 +101,7 @@ if($pedido['ep_id']==5){
                         toastr.success("Se ha actualizado la cantidad del pedido", "Actualización exitosa", opts);
                         document.getElementById('listConsumo'+idInsumo).innerHTML = pedido;
                         document.forms["formUpdateInsumo"]["newPedido"].value = null;
+                        document.getElementById('updateInsumo').disabled = true;
                         }
                 });
             }

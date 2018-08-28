@@ -193,12 +193,12 @@ if ($pedido['ep_id'] == 6) {
 <?php }?>
 
 <!-- Cerrar pedido -->
-<?php if ($pedido['ep_id'] == 4) {?>
+<?php /* if ($pedido['ep_id'] == 4) {?>
 <a href="index.php?sec=confirmar-pedido&id=<?php echo $_GET['id'];?>&pid=<?php echo $_GET['pid'];?>" class="btn btn-success btn-icon icon-left">
     <i class="entypo-search"></i>Verificar Recepción
 </a>
 <br />
-<?php }?>
+<?php } */?>
 
 <h2>Lista de Insumos Pedido</h2>
 

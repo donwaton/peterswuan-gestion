@@ -5,49 +5,18 @@ include './bin/select-confirmar-pedido.php';
 <!-- Inicio HTML -->
 
 <ol class="breadcrumb bc-3" >
-  <li class="hidden-xs">
-    <a href="index.php">Inicio</a>
-  </li>
-  <?php if ($_SESSION['perfil'] != 5) {?>
-  <li class="hidden-xs">
-    <a href="index.php?sec=lista-pacientes">Lista de pacientes</a>
-  </li>
   <li>
-    <a href="index.php?sec=paciente&id=<?php echo $pedido['paciente_id']; ?>">Ficha <?php echo $pedido['paciente_nombre'] ?></a>
-  </li>
-  <?php }if ($_SESSION['perfil'] == 5) {?>
-  <li class="hidden-xs">
-    <a href="index.php?sec=paciente-tens&id=<?php echo $pedido['paciente_id']; ?>">Ficha <?php echo $pedido['paciente_nombre'] ?></a>
-  </li>
-  <?php }?>
-  <li class="hidden-xs">
-    <a href="index.php?sec=edit-pedido&id=<?php echo $_GET['id'];?>&pid=<?php echo $_GET['pid'];?>">Detalles pedido</a>
+    <a href="index.php?sec=lista-pedidos-ruta">Lista de pedidos en ruta</a>
   </li>
   <li class="active">
     <strong>Verificar pedido</strong>
   </li>
 </ol>
 
-<h2 class="hidden-xs">Verificar pedido</h2> <br>
+<h2 class="hidden-xs">Verificar pedido</h2> <br class="hidden-xs">
 
-<button type="button" class="btn btn-success btn-icon icon-left" onclick="
-    $.ajax({
-        type:'POST',
-        url:'./bin/confirmar-pedido.php',
-        data:{idPedido:<?php echo $_GET['pid']; ?>,userId:<?php echo $_SESSION['userid']; ?>},
-        success:function(response){
-            <?php if ($_SESSION['perfil'] == 5) {?>
-            window.location.replace('index.php?sec=paciente-tens&id=<?php echo $_GET['id']; ?>');
-            <?php }?>
-            <?php if ($_SESSION['perfil'] <> 5) {?>
-            window.location.replace('index.php?sec=paciente&id=<?php echo $_GET['id']; ?>');
-            <?php }?>
-        }
-    });
-    ">
-    <i class="entypo-check"></i>Confirmar pedido
-</button>
-<br /><br />
+<h4><?php echo $pedido['paciente_nombre']; ?></h4> <br>
+<p><?php echo $pedido['paciente_domicilio']; ?></p>
 
 <table class="table table-bordered datatable" id="table-confirmacion">
     <thead>
@@ -119,3 +88,18 @@ include './bin/select-confirmar-pedido.php';
     <?php }?>
     </tbody>
 </table>
+
+<div align="right">
+<button type="button" class="btn btn-success btn-icon icon-left" onclick="
+    $.ajax({
+        type:'POST',
+        url:'./bin/confirmar-pedido.php',
+        data:{idPedido:<?php echo $_GET['pid']; ?>,userId:<?php echo $_SESSION['userid']; ?>},
+        success:function(response){
+            window.location.replace('index.php?sec=lista-pedidos-ruta');
+        }
+    });
+    ">
+    <i class="entypo-check"></i>Confirmar pedido
+</button>
+</div>

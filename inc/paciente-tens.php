@@ -34,7 +34,7 @@ include './bin/select-paciente.php';
             });
         }
         alertaQuiebreStock();
-
+/*
         // Alerta de próximos vencimientos de preparados magistrales
         function alertaPreparadoVencimiento(){
             $.ajax({
@@ -52,6 +52,7 @@ include './bin/select-paciente.php';
             });
         }
         alertaPreparadoVencimiento();
+*/
 
         $('.noEnterSubmit').keypress(function(e){
             if ( e.which == 13 ) return false;
@@ -214,7 +215,9 @@ include './bin/select-paciente.php';
                 <th>Dosis</th>
                 <th>Cantidad</th>
                 <th>Posología</th>
+                <!--
                 <th>Duración estimada</th>
+                -->
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -231,7 +234,9 @@ include './bin/select-paciente.php';
                 <td><?php echo $listaMagistrales["prep_dosis"]." ".$listaMagistrales["prep_unidad"];?></td>
                 <td><?php echo $listaMagistrales["prep_cantidad"]." ".$listaMagistrales["forma_nombre"];?></td>
                 <td><?php echo $listaMagistrales["prep_pos_dosis"]." ".$listaMagistrales["prep_unidad"]." cada ".$listaMagistrales["prep_pos_horas"]." horas";?></td>
+                <?php /*
                 <td><?php echo $listaMagistrales["prep_fecha_venc"]." ".$classDangerPrep;?></td>
+                */?>
                 <td width="100px">
                     <a href="index.php?sec=magistral&id=<?php echo $listaMagistrales['prep_id'];?>" class="btn btn-info btn-sm btn-icon icon-left">
                         <i class="entypo-doc-text"></i>Ver detalles

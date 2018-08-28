@@ -37,5 +37,10 @@ $sqlDespacho="SELECT COUNT(pedido_id) AS pendiente_despacho
     WHERE ep_id=3";
 $resultDespacho = $conn->query($sqlDespacho);
 
+$sqlRuta="SELECT COUNT(pedido_id) AS en_ruta
+    FROM pedido
+    WHERE ep_id=4";
+$resultRuta = $conn->query($sqlRuta);
+
 $conn->close();
 ?>

@@ -5,6 +5,11 @@ if($_SESSION['perfil']==5){
     echo "<script>window.location = 'index.php?sec=paciente-tens&id=".$pacienteAsignado['paciente_id']."';</script>";
 }
 
+if($_SESSION['perfil']==6){
+    include './bin/select-paciente-tens.php';
+    echo "<script>window.location = 'index.php?sec=lista-pedidos-ruta';</script>";
+}
+
 ?>
 
 <!-- Inicio HTML -->
@@ -77,9 +82,9 @@ if($_SESSION['perfil']==5){
         $colorTilePD="orange";
     }?>
     <div class="tile-stats tile-<?php echo $colorTilePD;?>">
-        <div class="icon"><i class="entypo-basket"></i></div>
+        <div class="icon"><i class="entypo-box"></i></div>
         <div class="num" data-start="0" data-end="<?php echo $Despacho['pendiente_despacho'];?>" data-postfix=" Pedidos" data-duration="700" data-delay="0">0 Pedidos</div>
-        <h3>Pendiente Despacho</h3>
+        <h3>Pendiente preparación</h3>
         <p>Debe despachar los pedidos</p>
     </div>
     </a>
@@ -87,4 +92,27 @@ if($_SESSION['perfil']==5){
 
 <?php } } ?>
 
+<?php while($Ruta = $resultRuta->fetch_assoc()) { 
+    if($Ruta['en_ruta']==""){ } if($_SESSION['perfil']==1 || $_SESSION['perfil']==6) { ?>
+
+<div class="col-sm-3">
+   <a href="index.php?sec=lista-pedidos-ruta">
+    <?php if($Ruta['en_ruta']==0){
+        $colorTilePD="green";
+    } else {
+        $colorTilePD="orange";
+    }?>
+    <div class="tile-stats tile-<?php echo $colorTilePD;?>">
+        <div class="icon"><i class="entypo-basket"></i></div>
+        <div class="num" data-start="0" data-end="<?php echo $Ruta['en_ruta'];?>" data-postfix=" Pedidos" data-duration="700" data-delay="0">0 Pedidos</div>
+        <h3>En ruta</h3>
+        <p>Debe confirmar los pedidos</p>
+    </div>
+   </a>
 </div>
+
+<?php } } ?>
+
+
+</div>
+
