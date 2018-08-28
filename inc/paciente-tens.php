@@ -60,6 +60,7 @@ include './bin/select-paciente.php';
         });
 
         $('#updateInsumo').click(function(){
+            document.getElementById('updateInsumo').disabled = true;
             var stock = document.forms["formUpdateInsumo"]["newStock"].value;
             var idInsumo = document.forms["formUpdateInsumo"]["insumoId"].value;
 
@@ -294,12 +295,20 @@ include './bin/select-paciente.php';
 
             <label for="newStock">Stock</label>
             <input type="number" name="newStock" id="newStock" class="form-control form-control-sm noEnterSubmit"
-            data-validate="required" data-message-required="Debe ingresar el nuevo stock." required>
+            data-validate="required" data-message-required="Debe ingresar el nuevo stock." required onkeyup="
+                        var pedido = document.forms['formUpdateInsumo']['newStock'].value;
+                        if(pedido!=''){
+                            document.getElementById('updateInsumo').disabled = false;
+                        }
+                        if(pedido==''){
+                            document.getElementById('updateInsumo').disabled = true;
+                        }
+                    ">
         </form>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-            <button type="button" name="updateInsumo" id="updateInsumo" class="btn btn-success">Actualizar</button>
+            <button type="button" name="updateInsumo" id="updateInsumo" class="btn btn-success" disabled>Actualizar</button>
         </div>
         </div>
     </div>

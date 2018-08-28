@@ -55,8 +55,6 @@ if($pedido['ep_id']==5){
             minimumResultsForSearch: -1
         });
 
-         document.getElementById("ingresoExitoso").style.visibility = "hidden";
-
          $('#newTipoInsumo').on('change',function(){
             var tipoInsumoID = $(this).val();
             if(tipoInsumoID){
@@ -69,6 +67,43 @@ if($pedido['ep_id']==5){
                         $('#newInsumo').append(html);
                         document.getElementById("ingresoExitoso").style.visibility = "hidden";
                     }
+                });
+            }
+        });
+
+        $('#updateInsumo').click(function(){
+            document.getElementById('updateInsumo').disabled = true;
+            var pedido = document.forms["formUpdateInsumo"]["newPedido"].value;
+            var idInsumo = document.forms["formUpdateInsumo"]["insumoId"].value;
+
+            if(pedido ==""){
+                alert("Debe ingresar una cantidad para actualizar");
+            } 
+            else {
+                                
+                $.ajax({
+                    url:"bin/update-insumo-pedido.php",
+                    method:"POST",
+                    data:$('#formUpdateInsumo').serialize(),
+                    success:function(response){
+                        var opts = {
+                            "closeButton": true,
+                            "debug": false,
+                            "positionClass": "toast-top-full-width",
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "1000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        };                        
+                        toastr.success("Se ha actualizado la cantidad del pedido", "Actualización exitosa", opts);
+                        document.getElementById('listConsumo'+idInsumo).innerHTML = pedido;
+                        document.forms["formUpdateInsumo"]["newPedido"].value = null;
+                        }
                 });
             }
         });
@@ -95,7 +130,6 @@ if($pedido['ep_id']==5){
 </script>
 
 <!-- Inicio HTML -->
-
 <ol class="breadcrumb bc-3" >
   <li>
     <a href="index.php">Inicio</a>
@@ -114,7 +148,7 @@ if($pedido['ep_id']==5){
     <div class="col-sm-1 col-xs-4"><p class="visible-xs"><b>Estado Pedido</b></p></div>
     <div class="col-sm-2 col-xs-8 <?php echo $class1;?>" style="border-radius: 25px;"><i class="entypo-clipboard"></i><br class="hidden-xs">Borrador</div>
     <div class="col-sm-2 col-xs-8 <?php echo $class2;?>" style="border-radius: 25px;"><i class="entypo-check"></i><br class="hidden-xs">Pendiente de<br class="hidden-xs">aprobación</div>
-    <div class="col-sm-2 col-xs-8 <?php echo $class3;?>" style="border-radius: 25px;"><i class="entypo-box"></i><br class="hidden-xs">Pendiente de<br class="hidden-xs">despacho</div>
+    <div class="col-sm-2 col-xs-8 <?php echo $class3;?>" style="border-radius: 25px;"><i class="entypo-box"></i><br class="hidden-xs">En preparación</div>
     <div class="col-sm-2 col-xs-8 <?php echo $class4;?>" style="border-radius: 25px;"><i class="fa fa-truck"></i><br class="hidden-xs">En ruta</div>
     <div class="col-sm-2 col-xs-8 <?php echo $class5;?>" style="border-radius: 25px;"><i class="entypo-home"></i><br class="hidden-xs">Entregado</div>
     <div class="col-sm-1"></div>
@@ -166,8 +200,14 @@ if($pedido['ep_id']==5){
                     <td><?php echo $listaInsumosPedido["mp_nombre"];?></td>
                     <td><?php echo $listaInsumosPedido["pi_consumo"];?></td>
                     <td><?php echo $listaInsumosPedido["pi_stock"];?></td>
-                    <td><?php echo $listaInsumosPedido["ip_cantidad"];?></td>
+                    <td id="listConsumo<?php echo $listaInsumosPedido['ip_id'];?>"><?php echo $listaInsumosPedido["ip_cantidad"];?></td>
                    <td width="80px">
+                        <button type="button" class="btn btn-info btn-xs" onclick="
+                            document.getElementById('insumoId').value = '<?php echo $listaInsumosPedido['ip_id'];?>';
+                            document.forms['formUpdateInsumo']['newPedido'].value = '';
+                            $('#modalUpdateInsumo').modal('show');
+                        "><i class="entypo-pencil"></i>
+						</button>
                         <button type="button" class="btn btn-danger btn-xs" onclick="
                         $.ajax({
                             type:'POST',
@@ -193,6 +233,42 @@ if($pedido['ep_id']==5){
     </div>    
 </div>
 
+<!-- Modal Actualiza Pedido-->
+<div class="modal fade" id="modalUpdateInsumo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title" id="exampleModalLabel">Actualizar Pedido</h3>
+            </div>
+            <div class="modal-body">
+                <form id="formUpdateInsumo" name="formUpdateInsumo" onsubmit="false">
+                    <input type="hidden" name="pacienteId" value="<?php echo $_GET['id'];?>">
+                    <input type="hidden" name="insumoId" id="insumoId" value="0">
+
+                    <label for="newPedido">Cantidad pedido</label>
+                    <input type="number" name="newPedido" id="newPedido" class="form-control form-control-sm noEnterSubmit"
+                    data-validate="required" data-message-required="Debe ingresar la cantidad del pedido." required onkeyup="
+                        var pedido = document.forms['formUpdateInsumo']['newPedido'].value;
+                        if(pedido!=''){
+                            document.getElementById('updateInsumo').disabled = false;
+                        }
+                        if(pedido==''){
+                            document.getElementById('updateInsumo').disabled = true;
+                        }
+                    ">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                <button type="button" name="updateInsumo" id="updateInsumo" class="btn btn-success" data-dismiss="modal" disabled>Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Imported styles on this page -->
 <link rel="stylesheet" href="assets/js/datatables/datatables.css">
 <link rel="stylesheet" href="assets/js/select2/select2-bootstrap.css">
@@ -208,3 +284,4 @@ if($pedido['ep_id']==5){
 <!-- Imported scripts on this page -->
 <script src="assets/js/datatables/datatables.js"></script>
 <script src="assets/js/select2/select2.min.js"></script>
+<script src="assets/js/toastr.js"></script>

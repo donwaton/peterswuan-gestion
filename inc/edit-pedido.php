@@ -149,7 +149,7 @@ if ($pedido['ep_id'] == 6) {
     <div class="col-sm-1 col-xs-4"><p class="visible-xs"><b>Estado Pedido</b></p></div>
     <div class="col-sm-2 col-xs-8 <?php echo $class1; ?>" style="border-radius: 25px;"><i class="entypo-clipboard"></i><br class="hidden-xs">Borrador</div>
     <div class="col-sm-2 col-xs-8 <?php echo $class2; ?>" style="border-radius: 25px;"><i class="entypo-check"></i><br class="hidden-xs">Pendiente de<br class="hidden-xs">aprobación</div>
-    <div class="col-sm-2 col-xs-8 <?php echo $class3; ?>" style="border-radius: 25px;"><i class="entypo-box"></i><br class="hidden-xs">Pendiente de<br class="hidden-xs">despacho</div>
+    <div class="col-sm-2 col-xs-8 <?php echo $class3; ?>" style="border-radius: 25px;"><i class="entypo-box"></i><br class="hidden-xs">En preparación</div>
     <div class="col-sm-2 col-xs-8 <?php echo $class4; ?>" style="border-radius: 25px;"><i class="fa fa-truck"></i><br class="hidden-xs">En ruta</div>
     <div class="col-sm-2 col-xs-8 <?php echo $class5; ?>" style="border-radius: 25px;"><i class="entypo-home"></i><br class="hidden-xs">Entregado</div>
     <div class="col-sm-1"></div>
@@ -313,9 +313,9 @@ if ($pedido['ep_id'] == 6) {
                         style="width:80px;" type="number" class="form-control input-sm col-md-2"
                         value="<?php echo $listaSugeridos["pedido_sugerido"]; ?>"></td>
                     <td width="80px">
-                        <button type="button" class="btn btn-blue btn-sm btn-icon icon-left" onclick="
+                        <button id="btnAgregar<?php echo $listaSugeridos["pi_id"]; ?>" type="button" class="btn btn-blue btn-sm btn-icon icon-left" onclick="
+                            document.getElementById('btnAgregar<?php echo $listaSugeridos['pi_id']; ?>').disabled = true;
                             var cantidad = ($('#<?php echo $listaSugeridos["pi_id"]; ?>').val());
-                            console.log(cantidad);
                             $.ajax({
                                 type:'POST',
                                 url:'./bin/insert-insumo-pedido.php',
