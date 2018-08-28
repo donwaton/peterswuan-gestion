@@ -11,6 +11,8 @@
             </a>
         </div>
 
+        <?php if($_SESSION['perfil']<>6){?>
+
         <!-- logo collapse icon -->
         <div class="sidebar-collapse">
             <a href="#" class="sidebar-collapse-icon">
@@ -28,7 +30,11 @@
             </a>
         </div>
 
+        <?php } ?>
+
     </header>
+
+    <?php if($_SESSION['perfil']<>6){?>
 
     <ul id="main-menu" class="main-menu">
         <!-- add class "multiple-expanded" to allow multiple submenus to open -->
@@ -97,6 +103,7 @@
             </a>						
         </li>
     </ul>
+    <?php } ?>
 </div>
 
 </div>
