@@ -2,7 +2,7 @@
 include 'db.php';
 
 if(isset($_POST['insumoId'])){
-        echo $sqlUpdate = "UPDATE insumo 
+        $sqlUpdate = "UPDATE insumo 
         SET tipoinsumo_id = '".$_POST['tipoInsumo']."', 
             insumo_nombre = '".$_POST['nombreInsumo']."', 
             insumo_stock = '".$_POST['stockInsumo']."', 

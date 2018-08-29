@@ -4,31 +4,49 @@ include './bin/select-turnos.php';
 
 <script>
 $(document).ready(function() {
-
 // page is now ready, initialize the calendar...
-
-$('#calendar').fullCalendar({
-    locale: 'es',
-    // put your options and callbacks here
-    events: [
-    <?php  while($listaturnos = $result->fetch_assoc()) { 
+    $('#calendar').fullCalendar({
+        locale: 'es',
+        // put your options and callbacks here
+        events: [
+        <?php while ($listaturnos = $result->fetch_assoc()) {
         $color = "#ee4749";
-        if($listaturnos['tipo_turno_id']==1){
+        if ($listaturnos['tipo_turno_id'] == 1) {
             $color = "#378006";
         }
-        echo '{ id:"'.$listaturnos['prof_id'].'",';
-        echo 'title:"'.$listaturnos['prof_nombre'].'",color:"'.$color.'",';
-        echo 'start:"'.$listaturnos['turno_fecha_inicio'].'",';
-        echo 'end:"'.$listaturnos['turno_fecha_fin'].'"},';
-        } ?>
-    ]
-})
+        echo '{ id:"' . $listaturnos['turno_id'] . '",';
+        echo 'profId:"' . $listaturnos['prof_id'] . '",';
+        echo 'title:"' . $listaturnos['prof_nombre'] . '",color:"' . $color . '",';
+        echo 'start:"' . $listaturnos['turno_fecha_inicio'] . '",';
+        echo 'end:"' . $listaturnos['turno_fecha_fin'] . '"},';
+    }?>
+        ],
+        eventClick: function(calEvent) {
+            $('#modalTurnoUpdate').modal('show');
+            document.getElementById('turnoId').value = calEvent.id;
+            document.getElementById('profesionalTurno').value = calEvent.profId;
+        }
+    });
+
+    $('#updateTurno').click(function(){
+            document.getElementById('updateTurno').disabled = true;                                
+            $.ajax({
+                url:"bin/update-turno.php",
+                method:"POST",
+                data:$('#formTurnoUpdate').serialize(),
+                success:function(response){
+                    document.getElementById('updateTurno').disabled = false;
+                    window.location = 'index.php?sec=turnos';
+                    }
+            });    
+        });
 
 });
 </script>
 <style>
-.calendar-env .fc .fc-view-container .fc-view table tbody .fc-day.fc-state-highlight {
-    background:#285182;
+.fc-unthemed .fc-today{
+    background:#285182 !important;
+    color:#ffffff;
 }
 </style>
 
@@ -42,17 +60,42 @@ $('#calendar').fullCalendar({
     <strong>Turnos de emergencia</strong>
   </li>
 </ol>
-      
+
 <h2>Turnos de emergencia</h2>
 <br />
 
-<div class="calendar-env">
-		
 <!-- Calendar Body -->
-<div class="calendar-body">
+<div id="calendar"></div>
 
-    <div id="calendar"></div>
+<!-- Modal turno-->
+<div class="modal fade" id="modalTurnoUpdate" tabindex="-1" role="dialog" aria-labelledby="modalTurnoUpdate" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            <h3 class="modal-title" id="modalTurnoUpdate">Modificar turno</h3>
+        </div>
+        <div class="modal-body">
+            <form id="formTurnoUpdate" name="formTurnoUpdate">
+                <input type="hidden" name="turnoId" id="turnoId" value="0">
 
+                <label for="profesionalTurno">Tipo</label>
+                    <select class="form-control form-control-sm" name="profesionalTurno" id="profesionalTurno" required>
+                        <option value="0"></option>
+                    <?php while($listaProfesional = $resultProfesional->fetch_assoc()) { ?>
+                        <option value="<?php echo $listaProfesional["prof_id"];?>"><?php echo $listaProfesional["prof_nombre"];?></option>
+                    <?php } ?>
+                    </select>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+            <button type="button" name="updateTurno" id="updateTurno" class="btn btn-success">Reemplazar</button>
+        </div>
+        </div>
+    </div>
 </div>
 
 <!-- Imported styles on this page -->
