@@ -1,5 +1,16 @@
 <?php
 include './bin/select-turnos.php';
+
+$listaEnfermeras = '';
+$listaKTR = '';
+
+while($listaProfesional1 = $resultProfesional1->fetch_assoc()) { 
+    $listaEnfermeras .= "<option value='".$listaProfesional1["prof_id"]."'>".$listaProfesional1["prof_nombre"]."</option>";
+} 
+while($listaProfesional2 = $resultProfesional2->fetch_assoc()) { 
+    $listaKTR .= "<option value='".$listaProfesional2["prof_id"]."'>".$listaProfesional2["prof_nombre"]."</option>";
+}
+
 ?>
 
 <script>
@@ -16,15 +27,23 @@ $(document).ready(function() {
         }
         echo '{ id:"' . $listaturnos['turno_id'] . '",';
         echo 'profId:"' . $listaturnos['prof_id'] . '",';
+        echo 'tipoId:"' . $listaturnos['tipo_turno_id'] . '",';
         echo 'title:"' . $listaturnos['prof_nombre'] . '",color:"' . $color . '",';
         echo 'start:"' . $listaturnos['turno_fecha_inicio'] . '",';
         echo 'end:"' . $listaturnos['turno_fecha_fin'] . '"},';
     }?>
         ],
         eventClick: function(calEvent) {
-            $('#modalTurnoUpdate').modal('show');
+            $('#profesionalTurno').empty();
+            if(calEvent.tipoId==2){
+                $('#profesionalTurno').append("<?php echo $listaKTR;?>");
+            }
+            if(calEvent.tipoId==1){
+                $('#profesionalTurno').append("<?php echo $listaEnfermeras;?>");
+            }
             document.getElementById('turnoId').value = calEvent.id;
             document.getElementById('profesionalTurno').value = calEvent.profId;
+            $('#modalTurnoUpdate').modal('show');
         }
     });
 
@@ -84,9 +103,6 @@ $(document).ready(function() {
                 <label for="profesionalTurno">Tipo</label>
                     <select class="form-control form-control-sm" name="profesionalTurno" id="profesionalTurno" required>
                         <option value="0"></option>
-                    <?php while($listaProfesional = $resultProfesional->fetch_assoc()) { ?>
-                        <option value="<?php echo $listaProfesional["prof_id"];?>"><?php echo $listaProfesional["prof_nombre"];?></option>
-                    <?php } ?>
                     </select>
             </form>
         </div>
