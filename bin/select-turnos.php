@@ -1,6 +1,6 @@
 <?php require 'db.php';
 
-$sql = "SELECT * FROM turno, profesional WHERE turno.prof_id=profesional.prof_id";
+$sql = "SELECT turno.turno_id,turno.turno_fecha_inicio,turno.turno_fecha_fin,turno.tipo_turno_id,profesional.prof_nombre FROM turno, profesional WHERE turno.prof_id=profesional.prof_id";
 $result = $conn->query($sql);
 
 $sqlProfesional1 = "SELECT * FROM profesional WHERE tipo_turno_id=1";
