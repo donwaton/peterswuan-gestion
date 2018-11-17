@@ -1,7 +1,7 @@
 <?php 
 include './bin/select-paciente.php';
+include './bin/select-turnos.php';
 ?>
-
 <script type="text/javascript">
     jQuery( document ).ready( function() {
         // Propiedades de la tablas
@@ -201,262 +201,344 @@ include './bin/select-paciente.php';
                     window.location.replace('index.php?sec=edit-pedido&id=<?php echo $_GET['id'];?>&pid='+data);
                 }
             });
-        });  
+        }); 
 
-    } );
+        $('#calendar').fullCalendar({
+            locale: 'es',
+            // put your options and callbacks here
+            events: [
+                <?php while ($listaturnos = $result->fetch_assoc()) {
+                $color = "#ee4749";
+                if ($listaturnos['tipo_turno_id'] == 1) {
+                    $color = "#378006";
+                }
+                echo '{ id:"' . $listaturnos['turno_id'] . '",';
+                echo 'profId:"' . $listaturnos['prof_id'] . '",';
+                echo 'tipoId:"' . $listaturnos['tipo_turno_id'] . '",';
+                echo 'title:"' . $listaturnos['prof_nombre'] . '",color:"' . $color . '",';
+                echo 'start:"' . $listaturnos['turno_fecha_inicio'] . '",';
+                echo 'end:"' . $listaturnos['turno_fecha_fin'] . '"},';
+                }?>
+            ]
+        });
+    });
 </script>
 
-<!-- Inicio HTML -->
+<div class="row" style="margin-top:-20px;">
+    <div class="col-sm-4 patientContainer">
+        <!-- Titulos Tabs Datos Paciente-->
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#datosPaciente" data-toggle="tab">
+                    <span>Datos del Paciente</span>
+                </a>
+            </li>
+            <li>
+                <a href="#datosAdministrativos" data-toggle="tab">
+                    <span>Datos Administrativos</span>
+                </a>
+            </li>
+        </ul>
 
-<ol class="breadcrumb bc-3" >
-  <li>
-    <a href="index.php"><i class="fa-home"></i>Inicio</a>
-  </li>
-  <li>
-    <a href="index.php?sec=lista-pacientes"><i class="fa-home"></i>Lista de pacientes</a>
-  </li>
-  <li class="active">
-    <strong>Ficha de <?php echo $datosPaciente['paciente_nombre'];?></strong>
-  </li>
-</ol>
-      
-<h2>Ficha de <?php echo $datosPaciente['paciente_nombre'];?></h2>
-<br />
+        <!-- Contenedor de Tabs Datos Paciente-->
+        <div class="tab-content">
+            <!-- Datos del Paciente -->
+            <div class="tab-pane active" id="datosPaciente">
+                <div>
+                    <img src="./assets/images/lockscreen-user.png" alt="Foto Paciente" class="patientAvatar">
+                </div>
+                <div class="patientInfo">
+                    <p class="patientTitle"><?php echo $datosPaciente['paciente_nombre'];?></p>
+                    <p>Ficha Nº: <?php echo $datosPaciente['paciente_id'];?></p>
+                    <p>RUT: <?php echo $datosPaciente['paciente_rut'];?></p>
+                    <p>Edad: 
+                    <?php 
+                    //funcion de calculo de dedad del paciente
+                        function calcular_edad($fecha){
+                            $fecha_nac = new DateTime(date('Y/m/d',strtotime($fecha))); // Creo un objeto DateTime de la fecha ingresada
+                            $fecha_hoy =  new DateTime(date('Y/m/d',time())); // Creo un objeto DateTime de la fecha de hoy
+                            $edad = date_diff($fecha_hoy,$fecha_nac); // La funcion ayuda a calcular la diferencia, esto seria un objeto
+                            return $edad;
+                        }
+                        $edad = calcular_edad($datosPaciente['paciente_fecha_nac']);
+                        echo "{$edad->format('%y')} años y {$edad->format('%m')} meses"; // Aplicamos un formato al objeto resultante de la funcion                        
+                    ?>
+                    </p>
+                    <p>Sexo: <?php echo $datosPaciente['paciente_sexo'];?></p>
+                    <p>Medico Tratante: <?php echo $datosPaciente['medico_nombre'];?></p>
+                    <p>Diagnóstico: <?php echo $datosPaciente['paciente_diagnostico'];?></p>
+                </div>                   
+            </div>
+            <!-- Datos Administrativos -->
+            <div class="tab-pane" id="datosAdministrativos"> 
+                <p>Nombre Tutor: <?php echo $datosPaciente['contacto_nombre1'];?></p>
+                <p>Teléfono de contacto: <?php echo $datosPaciente['contacto_tel1'];?></p>
+                <p>Dirección: <?php echo $datosPaciente['paciente_domicilio'];?></p>
+                <p>Previsión: <?php echo $datosPaciente['paciente_prevision'];?></p>
+                <p>Fecha de ingreso: <?php echo $datosPaciente['paciente_fecha_ingreso'];?></p>
+                <p>Unidad de traslado móvil: <?php echo $datosPaciente['paciente_utm'];?></p>
+                <p>Teléfono de unidad de traslado móvil: <?php echo $datosPaciente['paciente_utm_fono'];?></p>
+                <p>N° de socio de unidad de traslado móvil: <?php echo $datosPaciente['paciente_utm_num'];?></p>
+            </div>
+        </div>
+        <div class="alert alert-danger">Alertas</div>
+        <div class="row" style="margin-left:0px; margin-top:10px;">
+            <div class="col-sm-4 vital-sign">
+                <img src="./assets/images/farma-icons/heart-rate.png" alt="FC" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Frecuencia Cardíaca">
+                <b>90</b> bpm
+            </div>
+            <div class="col-sm-4 vital-sign">
+                <img src="./assets/images/farma-icons/temperature.png" alt="C°" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Temperatura">
+                <b>36</b> °C 
+            </div>
+            <div class="col-sm-4 vital-sign">
+                <img src="./assets/images/farma-icons/respiratory.png" alt="FR" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Frecuencia Respiratoria">
+                <b>12</b> rpm  
+            </div>
+            <div class="col-sm-4 vital-sign">
+                <img src="./assets/images/farma-icons/oxygen-sat.png" alt="SAT" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Saturación de Óxigeno">
+                <b>98</b> %     
+            </div>
+            <div class="col-sm-4 vital-sign">
+                <img src="./assets/images/farma-icons/preasure.png" alt="P°" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Presión Arterial">
+                <b>120/80</b>
+            </div>
+            <div class="col-sm-4 vital-sign">
+                <img src="./assets/images/farma-icons/weight.png" alt="KG" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Peso">
+                <b>35</b> Kg 
+            </div>
+            <div class="col-sm-4 vital-sign">
+                <img src="./assets/images/farma-icons/height.png" alt="P°" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Talla">
+                <b>80</b> cm
+            </div>
+            <div class="col-sm-4 vital-sign">
+                <img src="./assets/images/farma-icons/head.png" alt="KG" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Circunferencia craneal">
+                <b>50</b> cm 
+            </div>
+        </div>
 
-<ul class="nav nav-tabs bordered"><!-- available classes "bordered", "right-aligned" -->
-    <li>
-        <a href="#contacto" data-toggle="tab">
-            <span class="visible-xs"><i class="entypo-user"></i></span>
-            <span class="hidden-xs">Contacto</span>
-        </a>
-    </li>
-    <li class="active">
-        <a href="#consumo" data-toggle="tab">
-            <span class="visible-xs"><i class="entypo-box"></i></span>
-            <span class="hidden-xs">Consumo</span>
-            <span class="badge badge-danger" id="alertaInsumo"></span>
-        </a>
-    </li>
-    <li>
-        <a href="#magistrales" data-toggle="tab">
-            <span class="visible-xs"><i class="entypo-newspaper"></i></span>
-            <span class="hidden-xs">Preparados magistrales</span>
-
-            <span class="badge badge-danger" id="alertaPreparado"></span>
-        </a>
-    </li>
-    <li>
-        <a href="#pedidos" data-toggle="tab">
-            <span class="visible-xs"><i class="entypo-clipboard"></i></span>
-            <span class="hidden-xs">Pedidos</span>
-        </a>
-    </li>
-</ul>
-				
-<div class="tab-content">
-
-<!-- Datos de contacto -->
-    <div class="tab-pane" id="contacto"> 
-        <h4>Telefonos de contacto</h4>
-        <?php if($datosPaciente['contacto_nombre1']==""){?>   
-            <div class="alert alert-warning"><strong>Alerta!</strong> Paciente no tiene datos de contacto ingresados.</div>
-        <?php } else {?>
-        <p><?php echo $datosPaciente['contacto_nombre1'];?> : <?php echo $datosPaciente['contacto_tel1'];?></p>
-        <p><?php echo $datosPaciente['contacto_nombre2'];?> : <?php echo $datosPaciente['contacto_tel2'];?></p>   
-        <?php } ?>   
-        <h4>Domicilio</h4>   
-        <p><?php echo $datosPaciente['paciente_domicilio'];?></p>
+        <!-- Calendar Body -->
+        <div id="calendar" style="margin-top:40px;"></div>
     </div>
 
-<!-- Consumo -->
-    <div class="tab-pane active" id="consumo">
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-blue btn-sm btn-icon icon-left" data-toggle="modal" data-target="#exampleModal">
-            <i class="entypo-plus"></i>Agregar insumo
-        </button>
-        <table class="table table-bordered datatable" id="table-1">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Tipo</th>
-                    <th>Consumo</th>
-                    <th>Stock</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tabla-consumo">
-            <?php while($listaInsumos = $resultInsumos->fetch_assoc()) { 
-                 $classDanger = '';
-                 if($listaInsumos["pi_consumo"]*0.3>$listaInsumos["pi_stock"]){
-                     $classDanger = "<i class='entypo-attention' style='color:#ff3300;'></i>";
-                 }
-                ?>
-                <tr id="listInsumo<?php echo $listaInsumos['pi_id'];?>">
-                    <td><?php echo $listaInsumos["insumo_nombre"];?></td>
-                    <td><?php echo $listaInsumos["tipoinsumo_nombre"];?></td>
-                    <td id="listConsumo<?php echo $listaInsumos['pi_id'];?>"><?php echo $listaInsumos["pi_consumo"];?></td>
-                    <td><?php echo $listaInsumos["pi_stock"]." ".$classDanger;?></td>
-                    <td width="80px">
-                        <button type="button" class="btn btn-info btn-xs" onclick="
-                            document.getElementById('insumoId').value = '<?php echo $listaInsumos['pi_id'];?>';
-                            document.forms['formUpdateInsumo']['newConsumo'].value = '';
-                            $('#modalUpdateInsumo').modal('show');
-                        ">
-							<i class="entypo-pencil"></i>
-						</button>
-                        <button type="button" class="btn btn-danger btn-xs" onclick="
-                        var confirmDelete = confirm('¿Está seguro que desea eliminar el insumo?');
-                        if(confirmDelete == true){
-                            $.ajax({
-                                type:'POST',
-                                url:'./bin/delete-consumo.php',
-                                data:'idInsumo=<?php echo $listaInsumos['pi_id'];?>',
-                                success:function(response){
-                                    $('#table-1').DataTable().row($('#listInsumo<?php echo $listaInsumos['pi_id'];?>')).remove().draw();
-                                    var opts = {
-                                        'closeButton': true,
-                                        'debug': false,
-                                        'positionClass': 'toast-top-full-width',
-                                        'onclick': null,
-                                        'showDuration': '300',
-                                        'hideDuration': '1000',
-                                        'timeOut': '3000',
-                                        'extendedTimeOut': '1000',
-                                        'showEasing': 'swing',
-                                        'hideEasing': 'linear',
-                                        'showMethod': 'fadeIn',
-                                        'hideMethod': 'fadeOut'
-                                    };
-                        
-                                    toastr.info('Se ha eliminado el insumo del consumo del paciente', 'Eliminación exitosa', opts);
-                                    confirmDelete = false;
-                                }
-                            });
-                        } ">
-                            <i class="entypo-trash"></i>
-                        </button>
-                        <!--
-                        <button type="button" class="btn btn-info btn-xs">
+    <!-- Farmacia -->
+    <div class="col-sm-8">
+        <ul class="nav nav-tabs bordered"><!-- available classes "bordered", "right-aligned" -->
+            <li class="active">
+                <a href="#consumo" data-toggle="tab">
+                    <span class="visible-xs"><i class="entypo-box"></i></span>
+                    <span class="hidden-xs">Insumos y Medicamentos</span>
+                    <span class="badge badge-danger" id="alertaInsumo"></span>
+                </a>
+            </li>
+            <li>
+                <a href="#magistrales" data-toggle="tab">
+                    <span class="visible-xs"><i class="entypo-newspaper"></i></span>
+                    <span class="hidden-xs">Preparados magistrales</span>
+
+                    <span class="badge badge-danger" id="alertaPreparado"></span>
+                </a>
+            </li>
+            <li>
+                <a href="#pedidos" data-toggle="tab">
+                    <span class="visible-xs"><i class="entypo-clipboard"></i></span>
+                    <span class="hidden-xs">Nuevas Solicitudes</span>
+                </a>
+            </li>
+        </ul>				
+        <div class="tab-content">
+        <!-- Consumo -->
+            <div class="tab-pane active" id="consumo">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-blue btn-sm btn-icon icon-left" data-toggle="modal" data-target="#exampleModal">
+                    <i class="entypo-plus"></i>Agregar insumo
+                </button>
+                <table class="table table-bordered datatable" id="table-1">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Consumo</th>
+                            <th>Stock</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-consumo">
+                    <?php while($listaInsumos = $resultInsumos->fetch_assoc()) { 
+                        $classDanger = '';
+                        if($listaInsumos["pi_consumo"]*0.3>$listaInsumos["pi_stock"]){
+                            $classDanger = "<i class='entypo-attention' style='color:#ff3300;'></i>";
+                        }
+                        ?>
+                        <tr id="listInsumo<?php echo $listaInsumos['pi_id'];?>">
+                            <td><?php echo $listaInsumos["insumo_nombre"];?></td>
+                            <td><?php echo $listaInsumos["tipoinsumo_nombre"];?></td>
+                            <td id="listConsumo<?php echo $listaInsumos['pi_id'];?>"><?php echo $listaInsumos["pi_consumo"];?></td>
+                            <td><?php echo $listaInsumos["pi_stock"]." ".$classDanger;?></td>
+                            <td width="80px">
+                                <button type="button" class="btn btn-info btn-xs" onclick="
+                                    document.getElementById('insumoId').value = '<?php echo $listaInsumos['pi_id'];?>';
+                                    document.forms['formUpdateInsumo']['newConsumo'].value = '';
+                                    $('#modalUpdateInsumo').modal('show');
+                                ">
+                                    <i class="entypo-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-xs" onclick="
+                                var confirmDelete = confirm('¿Está seguro que desea eliminar el insumo?');
+                                if(confirmDelete == true){
+                                    $.ajax({
+                                        type:'POST',
+                                        url:'./bin/delete-consumo.php',
+                                        data:'idInsumo=<?php echo $listaInsumos['pi_id'];?>',
+                                        success:function(response){
+                                            $('#table-1').DataTable().row($('#listInsumo<?php echo $listaInsumos['pi_id'];?>')).remove().draw();
+                                            var opts = {
+                                                'closeButton': true,
+                                                'debug': false,
+                                                'positionClass': 'toast-top-full-width',
+                                                'onclick': null,
+                                                'showDuration': '300',
+                                                'hideDuration': '1000',
+                                                'timeOut': '3000',
+                                                'extendedTimeOut': '1000',
+                                                'showEasing': 'swing',
+                                                'hideEasing': 'linear',
+                                                'showMethod': 'fadeIn',
+                                                'hideMethod': 'fadeOut'
+                                            };
                                 
-                            <i class="entypo-pencil"></i>
-                        </button>
-                        -->
-                    </td>
-                </tr>
-            <?php } ?>
-            </tbody>			
-        </table> 
-    </div>
+                                            toastr.info('Se ha eliminado el insumo del consumo del paciente', 'Eliminación exitosa', opts);
+                                            confirmDelete = false;
+                                        }
+                                    });
+                                } ">
+                                    <i class="entypo-trash"></i>
+                                </button>
+                                <!--
+                                <button type="button" class="btn btn-info btn-xs">
+                                        
+                                    <i class="entypo-pencil"></i>
+                                </button>
+                                -->
+                            </td>
+                        </tr>
+                    <?php } ?>
+                    </tbody>			
+                </table> 
+            </div>
 
-<!-- Preparados Magistrales -->
-    <div class="tab-pane" id="magistrales"> 
-     <!-- Button trigger modal -->
-     <button type="button" class="btn btn-blue btn-sm btn-icon icon-left" data-toggle="modal" data-target="#newPreparadoModal">
-        <i class="entypo-plus"></i>Nuevo preparado magistral
-    </button>
-    <table class="table table-bordered datatable" id="table-3">
-        <thead>
-            <tr>
-                <th>Principio Actico</th>
-                <th>Dosis</th>
-                <th>Cantidad</th>
-                <th>Posología</th>
-                <!--<th>Duración estimada</th>-->
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="tabla-consumo">
-        <?php while($listaMagistrales = $resultMagistrales->fetch_assoc()) { 
-            $week=strtotime("-6 day");
-            $classDangerPrep = '';
-            if($listaMagistrales["prep_fecha_venc"]<date("Y-m-d", $week)){
-                $classDangerPrep = "<i class='entypo-attention' style='color:#ff3300;'></i>";
-            }
-        ?>
-            <tr id="listPreparado<?php echo $listaInsumos['pi_id'];?>">
-                <td><?php echo $listaMagistrales["principio_nombre"];?></td>
-                <td><?php echo $listaMagistrales["prep_dosis"]." ".$listaMagistrales["prep_unidad"];?></td>
-                <td><?php echo $listaMagistrales["prep_cantidad"]." ".$listaMagistrales["forma_nombre"];?></td>
-                <td><?php echo $listaMagistrales["prep_pos_dosis"]." ".$listaMagistrales["prep_unidad"]." cada ".$listaMagistrales["prep_pos_horas"]." horas";?></td>
-               <?php /* <td><?php echo $listaMagistrales["prep_fecha_venc"]." ".$classDangerPrep;?></td> */?>
-                <td width="80px">
-                    <a href="index.php?sec=magistral&id=<?php echo $listaMagistrales['prep_id'];?>" class="btn btn-info btn-xs">
-                        <i class="entypo-doc-text"></i>
-                    </a>
-                    <?php if($_SESSION['perfil']==1 || $_SESSION['perfil']==2){?>
-                    <button type="button" class="btn btn-danger btn-xs" onclick="
-                        var confirmDelete = confirm('¿Está seguro que desea eliminar el preparado magistral?');
-                        if(confirmDelete == true){
-                            $.ajax({
-                                type:'POST',
-                                url:'./bin/delete-preparado.php',
-                                data:'idPreparado=<?php echo $listaMagistrales['prep_id'];?>',
-                                success:function(response){
-                                    $('#table-3').DataTable().row($('#listPreparado<?php echo $listaInsumos['pi_id'];?>')).remove().draw();
-                                    var opts = {
-                                        'closeButton': true,
-                                        'debug': false,
-                                        'positionClass': 'toast-top-full-width',
-                                        'onclick': null,
-                                        'showDuration': '300',
-                                        'hideDuration': '1000',
-                                        'timeOut': '3000',
-                                        'extendedTimeOut': '1000',
-                                        'showEasing': 'swing',
-                                        'hideEasing': 'linear',
-                                        'showMethod': 'fadeIn',
-                                        'hideMethod': 'fadeOut'
-                                    };
-                        
-                                    toastr.info('Se ha eliminado el Preparado Magistral del paciente', 'Eliminación exitosa', opts);
-                                    confirmDelete = false;
-                                }
-                            });
-                        } ">
-                            <i class="entypo-trash"></i>
-                        </button>
-                    <?php }?>
-                </td>
-            </tr>
-        <?php } ?>
-        </tbody>			
-    </table> 
-    </div>
+        <!-- Preparados Magistrales -->
+            <div class="tab-pane" id="magistrales"> 
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-blue btn-sm btn-icon icon-left" data-toggle="modal" data-target="#newPreparadoModal">
+                <i class="entypo-plus"></i>Nuevo preparado magistral
+            </button>
+            <table class="table table-bordered datatable" id="table-3">
+                <thead>
+                    <tr>
+                        <th>Principio Actico</th>
+                        <th>Dosis</th>
+                        <th>Cantidad</th>
+                        <th>Posología</th>
+                        <!--<th>Duración estimada</th>-->
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-consumo">
+                <?php while($listaMagistrales = $resultMagistrales->fetch_assoc()) { 
+                    $week=strtotime("-6 day");
+                    $classDangerPrep = '';
+                    if($listaMagistrales["prep_fecha_venc"]<date("Y-m-d", $week)){
+                        $classDangerPrep = "<i class='entypo-attention' style='color:#ff3300;'></i>";
+                    }
+                ?>
+                    <tr id="listPreparado<?php echo $listaInsumos['pi_id'];?>">
+                        <td><?php echo $listaMagistrales["principio_nombre"];?></td>
+                        <td><?php echo $listaMagistrales["prep_dosis"]." ".$listaMagistrales["prep_unidad"];?></td>
+                        <td><?php echo $listaMagistrales["prep_cantidad"]." ".$listaMagistrales["forma_nombre"];?></td>
+                        <td><?php echo $listaMagistrales["prep_pos_dosis"]." ".$listaMagistrales["prep_unidad"]." cada ".$listaMagistrales["prep_pos_horas"]." horas";?></td>
+                    <?php /* <td><?php echo $listaMagistrales["prep_fecha_venc"]." ".$classDangerPrep;?></td> */?>
+                        <td width="80px">
+                            <a href="index.php?sec=magistral&id=<?php echo $listaMagistrales['prep_id'];?>" class="btn btn-info btn-xs">
+                                <i class="entypo-doc-text"></i>
+                            </a>
+                            <?php if($_SESSION['perfil']==1 || $_SESSION['perfil']==2){?>
+                            <button type="button" class="btn btn-danger btn-xs" onclick="
+                                var confirmDelete = confirm('¿Está seguro que desea eliminar el preparado magistral?');
+                                if(confirmDelete == true){
+                                    $.ajax({
+                                        type:'POST',
+                                        url:'./bin/delete-preparado.php',
+                                        data:'idPreparado=<?php echo $listaMagistrales['prep_id'];?>',
+                                        success:function(response){
+                                            $('#table-3').DataTable().row($('#listPreparado<?php echo $listaInsumos['pi_id'];?>')).remove().draw();
+                                            var opts = {
+                                                'closeButton': true,
+                                                'debug': false,
+                                                'positionClass': 'toast-top-full-width',
+                                                'onclick': null,
+                                                'showDuration': '300',
+                                                'hideDuration': '1000',
+                                                'timeOut': '3000',
+                                                'extendedTimeOut': '1000',
+                                                'showEasing': 'swing',
+                                                'hideEasing': 'linear',
+                                                'showMethod': 'fadeIn',
+                                                'hideMethod': 'fadeOut'
+                                            };
+                                
+                                            toastr.info('Se ha eliminado el Preparado Magistral del paciente', 'Eliminación exitosa', opts);
+                                            confirmDelete = false;
+                                        }
+                                    });
+                                } ">
+                                    <i class="entypo-trash"></i>
+                                </button>
+                            <?php }?>
+                        </td>
+                    </tr>
+                <?php } ?>
+                </tbody>			
+            </table> 
+            </div>
 
-<!-- Pedidos -->
-    <div class="tab-pane" id="pedidos">
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-blue btn-sm btn-icon icon-left" data-toggle="modal" data-target="#newPedidoModal">
-        <i class="entypo-plus"></i>Nuevo pedido
-    </button>
-    <table class="table table-bordered datatable" id="table-2">
-        <thead>
-            <tr>
-                <th>Descripción</th>
-                <th>Fecha pedido</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="tabla-consumo">
-        <?php while($listaPedidos = $resultPedidos->fetch_assoc()) { ?>
-            <tr>
-                <td><?php echo $listaPedidos["pedido_desc"];?></td>
-                <td><?php echo $listaPedidos["pedido_fecha"];?></td>
-                <td><?php echo $listaPedidos["ep_nombre"];?></td>
-                <td width="100px">
-                    <a href="index.php?sec=edit-pedido&id=<?php echo $_GET['id'];?>&pid=<?php echo $listaPedidos['pedido_id'];?>" class="btn btn-info btn-sm btn-icon icon-left">
-                        <i class="entypo-doc-text"></i>Ver detalles
-                    </a>
-                </td>
-            </tr>
-        <?php } ?>
-        </tbody>			
-    </table> 
+        <!-- Pedidos -->
+            <div class="tab-pane" id="pedidos">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-blue btn-sm btn-icon icon-left" data-toggle="modal" data-target="#newPedidoModal">
+                <i class="entypo-plus"></i>Nuevo pedido
+            </button>
+            <table class="table table-bordered datatable" id="table-2">
+                <thead>
+                    <tr>
+                        <th>Descripción</th>
+                        <th>Fecha pedido</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-consumo">
+                <?php while($listaPedidos = $resultPedidos->fetch_assoc()) { ?>
+                    <tr>
+                        <td><?php echo $listaPedidos["pedido_desc"];?></td>
+                        <td><?php echo $listaPedidos["pedido_fecha"];?></td>
+                        <td><?php echo $listaPedidos["ep_nombre"];?></td>
+                        <td width="100px">
+                            <a href="index.php?sec=edit-pedido&id=<?php echo $_GET['id'];?>&pid=<?php echo $listaPedidos['pedido_id'];?>" class="btn btn-info btn-sm btn-icon icon-left">
+                                <i class="entypo-doc-text"></i>Ver detalles
+                            </a>
+                        </td>
+                    </tr>
+                <?php } ?>
+                </tbody>			
+            </table> 
+            </div>
+        </div>
     </div>
 </div>
 
 
+<!-- Pop ups -->
 <!-- Modal Agregar Insumo-->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -657,3 +739,12 @@ include './bin/select-paciente.php';
 <script src="assets/js/datatables/datatables.js"></script>
 <script src="assets/js/select2/select2.min.js"></script>
 <script src="assets/js/toastr.js"></script>
+
+<!-- Imported styles on this page -->
+<link rel="stylesheet" href="assets/js/fullcalendar-2/fullcalendar.min.css">
+
+<!-- Imported scripts on this page -->
+<script src="assets/js/moment.min.js"></script>
+<script src="assets/js/fullcalendar-2/fullcalendar.min.js"></script>
+<script src="assets/js/fullcalendar-2/lang/es.js"></script>
+<script src="assets/js/neon-calendar-2.js"></script>

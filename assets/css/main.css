@@ -1,0 +1,32 @@
+.patientAvatar {
+    border-radius: 50%;
+    height: 90px;
+}
+
+.patientInfo{
+    margin-left: 115px;
+    margin-top: -85px;
+}
+
+.patientContainer{
+    color: #003471;
+    border-right: 1px solid #003471;
+    height:100vh;
+}
+
+.patientTitle{
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.farma-icon{
+    height:22px;
+    margin-top:-7px
+}
+
+.vital-sign{
+    padding:3px;
+}
+    .vital-sign b{
+        font-size: 18px;
+    }

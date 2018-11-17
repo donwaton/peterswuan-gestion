@@ -27,6 +27,7 @@ if($_SESSION['login']<>1){echo "<script>window.location.replace('login.php');</s
 	<link rel="stylesheet" href="assets/css/neon-forms.css">
 	<link rel="stylesheet" href="assets/css/custom.css">
 	<link rel="stylesheet" href="assets/css/skins/blue.css">
+	<link rel="stylesheet" href="assets/css/main.css">
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 

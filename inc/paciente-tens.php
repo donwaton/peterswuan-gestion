@@ -126,7 +126,7 @@ include './bin/select-paciente.php';
     <li class="active">
         <a href="#consumo" data-toggle="tab">
             <span class="visible-xs"><i class="entypo-box"></i></span>
-            <span class="hidden-xs">Consumo</span>
+            <span class="hidden-xs">Insumos y Medicamentos</span>
             <span class="badge badge-danger" id="alertaInsumo"></span>
         </a>
     </li>
@@ -140,7 +140,7 @@ include './bin/select-paciente.php';
     <li>
         <a href="#pedidos" data-toggle="tab">
             <span class="visible-xs"><i class="entypo-clipboard"></i></span>
-            <span class="hidden-xs">Pedidos</span>
+            <span class="hidden-xs">Nuevas Solicitudes</span>
         </a>
     </li>
     <li>

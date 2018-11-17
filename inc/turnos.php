@@ -122,4 +122,3 @@ $(document).ready(function() {
 <script src="assets/js/fullcalendar-2/fullcalendar.min.js"></script>
 <script src="assets/js/fullcalendar-2/lang/es.js"></script>
 <script src="assets/js/neon-calendar-2.js"></script>
-<script src="assets/js/neon-chat.js"></script>
