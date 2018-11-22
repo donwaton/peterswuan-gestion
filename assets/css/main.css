@@ -4,8 +4,12 @@
 }
 
 .patientInfo{
-    margin-left: 115px;
-    margin-top: -85px;
+    margin-left: 106px;
+    margin-top: -92px;
+}
+
+.patientInfo p{
+    margin-top:-8px;
 }
 
 .patientContainer{
@@ -30,3 +34,21 @@
     .vital-sign b{
         font-size: 18px;
     }
+
+.vital-sign-last{
+    font-size: 12px;
+}
+    .vital-sign-last b{
+        font-size: 14px;
+    }
+
+.fixCb{
+    margin-left: 5px;
+    font-weight: normal;
+    margin-right: 20px;
+}
+
+
+body {
+    color: #003471;
+}

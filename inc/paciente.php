@@ -1,4 +1,4 @@
-<?php 
+<?php
 include './bin/select-paciente.php';
 include './bin/select-turnos.php';
 ?>
@@ -8,8 +8,8 @@ include './bin/select-turnos.php';
         var $table1 = jQuery( '#table-1' );
         var $table2 = jQuery( '#table-2' );
         var $table3 = jQuery( '#table-3' );
-        $table1.DataTable( { paging: false });        
-        $table2.DataTable( { paging: false });        
+        $table1.DataTable( { paging: false });
+        $table2.DataTable( { paging: false });
         $table3.DataTable( { paging: false });
 
         // Alerta de quiebre de stock de insumos
@@ -17,7 +17,7 @@ include './bin/select-turnos.php';
             $.ajax({
                 url:"bin/select-insumo-critico.php",
                 method:"POST",
-                data:'pacienteId=<?php echo $_GET['id'];?>',
+                data:'pacienteId=<?php echo $_GET['id']; ?>',
                 success:function(response){
                     if(response>0){
                         document.getElementById('alertaInsumo').innerHTML = response;
@@ -29,14 +29,13 @@ include './bin/select-turnos.php';
             });
         }
         alertaQuiebreStock();
-        
         /* Pendiente de definición de proceso de pedidos para preparados magistrales
         // Alerta de próximos vencimientos de preparados magistrales
         function alertaPreparadoVencimiento(){
             $.ajax({
                 url:"bin/select-preparado-vencimiento.php",
                 method:"POST",
-                data:'pacienteId=<?php echo $_GET['id'];?>',
+                data:'pacienteId=<?php echo $_GET['id']; ?>',
                 success:function(response){
                     if(response>0){
                         document.getElementById('alertaPreparado').innerHTML = response;
@@ -77,9 +76,9 @@ include './bin/select-turnos.php';
 
             if(consumo ==""){
                 alert("Debe ingresar el nuevo consumo para actualizar");
-            } 
+            }
             else {
-                                
+
                 $.ajax({
                     url:"bin/update-consumo-paciente.php",
                     method:"POST",
@@ -98,7 +97,7 @@ include './bin/select-turnos.php';
                             "hideEasing": "linear",
                             "showMethod": "fadeIn",
                             "hideMethod": "fadeOut"
-                        };                        
+                        };
                         toastr.success("Se ha actualizado el consumo del insumo", "Actualización exitosa", opts);
                         $('#modalUpdateInsumo').modal('hide');
                         document.getElementById('listConsumo'+idInsumo).innerHTML = consumo;
@@ -106,15 +105,36 @@ include './bin/select-turnos.php';
                         alertaQuiebreStock();
                         }
                 });
-            } 
+            }
         });
 
-        $('#addInsumo').click(function(){       
+        $('#addSignos').click(function(){
+            $.ajax({
+                url:"bin/insert-signos-paciente.php",
+                method:"POST",
+                data:$('#formAddVital').serialize(),
+                success:function(data){
+                    console.log(data);
+                    if(data != 'error'){
+                        document.getElementById('svSo').innerHTML = document.getElementById('so').value;
+                        document.getElementById('svFc').innerHTML = document.getElementById('fc').value;
+                        document.getElementById('svFr').innerHTML = document.getElementById('fr').value;
+                        document.getElementById('svTemp').innerHTML = document.getElementById('temp').value;
+                        document.getElementById('so').value ='';
+                        document.getElementById('fc').value ='';
+                        document.getElementById('fr').value ='';
+                        document.getElementById('temp').value ='';
+                    }
+                }
+            });
+        });
+
+        $('#addInsumo').click(function(){
             $.ajax({
                 url:"bin/insert-insumo-paciente.php",
                 method:"POST",
                 data:$('#formAddInsumo').serialize(),
-                success:function(data){ 
+                success:function(data){
                     var obj = JSON.parse(data);
                     $('#table-1').DataTable().row.add({
                         "DT_RowId": "listInsumo"+obj[0].id,
@@ -141,19 +161,19 @@ include './bin/select-turnos.php';
                         "showMethod": "fadeIn",
                         "hideMethod": "fadeOut"
                     };
-                    
+
                     toastr.success("Se ha agregado "+obj[0].nombre+" al consumo del paciente", "Ingreso exitoso", opts);
-                            
+
                     }
             });
         });
 
-        $('#addPreparado').click(function(){       
+        $('#addPreparado').click(function(){
             $.ajax({
                 url:"bin/insert-preparado.php",
                 method:"POST",
                 data:$('#formAddPreparado').serialize(),
-                success:function(data){ 
+                success:function(data){
                     var obj = JSON.parse(data);
                     $('#table-3').DataTable().row.add({
                         "DT_RowId": "listPreparado"+obj[0].prep_id,
@@ -185,9 +205,9 @@ include './bin/select-turnos.php';
                         "showMethod": "fadeIn",
                         "hideMethod": "fadeOut"
                     };
-                    
+
                     toastr.success("Se ha agregado el preparado magistral a la ficha del paciente", "Ingreso exitoso", opts);
-                            
+
                     }
             });
         });
@@ -198,28 +218,9 @@ include './bin/select-turnos.php';
                 method:"POST",
                 data:$('#formAddPedido').serialize(),
                 success:function(data){
-                    window.location.replace('index.php?sec=edit-pedido&id=<?php echo $_GET['id'];?>&pid='+data);
+                    window.location.replace('index.php?sec=edit-pedido&id=<?php echo $_GET['id']; ?>&pid='+data);
                 }
             });
-        }); 
-
-        $('#calendar').fullCalendar({
-            locale: 'es',
-            // put your options and callbacks here
-            events: [
-                <?php while ($listaturnos = $result->fetch_assoc()) {
-                $color = "#ee4749";
-                if ($listaturnos['tipo_turno_id'] == 1) {
-                    $color = "#378006";
-                }
-                echo '{ id:"' . $listaturnos['turno_id'] . '",';
-                echo 'profId:"' . $listaturnos['prof_id'] . '",';
-                echo 'tipoId:"' . $listaturnos['tipo_turno_id'] . '",';
-                echo 'title:"' . $listaturnos['prof_nombre'] . '",color:"' . $color . '",';
-                echo 'start:"' . $listaturnos['turno_fecha_inicio'] . '",';
-                echo 'end:"' . $listaturnos['turno_fecha_fin'] . '"},';
-                }?>
-            ]
         });
     });
 </script>
@@ -245,85 +246,262 @@ include './bin/select-turnos.php';
             <!-- Datos del Paciente -->
             <div class="tab-pane active" id="datosPaciente">
                 <div>
-                    <img src="./assets/images/lockscreen-user.png" alt="Foto Paciente" class="patientAvatar">
+                    <img src="./assets/images/img-pacientes-1.jpg" alt="Foto Paciente" class="patientAvatar">
                 </div>
                 <div class="patientInfo">
-                    <p class="patientTitle"><?php echo $datosPaciente['paciente_nombre'];?></p>
-                    <p>Ficha Nº: <?php echo $datosPaciente['paciente_id'];?></p>
-                    <p>RUT: <?php echo $datosPaciente['paciente_rut'];?></p>
-                    <p>Edad: 
-                    <?php 
-                    //funcion de calculo de dedad del paciente
-                        function calcular_edad($fecha){
-                            $fecha_nac = new DateTime(date('Y/m/d',strtotime($fecha))); // Creo un objeto DateTime de la fecha ingresada
-                            $fecha_hoy =  new DateTime(date('Y/m/d',time())); // Creo un objeto DateTime de la fecha de hoy
-                            $edad = date_diff($fecha_hoy,$fecha_nac); // La funcion ayuda a calcular la diferencia, esto seria un objeto
-                            return $edad;
-                        }
-                        $edad = calcular_edad($datosPaciente['paciente_fecha_nac']);
-                        echo "{$edad->format('%y')} años y {$edad->format('%m')} meses"; // Aplicamos un formato al objeto resultante de la funcion                        
-                    ?>
+                    <p class="patientTitle"><?php echo $datosPaciente['paciente_nombre']; ?></p>
+                    <p>Ficha Nº: <?php echo $datosPaciente['paciente_id']; ?></p>
+                    <p>RUT: <?php echo $datosPaciente['paciente_rut']; ?></p>
+                    <p>Edad:
+                    <?php
+//funcion de calculo de dedad del paciente
+function calcular_edad($fecha)
+{
+    $fecha_nac = new DateTime(date('Y/m/d', strtotime($fecha))); // Creo un objeto DateTime de la fecha ingresada
+    $fecha_hoy = new DateTime(date('Y/m/d', time())); // Creo un objeto DateTime de la fecha de hoy
+    $edad = date_diff($fecha_hoy, $fecha_nac); // La funcion ayuda a calcular la diferencia, esto seria un objeto
+    return $edad;
+}
+$edad = calcular_edad($datosPaciente['paciente_fecha_nac']);
+echo "{$edad->format('%y')} años y {$edad->format('%m')} meses"; // Aplicamos un formato al objeto resultante de la funcion
+?>
                     </p>
-                    <p>Sexo: <?php echo $datosPaciente['paciente_sexo'];?></p>
-                    <p>Medico Tratante: <?php echo $datosPaciente['medico_nombre'];?></p>
-                    <p>Diagnóstico: <?php echo $datosPaciente['paciente_diagnostico'];?></p>
-                </div>                   
+                    <p>Sexo: <?php echo $datosPaciente['paciente_sexo']; ?></p>
+                </div>
+                <p style="margin-top:-8px;">Médico Tratante: Dra. <?php echo $datosPaciente['medico_nombre']; ?></p>
+                <p style="margin-top:-8px;">Diagnóstico: <?php echo $datosPaciente['paciente_diagnostico']; ?></p>
             </div>
             <!-- Datos Administrativos -->
-            <div class="tab-pane" id="datosAdministrativos"> 
-                <p>Nombre Tutor: <?php echo $datosPaciente['contacto_nombre1'];?></p>
-                <p>Teléfono de contacto: <?php echo $datosPaciente['contacto_tel1'];?></p>
-                <p>Dirección: <?php echo $datosPaciente['paciente_domicilio'];?></p>
-                <p>Previsión: <?php echo $datosPaciente['paciente_prevision'];?></p>
-                <p>Fecha de ingreso: <?php echo $datosPaciente['paciente_fecha_ingreso'];?></p>
-                <p>Unidad de traslado móvil: <?php echo $datosPaciente['paciente_utm'];?></p>
-                <p>Teléfono de unidad de traslado móvil: <?php echo $datosPaciente['paciente_utm_fono'];?></p>
-                <p>N° de socio de unidad de traslado móvil: <?php echo $datosPaciente['paciente_utm_num'];?></p>
-            </div>
-        </div>
-        <div class="alert alert-danger">Alertas</div>
-        <div class="row" style="margin-left:0px; margin-top:10px;">
-            <div class="col-sm-4 vital-sign">
-                <img src="./assets/images/farma-icons/heart-rate.png" alt="FC" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Frecuencia Cardíaca">
-                <b>90</b> bpm
-            </div>
-            <div class="col-sm-4 vital-sign">
-                <img src="./assets/images/farma-icons/temperature.png" alt="C°" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Temperatura">
-                <b>36</b> °C 
-            </div>
-            <div class="col-sm-4 vital-sign">
-                <img src="./assets/images/farma-icons/respiratory.png" alt="FR" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Frecuencia Respiratoria">
-                <b>12</b> rpm  
-            </div>
-            <div class="col-sm-4 vital-sign">
-                <img src="./assets/images/farma-icons/oxygen-sat.png" alt="SAT" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Saturación de Óxigeno">
-                <b>98</b> %     
-            </div>
-            <div class="col-sm-4 vital-sign">
-                <img src="./assets/images/farma-icons/preasure.png" alt="P°" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Presión Arterial">
-                <b>120/80</b>
-            </div>
-            <div class="col-sm-4 vital-sign">
-                <img src="./assets/images/farma-icons/weight.png" alt="KG" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Peso">
-                <b>35</b> Kg 
-            </div>
-            <div class="col-sm-4 vital-sign">
-                <img src="./assets/images/farma-icons/height.png" alt="P°" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Talla">
-                <b>80</b> cm
-            </div>
-            <div class="col-sm-4 vital-sign">
-                <img src="./assets/images/farma-icons/head.png" alt="KG" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Circunferencia craneal">
-                <b>50</b> cm 
+            <div class="tab-pane" id="datosAdministrativos">
+                <p>Nombre Tutor: <?php echo $datosPaciente['contacto_nombre1']; ?></p>
+                <p>Teléfono de contacto: <?php echo $datosPaciente['contacto_tel1']; ?></p>
+                <p>Dirección: <?php echo $datosPaciente['paciente_domicilio']; ?></p>
+                <p>Previsión: <?php echo $datosPaciente['paciente_prevision']; ?></p>
+                <p>Fecha de ingreso: <?php echo $datosPaciente['paciente_fecha_ingreso']; ?></p>
+                <p>Unidad de traslado móvil: <?php echo $datosPaciente['paciente_utm']; ?></p>
+                <p>Teléfono de unidad de traslado móvil: <?php echo $datosPaciente['paciente_utm_fono']; ?></p>
+                <p>N° de socio de unidad de traslado móvil: <?php echo $datosPaciente['paciente_utm_num']; ?></p>
             </div>
         </div>
 
-        <!-- Calendar Body -->
-        <div id="calendar" style="margin-top:40px;"></div>
+        <div class="row" style="margin-left:0px; margin-top:10px;">            
+            <!-- Fijos -->
+            <div class="col-sm-3 vital-sign">
+                <img src="./assets/images/farma-icons/preasure.png" alt="P°" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Presión Arterial">
+                <b>120/80</b>
+            </div>
+            <div class="col-sm-3 vital-sign">
+                <img src="./assets/images/farma-icons/weight.png" alt="KG" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Peso">
+                <b>35</b> Kg
+            </div>
+            <div class="col-sm-3 vital-sign">
+                <img src="./assets/images/farma-icons/height.png" alt="P°" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Talla">
+                <b>80</b> cm
+            </div>
+            <div class="col-sm-3 vital-sign">
+                <img src="./assets/images/farma-icons/head.png" alt="KG" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Circunferencia Craneal">
+                <b>50</b> cm
+            </div>
+        </div>
+
+        <div class="alert alert-danger">Alertas</div>
+
+        <div class="alert alert-warning">Indicaciones</div>
+
+        <div class="row" style="margin-left:0px; margin-top:10px;">
+            <div class="col-sm-3 vital-sign">
+                <img src="./assets/images/farma-icons/temperature.png" alt="C°" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Temperatura">
+                <b id="svTemp">36</b> °C
+            </div>
+            <div class="col-sm-3 vital-sign">
+                <img src="./assets/images/farma-icons/respiratory.png" alt="FR" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Frecuencia Respiratoria">
+                <b id="svFr">12</b> rpm
+            </div>
+            <div class="col-sm-3 vital-sign">
+                <img src="./assets/images/farma-icons/heart-rate.png" alt="FC" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Frecuencia Cardíaca">
+                <b id="svFc">90</b> bpm
+            </div>
+            <div class="col-sm-3 vital-sign">
+                <img src="./assets/images/farma-icons/oxygen-sat.png" alt="SAT" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Saturación de Óxigeno">
+                <b id="svSo">98</b> %
+            </div>
+            <p align="right" style="margin-right:20px;"><i>Última Medición: 21/10/2018 12:00:00 (Héctor Cifuentes)</i></p>
+        </div>
+
+        <div class="row" style="margin-left:0px; margin-top:10px;">
+            <button type="button" class="btn btn-blue btn-icon" data-toggle="modal" data-target="#newVitalSign">
+                Medir Signos Vitales
+                <i class="entypo-heart"></i>
+            </button>
+        </div>
     </div>
 
     <!-- Farmacia -->
     <div class="col-sm-8">
-        <ul class="nav nav-tabs bordered"><!-- available classes "bordered", "right-aligned" -->
+    <ul class="nav nav-tabs bordered"><!-- available classes "bordered", "right-aligned" -->
+            <li class="active">
+                <a href="#enfermera" data-toggle="tab">
+                    <span>ENF</span>
+                </a>
+            </li>
+            <li>
+                <a href="#ktr" data-toggle="tab">
+                    <span>KTR</span>
+                </a>
+            </li>
+            <li>
+                <a href="#ktm" data-toggle="tab">
+                    <span>KTM</span>
+                </a>
+            </li>
+            <li>
+                <a href="#fdn" data-toggle="tab">
+                    <span>FDN</span>
+                </a>
+            </li>
+            <li>
+                <a href="#tens" data-toggle="tab">
+                    <span>TENS</span>
+                </a>
+            </li>
+            <li>
+                <a href="#farmacia" data-toggle="tab">
+                    <span>FARMACIA</span>
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+        <!-- Enfermera -->
+            <div class="tab-pane active" id="enfermera">
+                <div class="row">
+                    <div class="form-group col-sm-12"> 
+                        <label for="field-ta" class="control-label">Observaciones de la TENS</label> 
+                        <textarea class="form-control" id="field-ta" placeholder="Observaciones de la TENS"></textarea> 
+                    </div>
+                    <div class="form-group col-sm-12"> 
+                        <label for="field-ta" class="control-label">Evolución</label> 
+                        <textarea class="form-control" id="field-ta" placeholder="Evolución"></textarea> 
+                    </div>
+                    <div class="form-group col-sm-12"> 
+                        <label for="field-ta" class="control-label">Intervenciones</label>
+                        <div class="row">
+                        <div class="col-sm-3"> 
+                            <input type="checkbox"><label class="fixCb">Curación</label> 
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="checkbox"><label class="fixCb">Revisión de botón</label> 
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="checkbox"><label class="fixCb">Cambio de Gripper</label> 
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="checkbox"><label class="fixCb">Cambio de GTT</label> 
+                        </div>
+                        <div class="col-sm-12">
+                            <input type="checkbox"><label class="fixCb">Otros</label>
+                            <textarea class="form-control" id="field-ta" placeholder="Otros"></textarea>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12"> 
+                        <label for="field-ta" class="control-label">Indicaciones</label> 
+                        <textarea class="form-control" id="field-ta" placeholder="Indicaciones"></textarea> 
+                    </div>                    
+                </div>
+            </div>
+
+         <!-- KTR -->
+            <div class="tab-pane" id="ktr">
+                <div class="row">
+                    <div class="form-group col-sm-12"> 
+                        <label for="field-ta" class="control-label">Estado Respiratorio Paciente</label> 
+                        <div class="row">
+                            <div class="col-sm-3"> 
+                                <label for="field-ta" class="control-label">Intercurrencias</label> 
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="radio" name="radioSiNo"><label class="fixCb">Si</label> 
+                                <input type="radio" name="radioSiNo"><label class="fixCb">No</label> 
+                            </div>
+                        </div>
+                        <label for="field-ta" class="control-label">Parámetros Basales</label> 
+                        <div class="row">
+                            <div class="col-sm-3"> 
+                                <label for="field-ta" class="control-label">Óxigeno</label> 
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="radio" name="radioSiNo2"><label class="fixCb">Si</label> 
+                                <input type="radio" name="radioSiNo2"><label class="fixCb">No</label> 
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text"><label class="fixCb">L/min</label> 
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3"> 
+                                <label for="field-ta" class="control-label">Ventilación mécanica</label> 
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="radio" name="radioSiNo3"><label class="fixCb">Si</label> 
+                                <input type="radio" name="radioSiNo3"><label class="fixCb">No</label> 
+                            </div>
+                            <div class="col-sm-2"> 
+                                <label for="field-ta" class="control-label">Tipo</label> 
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="radio" name="radioSiNo4"><label class="fixCb">VMNI</label> 
+                                <input type="radio" name="radioSiNo4"><label class="fixCb">VMI</label> 
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12"> 
+                        <label for="field-ta" class="control-label">Intervenciones</label>
+                        <div class="row">
+                            <div class="col-sm-3"> 
+                                <input type="checkbox"><label class="fixCb">Curación</label> 
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="checkbox"><label class="fixCb">Revisión de botón</label> 
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="checkbox"><label class="fixCb">Cambio de Gripper</label> 
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="checkbox"><label class="fixCb">Cambio de GTT</label> 
+                            </div>
+                            <div class="col-sm-12">
+                                <input type="checkbox"><label class="fixCb">Otros</label>
+                                <textarea class="form-control" id="field-ta" placeholder="Otros"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12"> 
+                        <label for="field-ta" class="control-label">Evaluación</label> 
+                        <textarea class="form-control" id="field-ta" placeholder="Evolución"></textarea> 
+                    </div>
+                    <div class="form-group col-sm-12"> 
+                        <label for="field-ta" class="control-label">Indicaciones</label> 
+                        <textarea class="form-control" id="field-ta" placeholder="Indicaciones"></textarea> 
+                    </div>                    
+                </div>
+            </div>
+
+        <!-- KTM -->
+            <div class="tab-pane" id="ktm">
+            </div>
+        
+        <!-- FDN -->
+            <div class="tab-pane" id="fdn">
+            </div>
+
+        <!-- TENS -->
+            <div class="tab-pane" id="tens">
+            </div>
+
+        <!-- Farmacia -->
+            <div class="tab-pane" id="farmacia">
+            <ul class="nav nav-tabs"><!-- available classes "bordered", "right-aligned" -->
             <li class="active">
                 <a href="#consumo" data-toggle="tab">
                     <span class="visible-xs"><i class="entypo-box"></i></span>
@@ -345,7 +523,7 @@ include './bin/select-turnos.php';
                     <span class="hidden-xs">Nuevas Solicitudes</span>
                 </a>
             </li>
-        </ul>				
+        </ul>
         <div class="tab-content">
         <!-- Consumo -->
             <div class="tab-pane active" id="consumo">
@@ -364,20 +542,20 @@ include './bin/select-turnos.php';
                         </tr>
                     </thead>
                     <tbody id="tabla-consumo">
-                    <?php while($listaInsumos = $resultInsumos->fetch_assoc()) { 
-                        $classDanger = '';
-                        if($listaInsumos["pi_consumo"]*0.3>$listaInsumos["pi_stock"]){
-                            $classDanger = "<i class='entypo-attention' style='color:#ff3300;'></i>";
-                        }
-                        ?>
-                        <tr id="listInsumo<?php echo $listaInsumos['pi_id'];?>">
-                            <td><?php echo $listaInsumos["insumo_nombre"];?></td>
-                            <td><?php echo $listaInsumos["tipoinsumo_nombre"];?></td>
-                            <td id="listConsumo<?php echo $listaInsumos['pi_id'];?>"><?php echo $listaInsumos["pi_consumo"];?></td>
-                            <td><?php echo $listaInsumos["pi_stock"]." ".$classDanger;?></td>
+                    <?php while ($listaInsumos = $resultInsumos->fetch_assoc()) {
+    $classDanger = '';
+    if ($listaInsumos["pi_consumo"] * 0.3 > $listaInsumos["pi_stock"]) {
+        $classDanger = "<i class='entypo-attention' style='color:#ff3300;'></i>";
+    }
+    ?>
+                        <tr id="listInsumo<?php echo $listaInsumos['pi_id']; ?>">
+                            <td><?php echo $listaInsumos["insumo_nombre"]; ?></td>
+                            <td><?php echo $listaInsumos["tipoinsumo_nombre"]; ?></td>
+                            <td id="listConsumo<?php echo $listaInsumos['pi_id']; ?>"><?php echo $listaInsumos["pi_consumo"]; ?></td>
+                            <td><?php echo $listaInsumos["pi_stock"] . " " . $classDanger; ?></td>
                             <td width="80px">
                                 <button type="button" class="btn btn-info btn-xs" onclick="
-                                    document.getElementById('insumoId').value = '<?php echo $listaInsumos['pi_id'];?>';
+                                    document.getElementById('insumoId').value = '<?php echo $listaInsumos['pi_id']; ?>';
                                     document.forms['formUpdateInsumo']['newConsumo'].value = '';
                                     $('#modalUpdateInsumo').modal('show');
                                 ">
@@ -389,9 +567,9 @@ include './bin/select-turnos.php';
                                     $.ajax({
                                         type:'POST',
                                         url:'./bin/delete-consumo.php',
-                                        data:'idInsumo=<?php echo $listaInsumos['pi_id'];?>',
+                                        data:'idInsumo=<?php echo $listaInsumos['pi_id']; ?>',
                                         success:function(response){
-                                            $('#table-1').DataTable().row($('#listInsumo<?php echo $listaInsumos['pi_id'];?>')).remove().draw();
+                                            $('#table-1').DataTable().row($('#listInsumo<?php echo $listaInsumos['pi_id']; ?>')).remove().draw();
                                             var opts = {
                                                 'closeButton': true,
                                                 'debug': false,
@@ -406,7 +584,7 @@ include './bin/select-turnos.php';
                                                 'showMethod': 'fadeIn',
                                                 'hideMethod': 'fadeOut'
                                             };
-                                
+
                                             toastr.info('Se ha eliminado el insumo del consumo del paciente', 'Eliminación exitosa', opts);
                                             confirmDelete = false;
                                         }
@@ -416,19 +594,19 @@ include './bin/select-turnos.php';
                                 </button>
                                 <!--
                                 <button type="button" class="btn btn-info btn-xs">
-                                        
+
                                     <i class="entypo-pencil"></i>
                                 </button>
                                 -->
                             </td>
                         </tr>
-                    <?php } ?>
-                    </tbody>			
-                </table> 
+                    <?php }?>
+                    </tbody>
+                </table>
             </div>
 
         <!-- Preparados Magistrales -->
-            <div class="tab-pane" id="magistrales"> 
+            <div class="tab-pane" id="magistrales">
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-blue btn-sm btn-icon icon-left" data-toggle="modal" data-target="#newPreparadoModal">
                 <i class="entypo-plus"></i>Nuevo preparado magistral
@@ -445,33 +623,33 @@ include './bin/select-turnos.php';
                     </tr>
                 </thead>
                 <tbody id="tabla-consumo">
-                <?php while($listaMagistrales = $resultMagistrales->fetch_assoc()) { 
-                    $week=strtotime("-6 day");
-                    $classDangerPrep = '';
-                    if($listaMagistrales["prep_fecha_venc"]<date("Y-m-d", $week)){
-                        $classDangerPrep = "<i class='entypo-attention' style='color:#ff3300;'></i>";
-                    }
-                ?>
-                    <tr id="listPreparado<?php echo $listaInsumos['pi_id'];?>">
-                        <td><?php echo $listaMagistrales["principio_nombre"];?></td>
-                        <td><?php echo $listaMagistrales["prep_dosis"]." ".$listaMagistrales["prep_unidad"];?></td>
-                        <td><?php echo $listaMagistrales["prep_cantidad"]." ".$listaMagistrales["forma_nombre"];?></td>
-                        <td><?php echo $listaMagistrales["prep_pos_dosis"]." ".$listaMagistrales["prep_unidad"]." cada ".$listaMagistrales["prep_pos_horas"]." horas";?></td>
+                <?php while ($listaMagistrales = $resultMagistrales->fetch_assoc()) {
+    $week = strtotime("-6 day");
+    $classDangerPrep = '';
+    if ($listaMagistrales["prep_fecha_venc"] < date("Y-m-d", $week)) {
+        $classDangerPrep = "<i class='entypo-attention' style='color:#ff3300;'></i>";
+    }
+    ?>
+                    <tr id="listPreparado<?php echo $listaInsumos['pi_id']; ?>">
+                        <td><?php echo $listaMagistrales["principio_nombre"]; ?></td>
+                        <td><?php echo $listaMagistrales["prep_dosis"] . " " . $listaMagistrales["prep_unidad"]; ?></td>
+                        <td><?php echo $listaMagistrales["prep_cantidad"] . " " . $listaMagistrales["forma_nombre"]; ?></td>
+                        <td><?php echo $listaMagistrales["prep_pos_dosis"] . " " . $listaMagistrales["prep_unidad"] . " cada " . $listaMagistrales["prep_pos_horas"] . " horas"; ?></td>
                     <?php /* <td><?php echo $listaMagistrales["prep_fecha_venc"]." ".$classDangerPrep;?></td> */?>
                         <td width="80px">
-                            <a href="index.php?sec=magistral&id=<?php echo $listaMagistrales['prep_id'];?>" class="btn btn-info btn-xs">
+                            <a href="index.php?sec=magistral&id=<?php echo $listaMagistrales['prep_id']; ?>" class="btn btn-info btn-xs">
                                 <i class="entypo-doc-text"></i>
                             </a>
-                            <?php if($_SESSION['perfil']==1 || $_SESSION['perfil']==2){?>
+                            <?php if ($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 2) {?>
                             <button type="button" class="btn btn-danger btn-xs" onclick="
                                 var confirmDelete = confirm('¿Está seguro que desea eliminar el preparado magistral?');
                                 if(confirmDelete == true){
                                     $.ajax({
                                         type:'POST',
                                         url:'./bin/delete-preparado.php',
-                                        data:'idPreparado=<?php echo $listaMagistrales['prep_id'];?>',
+                                        data:'idPreparado=<?php echo $listaMagistrales['prep_id']; ?>',
                                         success:function(response){
-                                            $('#table-3').DataTable().row($('#listPreparado<?php echo $listaInsumos['pi_id'];?>')).remove().draw();
+                                            $('#table-3').DataTable().row($('#listPreparado<?php echo $listaInsumos['pi_id']; ?>')).remove().draw();
                                             var opts = {
                                                 'closeButton': true,
                                                 'debug': false,
@@ -486,7 +664,7 @@ include './bin/select-turnos.php';
                                                 'showMethod': 'fadeIn',
                                                 'hideMethod': 'fadeOut'
                                             };
-                                
+
                                             toastr.info('Se ha eliminado el Preparado Magistral del paciente', 'Eliminación exitosa', opts);
                                             confirmDelete = false;
                                         }
@@ -497,9 +675,9 @@ include './bin/select-turnos.php';
                             <?php }?>
                         </td>
                     </tr>
-                <?php } ?>
-                </tbody>			
-            </table> 
+                <?php }?>
+                </tbody>
+            </table>
             </div>
 
         <!-- Pedidos -->
@@ -518,27 +696,84 @@ include './bin/select-turnos.php';
                     </tr>
                 </thead>
                 <tbody id="tabla-consumo">
-                <?php while($listaPedidos = $resultPedidos->fetch_assoc()) { ?>
+                <?php while ($listaPedidos = $resultPedidos->fetch_assoc()) {?>
                     <tr>
-                        <td><?php echo $listaPedidos["pedido_desc"];?></td>
-                        <td><?php echo $listaPedidos["pedido_fecha"];?></td>
-                        <td><?php echo $listaPedidos["ep_nombre"];?></td>
+                        <td><?php echo $listaPedidos["pedido_desc"]; ?></td>
+                        <td><?php echo $listaPedidos["pedido_fecha"]; ?></td>
+                        <td><?php echo $listaPedidos["ep_nombre"]; ?></td>
                         <td width="100px">
-                            <a href="index.php?sec=edit-pedido&id=<?php echo $_GET['id'];?>&pid=<?php echo $listaPedidos['pedido_id'];?>" class="btn btn-info btn-sm btn-icon icon-left">
+                            <a href="index.php?sec=edit-pedido&id=<?php echo $_GET['id']; ?>&pid=<?php echo $listaPedidos['pedido_id']; ?>" class="btn btn-info btn-sm btn-icon icon-left">
                                 <i class="entypo-doc-text"></i>Ver detalles
                             </a>
                         </td>
                     </tr>
-                <?php } ?>
-                </tbody>			
-            </table> 
+                <?php }?>
+                </tbody>
+            </table>
+            </div>
+        </div>
             </div>
         </div>
     </div>
 </div>
 
 
+
+
 <!-- Pop ups -->
+<!-- Modal Signos vitales-->
+<div class="modal fade" id="newVitalSign" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="exampleModalLabel">Signos Vitales</h3>
+        </div>
+        <div class="modal-body" style="height:90px;">
+            <form id="formAddVital" name="formAddVital">
+                <input type="hidden" name="pacienteId" value="<?php echo $_GET['id']; ?>">
+                <input type="hidden" name="userId" value="<?php echo $_SESSION['userid']; ?>">
+                <div class="form-group">
+                    <label for="field-1" class="col-sm-1 control-label">
+                        <img src="./assets/images/farma-icons/temperature.png" alt="C°" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Temperatura">
+                    </label>
+                    <div class="col-sm-2">
+                        <input type="number" class="form-control" id="temp" name="temp" placeholder="°C" focus>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="field-1" class="col-sm-1 control-label">
+                        <img src="./assets/images/farma-icons/respiratory.png" alt="FR" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Frecuencia Respiratoria">
+                    </label>
+                    <div class="col-sm-2">
+                        <input type="number" class="form-control" id="fr" name="fr"  placeholder="rpm">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="field-1" class="col-sm-1 control-label">
+                        <img src="./assets/images/farma-icons/heart-rate.png" alt="FC" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Frecuencia Cardíaca">
+                    </label>
+                    <div class="col-sm-2">
+                        <input type="number" class="form-control" id="fc" name="fc"  placeholder="bpm">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="field-1" class="col-sm-1 control-label">
+                        <img src="./assets/images/farma-icons/oxygen-sat.png" alt="SAT" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Saturación de Óxigeno">
+                    </label>
+                    <div class="col-sm-2">
+                        <input type="number" class="form-control" id="so" name="so"  placeholder="%">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+            <button type="button" name="addSignos" id="addSignos" class="btn btn-success" data-dismiss="modal">Ingresar</button>
+        </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal Agregar Insumo-->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -551,14 +786,14 @@ include './bin/select-turnos.php';
         </div>
         <div class="modal-body">
             <form id="formAddInsumo" name="formAddInsumo">
-                <input type="hidden" name="pacienteId" value="<?php echo $_GET['id'];?>">
+                <input type="hidden" name="pacienteId" value="<?php echo $_GET['id']; ?>">
 
                 <label for="tipoinsumo">Tipo</label>
                 <select class="form-control form-control-sm" name="tipoinsumoId" id="newTipoInsumo" required>
                     <option value="0"></option>
-                <?php while($listaTipoInsumo = $resultTipoInsumo->fetch_assoc()) { ?>
-                    <option value="<?php echo $listaTipoInsumo["tipoinsumo_id"];?>"><?php echo $listaTipoInsumo["tipoinsumo_nombre"];?></option>
-                <?php } ?>
+                <?php while ($listaTipoInsumo = $resultTipoInsumo->fetch_assoc()) {?>
+                    <option value="<?php echo $listaTipoInsumo["tipoinsumo_id"]; ?>"><?php echo $listaTipoInsumo["tipoinsumo_nombre"]; ?></option>
+                <?php }?>
                 </select>
 
                 <label for="newInsumo">Nombre</label>
@@ -593,8 +828,8 @@ include './bin/select-turnos.php';
         </div>
         <div class="modal-body">
             <form id="formAddPedido" name="formAddPedido">
-                <input type="hidden" name="pacienteId" value="<?php echo $_GET['id'];?>">
-                <input type="hidden" name="userId" value="<?php echo $_SESSION['userid'];?>">
+                <input type="hidden" name="pacienteId" value="<?php echo $_GET['id']; ?>">
+                <input type="hidden" name="userId" value="<?php echo $_SESSION['userid']; ?>">
 
                 <label for="pedidoDesc">Descripción</label>
                 <input type="text" name="pedidoDesc" id="pedidoDesc" class="form-control form-control-sm noEnterSubmit">
@@ -620,30 +855,30 @@ include './bin/select-turnos.php';
             </div>
             <div class="modal-body">
             <form id="formAddPreparado" name="formAddPreparado">
-                <input type="hidden" name="pacienteId" value="<?php echo $_GET['id'];?>">
-                <input type="hidden" name="userId" value="<?php echo $_SESSION['userid'];?>">
+                <input type="hidden" name="pacienteId" value="<?php echo $_GET['id']; ?>">
+                <input type="hidden" name="userId" value="<?php echo $_SESSION['userid']; ?>">
 
             <label for="fechaReceta">Fecha de Receta</label>
             <input type="date" name="fechaReceta" id="fechaReceta" class="form-control form-control-sm">
-            
+
             <div class="row">
                 <div class="col-sm-6">
                     <label for="rutMedico">RUT Médico</label>
-                    <input type="text" name="rutMedico" id="rutMedico" class="form-control form-control-sm">   
+                    <input type="text" name="rutMedico" id="rutMedico" class="form-control form-control-sm">
                 </div>
                 <div class="col-sm-6">
                     <label for="nombreMedico">Nombre Médico</label>
                     <input type="text" name="nombreMedico" id="nombreMedico" class="form-control form-control-sm">
                 </div>
-            </div>           
+            </div>
 
             <label for="principioId">Principio Activo</label>
             <select class="form-control form-control-sm" name="principioId" id="principioId" required>
             <option value="0"></option>
-            <?php 
-            while($listaPrincipioActivo = $resultPrincipioActivo->fetch_assoc()) { ?>
-            <option value="<?php echo $listaPrincipioActivo["principio_id"];?>"><?php echo $listaPrincipioActivo["principio_nombre"];?></option>
-            <?php } ?>
+            <?php
+while ($listaPrincipioActivo = $resultPrincipioActivo->fetch_assoc()) {?>
+            <option value="<?php echo $listaPrincipioActivo["principio_id"]; ?>"><?php echo $listaPrincipioActivo["principio_nombre"]; ?></option>
+            <?php }?>
             </select>
 
             <div class="row">
@@ -662,10 +897,10 @@ include './bin/select-turnos.php';
                     <label for="formaId">Forma Farmaceutica</label>
                     <select class="form-control form-control-sm" name="formaId" id="formaId" required>
                     <option value="0"></option>
-                    <?php 
-                    while($listaFormaFarmaceutica = $resultFormaFarmaceutica->fetch_assoc()) { ?>
-                    <option value="<?php echo $listaFormaFarmaceutica["forma_id"];?>"><?php echo $listaFormaFarmaceutica["forma_nombre"];?></option>
-                    <?php } ?>
+                    <?php
+while ($listaFormaFarmaceutica = $resultFormaFarmaceutica->fetch_assoc()) {?>
+                    <option value="<?php echo $listaFormaFarmaceutica["forma_id"]; ?>"><?php echo $listaFormaFarmaceutica["forma_nombre"]; ?></option>
+                    <?php }?>
                     </select>
                 </div>
                 <div class="col-sm-6">
@@ -673,10 +908,10 @@ include './bin/select-turnos.php';
                     <input type="number" name="cantidad" id="cantidad" class="form-control form-control-sm">
                 </div>
             </div>
-            
+
             <br>
-            <p><b>Posología</b></p>            
-            
+            <p><b>Posología</b></p>
+
             <div class="row">
                 <div class="col-sm-6">
                     <label for="posDosis">Dosis (misma unidad de medida)</label>
@@ -709,7 +944,7 @@ include './bin/select-turnos.php';
             </div>
             <div class="modal-body">
                 <form id="formUpdateInsumo" name="formUpdateInsumo" onsubmit="false">
-                    <input type="hidden" name="pacienteId" value="<?php echo $_GET['id'];?>">
+                    <input type="hidden" name="pacienteId" value="<?php echo $_GET['id']; ?>">
                     <input type="hidden" name="insumoId" id="insumoId" value="0">
 
                     <label for="newConsumo">Consumo</label>
@@ -739,12 +974,3 @@ include './bin/select-turnos.php';
 <script src="assets/js/datatables/datatables.js"></script>
 <script src="assets/js/select2/select2.min.js"></script>
 <script src="assets/js/toastr.js"></script>
-
-<!-- Imported styles on this page -->
-<link rel="stylesheet" href="assets/js/fullcalendar-2/fullcalendar.min.css">
-
-<!-- Imported scripts on this page -->
-<script src="assets/js/moment.min.js"></script>
-<script src="assets/js/fullcalendar-2/fullcalendar.min.js"></script>
-<script src="assets/js/fullcalendar-2/lang/es.js"></script>
-<script src="assets/js/neon-calendar-2.js"></script>
