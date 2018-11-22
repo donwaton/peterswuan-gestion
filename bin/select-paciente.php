@@ -32,5 +32,16 @@ $sqlMagistrales = "SELECT * FROM preparado_magistral, prinicipio_activo, forma_f
     AND paciente_id='".$_GET['id']."'";
 $resultMagistrales = $conn->query($sqlMagistrales);
 
+$sqlLastSignos = "SELECT * FROM signos_vitales, usuario 
+    WHERE usuario.user_id=signos_vitales.user_id 
+    AND paciente_id='".$_GET['id']."'  ORDER BY sv_date DESC LIMIT 1;";
+$resultLastSignos = $conn->query($sqlLastSignos);
+$lastVS = $resultLastSignos->fetch_assoc();
+
+$sqlSignos = "SELECT * FROM signos_vitales, usuario 
+    WHERE usuario.user_id=signos_vitales.user_id 
+    AND paciente_id='".$_GET['id']."'  ORDER BY sv_date DESC;";
+$resultSignos = $conn->query($sqlSignos);
+
 $conn->close();
 ?>

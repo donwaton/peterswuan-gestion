@@ -120,6 +120,7 @@ include './bin/select-turnos.php';
                         document.getElementById('svFc').innerHTML = document.getElementById('fc').value;
                         document.getElementById('svFr').innerHTML = document.getElementById('fr').value;
                         document.getElementById('svTemp').innerHTML = document.getElementById('temp').value;
+                        document.getElementById('svLastUpdate').innerHTML = data;
                         document.getElementById('so').value ='';
                         document.getElementById('fc').value ='';
                         document.getElementById('fr').value ='';
@@ -311,27 +312,31 @@ echo "{$edad->format('%y')} años y {$edad->format('%m')} meses"; // Aplicamos u
         <div class="row" style="margin-left:0px; margin-top:10px;">
             <div class="col-sm-3 vital-sign">
                 <img src="./assets/images/farma-icons/temperature.png" alt="C°" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Temperatura">
-                <b id="svTemp">36</b> °C
+                <b id="svTemp"><?php echo $lastVS['sv_temp'];?></b> °C
             </div>
             <div class="col-sm-3 vital-sign">
                 <img src="./assets/images/farma-icons/respiratory.png" alt="FR" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Frecuencia Respiratoria">
-                <b id="svFr">12</b> rpm
+                <b id="svFr"><?php echo $lastVS['sv_fr'];?></b> rpm
             </div>
             <div class="col-sm-3 vital-sign">
                 <img src="./assets/images/farma-icons/heart-rate.png" alt="FC" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Frecuencia Cardíaca">
-                <b id="svFc">90</b> bpm
+                <b id="svFc"><?php echo $lastVS['sv_fc'];?></b> bpm
             </div>
             <div class="col-sm-3 vital-sign">
                 <img src="./assets/images/farma-icons/oxygen-sat.png" alt="SAT" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Saturación de Óxigeno">
-                <b id="svSo">98</b> %
+                <b id="svSo"><?php echo $lastVS['sv_so'];?></b> %
             </div>
-            <p align="right" style="margin-right:20px;"><i>Última Medición: 21/10/2018 12:00:00 (Héctor Cifuentes)</i></p>
+            <p align="right" style="margin-right:20px;" id="svLastUpdate"><i>Última Medición: <?php echo date("d/m/Y H:i:s", strtotime($lastVS['sv_date']));?> (<?php echo $lastVS['user_names'];?>)</i></p>
         </div>
 
         <div class="row" style="margin-left:0px; margin-top:10px;">
             <button type="button" class="btn btn-blue btn-icon" data-toggle="modal" data-target="#newVitalSign">
                 Medir Signos Vitales
                 <i class="entypo-heart"></i>
+            </button>
+            <button type="button" class="btn btn-blue btn-icon" data-toggle="modal" data-target="#historyVitalSign">
+                    Ver Histórico
+                <i class="entypo-clock"></i>
             </button>
         </div>
     </div>
@@ -773,6 +778,47 @@ echo "{$edad->format('%y')} años y {$edad->format('%m')} meses"; // Aplicamos u
         </div>
     </div>
 </div>
+
+<!-- Modal Signos vitales-->
+<div class="modal fade" id="historyVitalSign" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="exampleModalLabel">Signos Vitales Históricos</h3>
+        </div>
+        <div class="modal-body">
+            <table class="table table-bordered datatable" id="table-4">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>FC (bpm)</th>
+                        <th>FR (rpm)</th>
+                        <th>SAT (%)</th>
+                        <th>Tº (ºC)</th>
+                        <th>Profesional</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php while ($listaSignosVitales = $resultSignos->fetch_assoc()) {?>
+                    <tr>
+                        <td><?php echo date("d/m/Y H:i:s", strtotime($listaSignosVitales['sv_date'])); ?></td>
+                        <td><?php echo $listaSignosVitales["sv_fc"]; ?></td>
+                        <td><?php echo $listaSignosVitales["sv_fr"]; ?></td>
+                        <td><?php echo $listaSignosVitales["sv_so"]; ?></td>
+                        <td><?php echo $listaSignosVitales["sv_temp"]; ?></td>
+                        <td><?php echo $listaSignosVitales["user_names"]; ?></td>
+                    </tr>
+                <?php }?>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+        </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- Modal Agregar Insumo-->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
