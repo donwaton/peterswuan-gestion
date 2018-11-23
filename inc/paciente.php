@@ -341,9 +341,9 @@ echo "{$edad->format('%y')} años y {$edad->format('%m')} meses"; // Aplicamos u
         </div>
     </div>
 
-    <!-- Farmacia -->
+    <!-- Detalles -->
     <div class="col-sm-8">
-    <ul class="nav nav-tabs bordered"><!-- available classes "bordered", "right-aligned" -->
+    <ul class="nav nav-tabs bordered">
             <li class="active">
                 <a href="#enfermera" data-toggle="tab">
                     <span>ENF</span>
@@ -502,6 +502,190 @@ echo "{$edad->format('%y')} años y {$edad->format('%m')} meses"; // Aplicamos u
 
         <!-- TENS -->
             <div class="tab-pane" id="tens">
+                <div class="row">
+                    <div class="form-group col-sm-12"> 
+                        <label for="field-ta" class="control-label">Entrega de Turno</label> 
+                        <textarea class="form-control" id="field-ta" placeholder="Entrega de Turno"></textarea> 
+                    </div>
+                    <div class="form-group col-sm-12"> 
+                        <label for="field-ta" class="control-label">Observaciones de Entrega de Turno</label> 
+                        <textarea class="form-control" id="field-ta" placeholder="Observaciones..."></textarea> 
+                    </div>
+                    <div class="col-sm-12">
+                    <label for="field-ta" class="control-label">Administración de Medicamentos</label> 
+                        <table class="table table-bordered datatable" id="table-4">
+                            <thead>
+                                <tr>
+                                    <th>Medicamento</th>
+                                    <th>Posología</th>
+                                    <th>Vía de administración</th>
+                                    <th>Horario de administración</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Propanolol 5mg Comprimido</td>
+                                    <td>5mg cada 8hrs</td>
+                                    <td>Oral</td>
+                                    <td>14:00</td>
+                                </tr>
+                                <tr>
+                                    <td>Aerolin Inhalador</td>
+                                    <td>1 pff cada 8hrs</td>
+                                    <td>Oral</td>
+                                    <td>15:00</td>
+                                </tr>
+                                <tr>
+                                    <td>Nexium 10 mg sobre</td>
+                                    <td>10mg cada 12hr</td>
+                                    <td>Gastro</td>
+                                    <td>16:00</td>
+                                </tr>
+                                <tr>
+                                    <td>Fenobarbital 5mg/mL Jarabe</td>
+                                    <td>5mL cada 12hrs</td>
+                                    <td>Oral</td>
+                                    <td>18:00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-sm-12">
+                        <label for="field-ta" class="control-label">Alimentación</label> 
+                        <table class="table table-bordered datatable" id="table-4">
+                            <thead>
+                                <tr>
+                                    <th>Leche</th>
+                                    <th>Medida</th>
+                                    <th>Velocidad de administración</th>
+                                    <th>Forma de administración</th>
+                                    <th>Tiempo de infusión</th>
+                                    <th>Próxima administración</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Pediasure</td>
+                                    <td>5 medidas en 150 mL</td>
+                                    <td>100 mL/hora</td>
+                                    <td>Bomba de infusión continua</td>
+                                    <td>1 hr</td>
+                                    <td>14:00</td>
+                                </tr>
+                                <tr>
+                                    <td>Pediasure</td>
+                                    <td>5 medidas en 150 mL</td>
+                                    <td>100 mL/hora</td>
+                                    <td>Bolo</td>
+                                    <td>30 min</td>
+                                    <td>15:00</td>
+                                </tr>
+                                <tr>
+                                    <td>Pediasure</td>
+                                    <td>5 medidas en 150 mL</td>
+                                    <td>100 mL/hora</td>
+                                    <td>Caída libre</td>
+                                    <td>etc</td>
+                                    <td>16:00</td>
+                                </tr>
+                                <tr>
+                                    <td>Pediasure</td>
+                                    <td>5 medidas en 150 mL</td>
+                                    <td>100 mL/hora</td>
+                                    <td>Vía Oral</td>
+                                    <td>etc</td>
+                                    <td>17:00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-sm-12">
+                        <label for="field-ta" class="control-label">Comida 11:00</label> 
+                        <table class="table table-bordered datatable" id="table-4">
+                            <thead>
+                                <tr>
+                                    <th>Comida</th>
+                                    <th>Medida</th>
+                                    <th>Velocidad de administración</th>
+                                    <th>Vía de administración</th>
+                                    <th>Forma de administración</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Papilla</td>
+                                    <td>150cc</td>
+                                    <td>1 hr</td>
+                                    <td>Gastronomía</td>
+                                    <td>Bolo</td>
+                                </tr>
+                                <tr>
+                                    <td>Postre</td>
+                                    <td>50cc</td>
+                                    <td>15 min</td>
+                                    <td>Vía Oral</td>
+                                    <td>Bolo</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-sm-12">
+                        <label for="field-ta" class="control-label">Comida 19:00</label> 
+                        <table class="table table-bordered datatable" id="table-4">
+                            <thead>
+                                <tr>
+                                    <th>Comida</th>
+                                    <th>Medida</th>
+                                    <th>Velocidad de administración</th>
+                                    <th>Vía de administración</th>
+                                    <th>Forma de administración</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Papilla</td>
+                                    <td>150cc</td>
+                                    <td>1 hr</td>
+                                    <td>Gastronomía</td>
+                                    <td>Bolo</td>
+                                </tr>
+                                <tr>
+                                    <td>Postre</td>
+                                    <td>50cc</td>
+                                    <td>15 min</td>
+                                    <td>Vía Oral</td>
+                                    <td>Bolo</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="form-group col-sm-12"> 
+                        <label for="field-ta" class="control-label">Intervenciones</label>
+                        <div class="row">
+                        <div class="col-sm-3"> 
+                            <input type="checkbox"><label class="fixCb">Curación</label> 
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="checkbox"><label class="fixCb">Revisión de botón</label> 
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="checkbox"><label class="fixCb">Cambio de Gripper</label> 
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="checkbox"><label class="fixCb">Cambio de GTT</label> 
+                        </div>
+                        <div class="col-sm-12">
+                            <input type="checkbox"><label class="fixCb">Otros</label>
+                            <textarea class="form-control" id="field-ta" placeholder="Otros"></textarea>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12"> 
+                        <label for="field-ta" class="control-label">Indicaciones</label> 
+                        <textarea class="form-control" id="field-ta" placeholder="Indicaciones"></textarea> 
+                    </div>                    
+                </div>
             </div>
 
         <!-- Farmacia -->

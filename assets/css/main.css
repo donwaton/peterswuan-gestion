@@ -52,3 +52,8 @@
 body {
     color: #003471;
 }
+
+.table-bordered > thead > tr > th, .table-bordered > thead > tr > td{
+    color:#ffffff;
+    background-color:#015993; 
+}
