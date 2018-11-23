@@ -331,11 +331,11 @@ echo "{$edad->format('%y')} años y {$edad->format('%m')} meses"; // Aplicamos u
 
         <div class="row" style="margin-left:0px; margin-top:10px;">
             <button type="button" class="btn btn-blue btn-icon" data-toggle="modal" data-target="#newVitalSign">
-                Medir Signos Vitales
+                    Registrar Signos Vitales
                 <i class="entypo-heart"></i>
             </button>
             <button type="button" class="btn btn-blue btn-icon" data-toggle="modal" data-target="#historyVitalSign">
-                    Ver Histórico
+                    Últimas 24hrs
                 <i class="entypo-clock"></i>
             </button>
         </div>
@@ -380,8 +380,8 @@ echo "{$edad->format('%y')} años y {$edad->format('%m')} meses"; // Aplicamos u
             <div class="tab-pane active" id="enfermera">
                 <div class="row">
                     <div class="form-group col-sm-12"> 
-                        <label for="field-ta" class="control-label">Observaciones de la TENS</label> 
-                        <textarea class="form-control" id="field-ta" placeholder="Observaciones de la TENS"></textarea> 
+                        <label for="field-ta" class="control-label">Observaciones de las intervenciones realizadas</label> 
+                        <textarea class="form-control" id="field-ta" placeholder="Observaciones de las intervenciones realizadas"></textarea> 
                     </div>
                     <div class="form-group col-sm-12"> 
                         <label for="field-ta" class="control-label">Evolución</label> 
@@ -731,7 +731,7 @@ echo "{$edad->format('%y')} años y {$edad->format('%m')} meses"; // Aplicamos u
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">
-            <h3 class="modal-title" id="exampleModalLabel">Signos Vitales</h3>
+            <h3 class="modal-title" id="exampleModalLabel">Registrar Signos Vitales</h3>
         </div>
         <div class="modal-body" style="height:90px;">
             <form id="formAddVital" name="formAddVital">
@@ -784,7 +784,7 @@ echo "{$edad->format('%y')} años y {$edad->format('%m')} meses"; // Aplicamos u
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">
-            <h3 class="modal-title" id="exampleModalLabel">Signos Vitales Históricos</h3>
+            <h3 class="modal-title" id="exampleModalLabel">Signos Vitales Últimas 24 hrs</h3>
         </div>
         <div class="modal-body">
             <table class="table table-bordered datatable" id="table-4">

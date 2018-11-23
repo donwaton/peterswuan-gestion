@@ -1,5 +1,9 @@
 <?php require_once 'db.php';
 
+date_default_timezone_set("America/Santiago");
+$ayer = date('Y-m-d h:i:s', strtotime("-1 day"));
+$hoy = date('Y-m-d h:i:s');
+
 $sqlInsumos = "SELECT paciente_insumo.pi_id,insumo.insumo_nombre, tipo_insumo.tipoinsumo_nombre, paciente_insumo.pi_consumo, paciente_insumo.pi_stock 
 FROM insumo, paciente_insumo, tipo_insumo
 WHERE insumo.insumo_id=paciente_insumo.insumo_id
@@ -40,7 +44,9 @@ $lastVS = $resultLastSignos->fetch_assoc();
 
 $sqlSignos = "SELECT * FROM signos_vitales, usuario 
     WHERE usuario.user_id=signos_vitales.user_id 
-    AND paciente_id='".$_GET['id']."'  ORDER BY sv_date DESC;";
+    AND paciente_id='".$_GET['id']."' 
+    AND sv_date > '".$ayer."' 
+    ORDER BY sv_date DESC;";
 $resultSignos = $conn->query($sqlSignos);
 
 $conn->close();
