@@ -326,7 +326,7 @@ echo "{$edad->format('%y')} años y {$edad->format('%m')} meses"; // Aplicamos u
                 <img src="./assets/images/farma-icons/oxygen-sat.png" alt="SAT" class="farma-icon tooltip-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Saturación de Óxigeno">
                 <b id="svSo"><?php echo $lastVS['sv_so'];?></b> %
             </div>
-            <p align="right" style="margin-right:20px;" id="svLastUpdate"><i>Última Medición: <?php echo date("d/m/Y H:i:s", strtotime($lastVS['sv_date']));?> (<?php echo $lastVS['user_names'];?>)</i></p>
+            <p align="right" style="margin-right:20px;" id="svLastUpdate"><i>Última Medición: <?php echo date("d/m/Y H:i", strtotime($lastVS['sv_date']));?> (<?php echo $lastVS['user_names'];?>)</i></p>
         </div>
 
         <div class="row" style="margin-left:0px; margin-top:10px;">
@@ -380,38 +380,101 @@ echo "{$edad->format('%y')} años y {$edad->format('%m')} meses"; // Aplicamos u
             <div class="tab-pane active" id="enfermera">
                 <div class="row">
                     <div class="form-group col-sm-12"> 
-                        <label for="field-ta" class="control-label">Observaciones de las intervenciones realizadas</label> 
-                        <textarea class="form-control" id="field-ta" placeholder="Observaciones de las intervenciones realizadas"></textarea> 
-                    </div>
-                    <div class="form-group col-sm-12"> 
                         <label for="field-ta" class="control-label">Evolución</label> 
                         <textarea class="form-control" id="field-ta" placeholder="Evolución"></textarea> 
                     </div>
                     <div class="form-group col-sm-12"> 
-                        <label for="field-ta" class="control-label">Intervenciones</label>
+                        <label for="field-ta" class="control-label">Información Relevante Referida</label> 
+                        <textarea class="form-control" id="field-ta" placeholder="Información Relevante Referida"></textarea> 
+                    </div>
+                    <div class="form-group col-sm-12"> 
+                        <label for="field-ta" class="control-label">Destaca al examen físico</label> 
+                        <textarea class="form-control" id="field-ta" placeholder="Destaca al examen físico"></textarea> 
+                    </div>
+                    <div class="form-group col-sm-12"> 
+                        <label for="field-ta" class="control-label">Plan de Enfermeria</label>
                         <div class="row">
-                        <div class="col-sm-3"> 
-                            <input type="checkbox"><label class="fixCb">Curación</label> 
+                        <div class="col-sm-4 "> 
+                            <input type="checkbox"><label class="fixCb">Aseo Bucal</label> 
                         </div>
-                        <div class="col-sm-3">
-                            <input type="checkbox"><label class="fixCb">Revisión de botón</label> 
+                        <div class="col-sm-4 "> 
+                            <input type="checkbox"><label class="fixCb">Aseo Ocular</label> 
                         </div>
-                        <div class="col-sm-3">
-                            <input type="checkbox"><label class="fixCb">Cambio de Gripper</label> 
+                        <div class="col-sm-4 "> 
+                            <input type="checkbox"><label class="fixCb">Aspiración de Secreciones</label> 
                         </div>
-                        <div class="col-sm-3">
-                            <input type="checkbox"><label class="fixCb">Cambio de GTT</label> 
+                        <div class="col-sm-4 "> 
+                            <input type="checkbox"><label class="fixCb">Baño cama</label> 
+                        </div>
+                        <div class="col-sm-4 "> 
+                            <input type="checkbox"><label class="fixCb">Baño en tina</label> 
+                        </div>
+                        <div class="col-sm-4 "> 
+                            <input type="checkbox"><label class="fixCb">Cambio Collarín</label> 
+                        </div>
+                        <div class="col-sm-4 "> 
+                            <input type="checkbox"><label class="fixCb">Cambio de posición</label> 
+                        </div>
+                        <div class="col-sm-4 "> 
+                            <input type="checkbox"><label class="fixCb">Curación de Nefroestomia</label> 
+                        </div>
+                        <div class="col-sm-4 "> 
+                            <input type="checkbox"><label class="fixCb">Curación de yeyunoestomia</label> 
+                        </div>
+                        <div class="col-sm-4 "> 
+                            <input type="checkbox"><label class="fixCb">Curación Traqueotomía</label> 
+                        </div>
+                        <div class="col-sm-4 ">
+                            <input type="checkbox"><label class="fixCb">Descompresión gástrica (mL)</label> 
+                        </div>
+                        <div class="col-sm-4 ">
+                            <input type="checkbox"><label class="fixCb">Filtro de BIPADr</label> 
+                        </div>
+                        <div class="col-sm-4 ">
+                            <input type="checkbox"><label class="fixCb">Filtro de CPAD</label> 
+                        </div>
+                        <div class="col-sm-4 ">
+                            <input type="checkbox"><label class="fixCb">Lubricación de la Piel</label> 
+                        </div>
+                        <div class="col-sm-4 ">
+                            <input type="checkbox"><label class="fixCb">Muda</label> 
+                        </div>
+                        <div class="col-sm-4 ">
+                            <input type="checkbox"><label class="fixCb">Paseo en silla</label> 
                         </div>
                         <div class="col-sm-12">
                             <input type="checkbox"><label class="fixCb">Otros</label>
                             <textarea class="form-control" id="field-ta" placeholder="Otros"></textarea>
                         </div>
-                        </div>
+                    </div>
                     </div>
                     <div class="form-group col-sm-12"> 
-                        <label for="field-ta" class="control-label">Indicaciones</label> 
-                        <textarea class="form-control" id="field-ta" placeholder="Indicaciones"></textarea> 
-                    </div>                    
+                        <label for="field-ta" class="control-label">Procedimientos realizados</label>
+                        <div class="row">
+                            <div class="col-sm-3 "> 
+                                <input type="checkbox"><label class="fixCb">Curación</label> 
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="checkbox"><label class="fixCb">Revisión de botón</label> 
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="checkbox"><label class="fixCb">Cambio de Gripper</label> 
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="checkbox"><label class="fixCb">Cambio de GTT</label> 
+                            </div>
+                            <div class="col-sm-12">
+                                <input type="checkbox"><label class="fixCb">Otros</label>
+                                <textarea class="form-control" id="field-ta" placeholder="Otros"></textarea>
+                            </div>
+                        </div>
+                    </div>                   
+                    <div class="col-sm-12" align="right">
+                        <button type="button" class="btn btn-blue btn-icon">
+                            Guardar
+                            <i class="entypo-floppy"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -421,7 +484,7 @@ echo "{$edad->format('%y')} años y {$edad->format('%m')} meses"; // Aplicamos u
                     <div class="form-group col-sm-12"> 
                         <label for="field-ta" class="control-label">Estado Respiratorio Paciente</label> 
                         <div class="row">
-                            <div class="col-sm-3"> 
+                            <div class="col-sm-4 "> 
                                 <label for="field-ta" class="control-label">Intercurrencias</label> 
                             </div>
                             <div class="col-sm-2">
@@ -431,7 +494,7 @@ echo "{$edad->format('%y')} años y {$edad->format('%m')} meses"; // Aplicamos u
                         </div>
                         <label for="field-ta" class="control-label">Parámetros Basales</label> 
                         <div class="row">
-                            <div class="col-sm-3"> 
+                            <div class="col-sm-4 "> 
                                 <label for="field-ta" class="control-label">Óxigeno</label> 
                             </div>
                             <div class="col-sm-2">
@@ -443,7 +506,7 @@ echo "{$edad->format('%y')} años y {$edad->format('%m')} meses"; // Aplicamos u
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-3"> 
+                            <div class="col-sm-4 "> 
                                 <label for="field-ta" class="control-label">Ventilación mécanica</label> 
                             </div>
                             <div class="col-sm-2">
@@ -985,7 +1048,7 @@ echo "{$edad->format('%y')} años y {$edad->format('%m')} meses"; // Aplicamos u
                 <tbody>
                 <?php while ($listaSignosVitales = $resultSignos->fetch_assoc()) {?>
                     <tr>
-                        <td><?php echo date("d/m/Y H:i:s", strtotime($listaSignosVitales['sv_date'])); ?></td>
+                        <td><?php echo date("d/m/Y H:i", strtotime($listaSignosVitales['sv_date'])); ?></td>
                         <td><?php echo $listaSignosVitales["sv_fc"]; ?></td>
                         <td><?php echo $listaSignosVitales["sv_fr"]; ?></td>
                         <td><?php echo $listaSignosVitales["sv_so"]; ?></td>

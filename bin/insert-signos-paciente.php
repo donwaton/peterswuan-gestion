@@ -1,7 +1,7 @@
 <?php
 include 'db.php';
 date_default_timezone_set("America/Santiago");
-$ahora = date("d/m/Y H:i:s");
+$ahora = date("d/m/Y H:i");
 $now = date("Y-m-d H:i:s");
 
 if($_POST['fc']<>'' && $_POST['fr']<>'' && $_POST['so']<>'' && $_POST['temp']<>''){
